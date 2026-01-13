@@ -47,15 +47,17 @@ export function CopyButtons({ laudo }: CopyButtonsProps) {
     <div className="flex gap-2">
       <Button
         variant="outline"
+        size="sm"
         onClick={copiarHTML}
-        className="bg-zinc-800 border-zinc-700 text-zinc-100 hover:bg-zinc-700"
+        className="bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
       >
         {copiado === 'html' ? 'Copiado!' : 'Copiar HTML'}
       </Button>
       <Button
         variant="outline"
+        size="sm"
         onClick={copiarTexto}
-        className="bg-zinc-800 border-zinc-700 text-zinc-100 hover:bg-zinc-700"
+        className="bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
       >
         {copiado === 'texto' ? 'Copiado!' : 'Copiar Texto'}
       </Button>

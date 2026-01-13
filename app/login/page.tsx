@@ -41,10 +41,10 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-zinc-950 p-4">
-      <Card className="w-full max-w-sm bg-zinc-900 border-zinc-800">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <Card className="w-full max-w-sm bg-white border-gray-200 shadow-sm">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold text-zinc-100">
+          <CardTitle className="text-2xl font-bold text-gray-900">
             RadReport
           </CardTitle>
         </CardHeader>
@@ -55,11 +55,11 @@ export default function LoginPage() {
               placeholder="Senha"
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
-              className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
+              className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-400"
               autoFocus
             />
             {erro && (
-              <p className="text-sm text-red-400 text-center">{erro}</p>
+              <p className="text-sm text-red-600 text-center">{erro}</p>
             )}
             <Button
               type="submit"

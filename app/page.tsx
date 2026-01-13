@@ -77,7 +77,7 @@ export default function HomePage() {
     } finally {
       setCarregando(false);
     }
-  }, [texto, modoPS]);
+  }, [texto, modoPS, adicionarAoHistorico]);
 
   // Atalho Ctrl+Enter para gerar
   useEffect(() => {
@@ -98,11 +98,11 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 p-4 md:p-8">
+    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-zinc-100">RadReport</h1>
+          <h1 className="text-2xl font-bold text-gray-900">RadReport</h1>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <Switch
@@ -110,7 +110,7 @@ export default function HomePage() {
                 checked={modoPS}
                 onCheckedChange={setModoPS}
               />
-              <Label htmlFor="modo-ps" className="text-zinc-400 text-sm">
+              <Label htmlFor="modo-ps" className="text-gray-600 text-sm">
                 Modo PS
               </Label>
             </div>
@@ -118,7 +118,7 @@ export default function HomePage() {
               variant="ghost"
               size="sm"
               onClick={handleLogout}
-              className="text-zinc-500 hover:text-zinc-300"
+              className="text-gray-500 hover:text-gray-700"
             >
               Sair
             </Button>
@@ -126,10 +126,10 @@ export default function HomePage() {
         </div>
 
         {/* Input */}
-        <Card className="bg-zinc-900 border-zinc-800">
+        <Card className="bg-white border-gray-200 shadow-sm">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-lg text-zinc-100">Texto ditado</CardTitle>
+              <CardTitle className="text-lg text-gray-900">Texto ditado</CardTitle>
               <Historico onSelecionar={setTexto} />
             </div>
           </CardHeader>
@@ -140,7 +140,7 @@ export default function HomePage() {
               disabled={carregando}
             />
             <div className="flex items-center justify-between">
-              <span className="text-xs text-zinc-500">
+              <span className="text-xs text-gray-500">
                 Ctrl+Enter para gerar
               </span>
               <Button
@@ -155,10 +155,10 @@ export default function HomePage() {
         </Card>
 
         {/* Resultado */}
-        <Card className="bg-zinc-900 border-zinc-800">
+        <Card className="bg-white border-gray-200 shadow-sm">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-lg text-zinc-100">Resultado</CardTitle>
+              <CardTitle className="text-lg text-gray-900">Resultado</CardTitle>
               <CopyButtons laudo={resultado.laudo} />
             </div>
           </CardHeader>
