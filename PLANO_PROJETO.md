@@ -1,4 +1,4 @@
-# MeusLaudos - Sistema Pessoal de Laudos de TC
+# RadReport - Sistema Pessoal de Laudos de TC
 
 ## 1. Visão Geral
 

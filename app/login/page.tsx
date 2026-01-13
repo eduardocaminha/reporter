@@ -45,7 +45,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-sm bg-zinc-900 border-zinc-800">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold text-zinc-100">
-            MeusLaudos
+            RadReport
           </CardTitle>
         </CardHeader>
         <CardContent>

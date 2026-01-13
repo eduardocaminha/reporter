@@ -102,7 +102,7 @@ export default function HomePage() {
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-zinc-100">MeusLaudos</h1>
+          <h1 className="text-2xl font-bold text-zinc-100">RadReport</h1>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <Switch

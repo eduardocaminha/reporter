@@ -8,7 +8,7 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "MeusLaudos",
+  title: "RadReport",
   description: "Sistema pessoal para geração de laudos de TC",
 };
 
