@@ -219,10 +219,11 @@ export function filtrarTemplatesRelevantes(contexto: ContextoExame): {
     
     achadosFiltrados = [...new Set([...achadosFiltrados, ...achadosGerais])];
     
-    // Sempre incluir dispositivos e cirurgias (podem aparecer em qualquer laudo)
+    // Sempre incluir dispositivos, cirurgias e comparativo (podem aparecer em qualquer laudo)
     const achadosDispositivos = todosAchados.filter(a => a.regiao === 'dispositivos');
     const achadosCirurgias = todosAchados.filter(a => a.regiao === 'cirurgias');
-    achadosFiltrados = [...new Set([...achadosFiltrados, ...achadosDispositivos, ...achadosCirurgias])];
+    const achadosComparativo = todosAchados.filter(a => a.regiao === 'comparativo');
+    achadosFiltrados = [...new Set([...achadosFiltrados, ...achadosDispositivos, ...achadosCirurgias, ...achadosComparativo])];
     
     // Se for tc-abdome, também incluir achados de pelve (abdome contempla pelve)
     if (contexto.tipo === 'tc-abdome') {

@@ -213,9 +213,10 @@ async function chamarClaudeComRetry(
 export async function gerarLaudo(
   texto: string, 
   modoPS: boolean, 
+  modoComparativo: boolean = false,
   usarPesquisa: boolean = false
 ): Promise<ResultadoLaudo> {
-  const systemPrompt = montarSystemPrompt(modoPS, usarPesquisa, texto);
+  const systemPrompt = montarSystemPrompt(modoPS, modoComparativo, usarPesquisa, texto);
   
   try {
     const message = await chamarClaudeComRetry(systemPrompt, texto, usarPesquisa);

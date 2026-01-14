@@ -14,6 +14,8 @@ TÉCNICA:
 Aquisição volumétrica multislice, antes e após a administração endovenosa de meio de contraste iodado.
 
 ANÁLISE:
+<!-- REGIAO:comparativo -->
+<!-- /REGIAO:comparativo -->
 <!-- REGIAO:dispositivos -->
 <!-- /REGIAO:dispositivos -->
 

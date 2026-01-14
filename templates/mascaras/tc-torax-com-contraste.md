@@ -13,6 +13,8 @@ TÉCNICA:
 Exame realizado em aparelho multislice, antes e após a injeção endovenosa do meio de contraste iodado.
 
 ANÁLISE:
+<!-- REGIAO:comparativo -->
+<!-- /REGIAO:comparativo -->
 <!-- REGIAO:dispositivos -->
 <!-- /REGIAO:dispositivos -->
 

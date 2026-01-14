@@ -2,6 +2,7 @@ import { formatarTemplatesParaPrompt, identificarContextoExame, ContextoExame } 
 
 export function montarSystemPrompt(
   modoPS: boolean, 
+  modoComparativo: boolean = false,
   usarPesquisa: boolean = false,
   textoUsuario?: string
 ): string {
@@ -218,5 +219,47 @@ Se o achado não tiver template, gere descrição baseada no seu conhecimento E 
 - Menos detalhamento de achados crônicos/incidentais
 - Priorize informações que impactem conduta imediata` : '';
 
-  return basePrompt + psAddendum;
+  const comparativoAddendum = modoComparativo ? `
+
+## MODO COMPARATIVO (ATIVO)
+
+Quando este modo estiver ativo, o usuário provavelmente colou um laudo anterior completo no campo de texto. Sua tarefa é:
+
+1. **IDENTIFICAR O LAUDO ANTERIOR**: O texto pode conter um laudo completo anterior (com título, técnica, análise completa). Identifique esse laudo anterior.
+
+2. **EXTRAIR A DATA**: Procure por datas no formato DD/MM/AAAA ou similar no laudo anterior ou no texto ditado. Se não encontrar, use "[DATA]" como placeholder.
+
+3. **COMPARAR COM O NOVO TEXTO**: O usuário mencionará apenas as alterações ou dirá "não existe mais X", "resolvido Y", etc. Compare o laudo anterior com essas menções.
+
+4. **GERAR O LAUDO COMPARATIVO**:
+   - **SE HOUVER ALTERAÇÕES**: Use o template "comparativo-com-alteracoes":
+     ```
+     Exame comparativo com a tomografia de [DATA] evidencia:
+     [Lista das alterações mencionadas pelo usuário]
+     
+     Restante permanece sem alterações evolutivas significativas:
+     [Laudo anterior completo, formatado em HTML, apenas com correções ortográficas]
+     ```
+   
+   - **SE NÃO HOUVER ALTERAÇÕES**: Use o template "comparativo-sem-alteracoes":
+     ```
+     Exame comparativo com a tomografia de [DATA] não evidencia alterações evolutivas significativas, permanecendo:
+     [Laudo anterior completo, formatado em HTML, apenas com correções ortográficas]
+     ```
+
+5. **FORMATAÇÃO DO LAUDO ANTERIOR**:
+   - Mantenha EXATAMENTE o conteúdo do laudo anterior
+   - Apenas corrija ortografia e formate em HTML (título, urgência, técnica, análise)
+   - NÃO altere o conteúdo descritivo, apenas formate
+   - Use as classes CSS corretas (laudo-titulo, laudo-urgencia, laudo-secao, laudo-texto)
+
+6. **IDENTIFICAÇÃO DE ALTERAÇÕES**:
+   - Se o usuário mencionar "não existe mais X" → X foi resolvido/removido
+   - Se o usuário mencionar "novo Y" → Y é uma nova alteração
+   - Se o usuário mencionar "Y aumentou/diminuiu" → Y mudou
+   - Se não mencionar nada específico → não há alterações
+
+**IMPORTANTE**: O laudo anterior deve ser repetido EXATAMENTE como estava, apenas formatado. Não invente ou modifique descrições.` : '';
+
+  return basePrompt + psAddendum + comparativoAddendum;
 }

@@ -15,6 +15,8 @@ TÉCNICA:
 Exame realizado em aparelho multislice, após a injeção do meio de contraste iodado, com protocolo direcionado para investigação de tromboembolismo pulmonar.
 
 ANÁLISE:
+<!-- REGIAO:comparativo -->
+<!-- /REGIAO:comparativo -->
 <!-- REGIAO:dispositivos -->
 <!-- /REGIAO:dispositivos -->
 

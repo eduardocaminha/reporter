@@ -14,6 +14,8 @@ TÉCNICA:
 Exame realizado em aparelho multislice, após a injeção do meio de contraste iodado. Foram documentadas reconstruções 3D e multiplanares do leito vascular de interesse.
 
 ANÁLISE:
+<!-- REGIAO:comparativo -->
+<!-- /REGIAO:comparativo -->
 <!-- REGIAO:dispositivos -->
 <!-- /REGIAO:dispositivos -->
 
