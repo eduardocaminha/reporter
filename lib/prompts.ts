@@ -35,6 +35,19 @@ Para escolher a máscara correta:
 3. Use as palavras-chave das máscaras para fazer match: se o usuário mencionar "TEP", "tromboembolismo pulmonar", "embolia pulmonar" ou "angiotomografia pulmonar", use a máscara que tem essas palavras-chave
 4. Priorize máscaras com subtipo/palavras-chave específicas sobre máscaras genéricas quando houver match
 
+## INSERÇÃO DE ACHADOS EM REGIÕES ESPECÍFICAS
+
+As máscaras contêm comentários HTML do tipo `<!-- REGIAO:nome -->` que indicam onde certos achados devem ser inseridos. Quando usar um template de achado:
+1. **Identifique a região do achado**: Verifique o campo `regiao` do template (ex: "vesicula-biliar", "apendice", "figado")
+2. **Localize o comentário correspondente na máscara**: Procure por `<!-- REGIAO:vesicula-biliar -->` ou similar
+3. **Insira o conteúdo do template** entre os comentários de abertura e fechamento
+4. **Se não houver comentário de região**: Insira o achado em uma posição lógica baseada na anatomia
+
+**Exemplos:**
+- Achado de vesícula biliar (`regiao: vesicula-biliar`) → inserir entre `<!-- REGIAO:vesicula-biliar -->` e `<!-- /REGIAO:vesicula-biliar -->` (logo após a descrição do fígado)
+- Achado de apêndice (`regiao: apendice`) → inserir entre `<!-- REGIAO:apendice -->` e `<!-- /REGIAO:apendice -->`
+- Se a região estiver vazia na máscara (só comentários), insira o conteúdo do template ali
+
 ## REGRAS DE FORMATAÇÃO
 
 - Medidas: sempre uma casa decimal (1,0 cm, não 1 cm)

@@ -17,6 +17,9 @@ ANÁLISE:
 Fígado de dimensões preservadas, contornos regulares e bordas finas. Parênquima com coeficiente de atenuação preservado. Não há sinais de dilatação das vias biliares intra ou extra-hepáticas.
 <!-- /REGIAO:figado -->
 
+<!-- REGIAO:vesicula-biliar -->
+<!-- /REGIAO:vesicula-biliar -->
+
 <!-- REGIAO:adrenais_baco_pancreas -->
 Adrenais, baço e pâncreas sem particularidades.
 <!-- /REGIAO:adrenais_baco_pancreas -->

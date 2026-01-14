@@ -17,6 +17,9 @@ ANÁLISE:
 Fígado de dimensões normais, contornos regulares e bordas finas. Parênquima com coeficiente de atenuação preservado no protocolo realizado.
 <!-- /REGIAO:figado -->
 
+<!-- REGIAO:vesicula-biliar -->
+<!-- /REGIAO:vesicula-biliar -->
+
 <!-- REGIAO:adrenais_baco_pancreas -->
 Adrenais, baço e pâncreas sem particularidades no estudo sem contraste.
 <!-- /REGIAO:adrenais_baco_pancreas -->
