@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { Copy, FileText, Check } from "lucide-react"
-import { useState } from "react"
+import { useState, useMemo } from "react"
 
 interface ReportOutputProps {
   report: string
@@ -14,16 +14,47 @@ export function ReportOutput({ report, isGenerating }: ReportOutputProps) {
   const [copiedHtml, setCopiedHtml] = useState(false)
   const [copiedText, setCopiedText] = useState(false)
 
+  // Converte texto com \n para HTML com parágrafos
+  const reportHtml = useMemo(() => {
+    if (!report) return ""
+    
+    // Se já tem tags HTML, retorna como está
+    if (report.includes("<") && report.includes(">")) {
+      return report
+    }
+    
+    // Converte quebras de linha duplas em parágrafos e simples em <br>
+    const paragraphs = report.split(/\n\n+/)
+    return paragraphs
+      .map((p) => {
+        const lines = p.split(/\n/)
+        return `<p>${lines.join("<br>")}</p>`
+      })
+      .join("")
+  }, [report])
+
+  // Texto plano com quebras de linha preservadas
+  const plainText = useMemo(() => {
+    if (!report) return ""
+    
+    // Se tem tags HTML, extrai o texto
+    if (report.includes("<") && report.includes(">")) {
+      const tempDiv = document.createElement("div")
+      tempDiv.innerHTML = report
+      return tempDiv.textContent || tempDiv.innerText || ""
+    }
+    
+    // Se já é texto plano, retorna como está
+    return report
+  }, [report])
+
   const handleCopyHtml = async () => {
-    await navigator.clipboard.writeText(report)
+    await navigator.clipboard.writeText(reportHtml)
     setCopiedHtml(true)
     setTimeout(() => setCopiedHtml(false), 2000)
   }
 
   const handleCopyText = async () => {
-    const tempDiv = document.createElement("div")
-    tempDiv.innerHTML = report
-    const plainText = tempDiv.textContent || tempDiv.innerText || ""
     await navigator.clipboard.writeText(plainText)
     setCopiedText(true)
     setTimeout(() => setCopiedText(false), 2000)
@@ -106,10 +137,8 @@ export function ReportOutput({ report, isGenerating }: ReportOutputProps) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="text-sm leading-relaxed prose prose-sm max-w-none text-foreground 
-                prose-headings:text-foreground prose-headings:font-semibold prose-headings:mb-2 prose-headings:mt-4
-                prose-p:my-1 prose-strong:text-foreground"
-              dangerouslySetInnerHTML={{ __html: report }}
+              className="text-sm leading-relaxed text-foreground [&_p]:mb-3 [&_p:last-child]:mb-0"
+              dangerouslySetInnerHTML={{ __html: reportHtml }}
             />
           ) : (
             <motion.div
