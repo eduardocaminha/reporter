@@ -3,7 +3,10 @@
 import { motion } from "motion/react"
 import { LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Toggle } from "@/components/ui/toggle"
+import { Kbd, KbdGroup } from "@/components/ui/kbd"
 import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 
 type ReportMode = "ps" | "eletivo" | "comparativo"
 
@@ -14,11 +17,32 @@ interface HeaderProps {
 
 export function Header({ reportMode, onReportModeChange }: HeaderProps) {
   const router = useRouter()
-  const modes: { value: ReportMode; label: string }[] = [
-    { value: "ps", label: "PS" },
-    { value: "eletivo", label: "Eletivo" },
-    { value: "comparativo", label: "Comparativo" },
+  const modes: { value: ReportMode; label: string; key: string }[] = [
+    { value: "ps", label: "PS", key: "p" },
+    { value: "eletivo", label: "Eletivo", key: "e" },
+    { value: "comparativo", label: "Comparativo", key: "c" },
   ]
+
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      // Ctrl ou Cmd + Shift + tecla
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && !e.altKey) {
+        if (e.key.toLowerCase() === "p") {
+          e.preventDefault()
+          onReportModeChange("ps")
+        } else if (e.key.toLowerCase() === "e") {
+          e.preventDefault()
+          onReportModeChange("eletivo")
+        } else if (e.key.toLowerCase() === "c") {
+          e.preventDefault()
+          onReportModeChange("comparativo")
+        }
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [onReportModeChange])
 
   async function handleLogout() {
     try {
@@ -44,28 +68,26 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
         <span className="text-lg font-semibold tracking-tight text-foreground">RadReport</span>
 
         <div className="flex items-center gap-6">
-          <div className="flex items-center gap-1 bg-muted rounded-lg p-1 relative">
+          <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
             {modes.map((mode) => (
-              <button
+              <Toggle
                 key={mode.value}
-                onClick={() => onReportModeChange(mode.value)}
-                className="relative px-3 py-1.5 text-sm font-medium rounded-md transition-colors z-10"
+                pressed={reportMode === mode.value}
+                onPressedChange={() => onReportModeChange(mode.value)}
+                aria-label={mode.label}
+                variant="outline"
+                size="sm"
+                className="px-3 py-1.5 text-sm font-medium data-[state=on]:bg-card data-[state=on]:shadow-sm"
               >
-                {reportMode === mode.value && (
-                  <motion.div
-                    layoutId="activeMode"
-                    className="absolute inset-0 bg-card shadow-sm rounded-md"
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
-                  />
-                )}
-                <span
-                  className={`relative z-10 ${
-                    reportMode === mode.value ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  {mode.label}
-                </span>
-              </button>
+                <span className="relative z-10">{mode.label}</span>
+                <KbdGroup className="ml-1.5 hidden sm:inline-flex">
+                  <Kbd className="text-[10px]">Ctrl</Kbd>
+                  <span className="text-muted-foreground text-[10px]">+</span>
+                  <Kbd className="text-[10px]">Shift</Kbd>
+                  <span className="text-muted-foreground text-[10px]">+</span>
+                  <Kbd className="text-[10px]">{mode.key.toUpperCase()}</Kbd>
+                </KbdGroup>
+              </Toggle>
             ))}
           </div>
 

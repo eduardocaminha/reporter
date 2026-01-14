@@ -1,12 +1,13 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
+import { Kbd, KbdGroup } from "@/components/ui/kbd"
 import { Clock, Sparkles, Loader2, X, Search } from "lucide-react"
 
 interface ItemHistorico {
@@ -40,6 +41,11 @@ export function DictationInput({
   onUsarPesquisaChange,
 }: DictationInputProps) {
   const [historicoAberto, setHistoricoAberto] = useState(false)
+  const [isMac, setIsMac] = useState(false)
+
+  useEffect(() => {
+    setIsMac(navigator.platform.toUpperCase().indexOf('MAC') >= 0 || navigator.userAgent.toUpperCase().indexOf('MAC') >= 0)
+  }, [])
 
   return (
     <section className="bg-card rounded-xl border border-border p-6">
@@ -136,13 +142,13 @@ export function DictationInput({
       />
 
       <div className="flex items-center justify-between mt-4">
-        <span className="text-xs text-muted-foreground">
-          <kbd className="px-1.5 py-0.5 rounded bg-secondary text-secondary-foreground text-[10px] font-mono">Ctrl</kbd>
-          {" + "}
-          <kbd className="px-1.5 py-0.5 rounded bg-secondary text-secondary-foreground text-[10px] font-mono">
-            Enter
-          </kbd>{" "}
-          para gerar
+        <span className="text-xs text-muted-foreground flex items-center gap-1">
+          <KbdGroup>
+            <Kbd>{isMac ? '⌘' : 'Ctrl'}</Kbd>
+            <span className="text-muted-foreground">+</span>
+            <Kbd>Enter</Kbd>
+          </KbdGroup>
+          {" "}para gerar
         </span>
 
         <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
