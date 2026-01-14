@@ -142,8 +142,8 @@ async function chamarClaudeComRetry(
       // Processar tool calls se houver
       while (currentMessage.stop_reason === 'tool_use' && currentMessage.content) {
         const toolUses = currentMessage.content.filter(
-          (item): item is Anthropic.ContentBlock.ToolUseBlock => item.type === 'tool_use'
-        );
+          (item) => item.type === 'tool_use'
+        ) as Array<{ type: 'tool_use'; id: string; name: string; input: Record<string, unknown> }>;
 
         if (toolUses.length === 0) break;
 
@@ -158,7 +158,7 @@ async function chamarClaudeComRetry(
 
         for (const toolUse of toolUses) {
           if (toolUse.name === 'pesquisar_radiopaedia') {
-            const termo = toolUse.input.termo;
+            const termo = toolUse.input.termo as string;
             console.log(`Pesquisando Radiopaedia para: ${termo}`);
             
             const resultado = await pesquisarRadiopaedia(termo);
