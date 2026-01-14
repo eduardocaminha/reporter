@@ -13,6 +13,8 @@ TÉCNICA:
 Aquisição volumétrica multislice, sem a administração endovenosa de meio de contraste iodado.
 
 ANÁLISE:
+<!-- REGIAO:dispositivos -->
+<!-- /REGIAO:dispositivos -->
 <!-- REGIAO:condutos_auditivos_externos -->
 Condutos auditivos externos pérvios, de conformação e calibre normais.
 <!-- /REGIAO:condutos_auditivos_externos -->
@@ -69,5 +71,3 @@ Forames jugulares e canais carotídeos preservados.
 Rinofaringe de contornos regulares. Seios paranasais incluídos na aquisição do estudo normoaerados.
 <!-- /REGIAO:rinofaringe_seios -->
 
-<!-- REGIAO:dispositivos -->
-<!-- /REGIAO:dispositivos -->

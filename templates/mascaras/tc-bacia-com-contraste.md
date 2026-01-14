@@ -14,6 +14,8 @@ TÉCNICA:
 Aquisição volumétrica multislice, antes e após a administração endovenosa de meio de contraste iodado.
 
 ANÁLISE:
+<!-- REGIAO:dispositivos -->
+<!-- /REGIAO:dispositivos -->
 <!-- REGIAO:estruturas_osseas -->
 Estruturas ósseas de morfologia habitual.
 <!-- /REGIAO:estruturas_osseas -->
@@ -34,5 +36,3 @@ Não há sinais de derrame articular.
 Planos musculares e tendíneos sem alterações tomográficas.
 <!-- /REGIAO:planos_musculares_tendineos -->
 
-<!-- REGIAO:dispositivos -->
-<!-- /REGIAO:dispositivos -->

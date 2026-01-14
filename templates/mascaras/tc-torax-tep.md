@@ -15,6 +15,8 @@ TÉCNICA:
 Exame realizado em aparelho multislice, após a injeção do meio de contraste iodado, com protocolo direcionado para investigação de tromboembolismo pulmonar.
 
 ANÁLISE:
+<!-- REGIAO:dispositivos -->
+<!-- /REGIAO:dispositivos -->
 <!-- REGIAO:tep -->
 Não há sinais de tromboembolismo pulmonar.
 <!-- /REGIAO:tep -->
@@ -43,5 +45,3 @@ Estruturas vasculares mediastinais tópicas, com calibre preservado.
 Parede torácica sem alterações significativas.
 <!-- /REGIAO:parede_toracica -->
 
-<!-- REGIAO:dispositivos -->
-<!-- /REGIAO:dispositivos -->

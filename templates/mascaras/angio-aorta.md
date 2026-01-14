@@ -14,6 +14,8 @@ TÉCNICA:
 Exame realizado em aparelho multislice, após a injeção do meio de contraste iodado. Foram documentadas reconstruções 3D e multiplanares do leito vascular de interesse.
 
 ANÁLISE:
+<!-- REGIAO:dispositivos -->
+<!-- /REGIAO:dispositivos -->
 <!-- REGIAO:troncos_supraaorticos -->
 Segmento proximal dos troncos supra-aórticos pérvios, com anatomia habitual e calibre preservado.
 <!-- /REGIAO:troncos_supraaorticos -->
@@ -34,5 +36,3 @@ Artérias renais únicas, pérvias e com calibre preservado.
 Artérias ilíacas comuns, externas e internas, femorais comuns e segmento proximal das femorais superficiais e profundas pérvios, sem alterações significativas de calibre.
 <!-- /REGIAO:iliacas_femorais -->
 
-<!-- REGIAO:dispositivos -->
-<!-- /REGIAO:dispositivos -->

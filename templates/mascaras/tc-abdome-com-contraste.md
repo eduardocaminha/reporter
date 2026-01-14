@@ -13,6 +13,8 @@ TÉCNICA:
 Exame realizado em aparelho multislice, antes e após a injeção endovenosa do meio de contraste iodado.
 
 ANÁLISE:
+<!-- REGIAO:dispositivos -->
+<!-- /REGIAO:dispositivos -->
 <!-- REGIAO:figado -->
 Fígado de dimensões preservadas, contornos regulares e bordas finas. Parênquima com coeficiente de atenuação preservado. Não há sinais de dilatação das vias biliares intra ou extra-hepáticas.
 <!-- /REGIAO:figado -->
@@ -58,6 +60,3 @@ Estruturas ósseas sem alterações significativas.
 <!-- REGIAO:transicao -->
 Transição toracoabdominal sem alterações significativas.
 <!-- /REGIAO:transicao -->
-
-<!-- REGIAO:dispositivos -->
-<!-- /REGIAO:dispositivos -->

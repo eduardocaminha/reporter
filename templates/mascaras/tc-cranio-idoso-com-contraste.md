@@ -15,6 +15,8 @@ TÉCNICA:
 Exame realizado em aparelho multislice, antes e após a injeção endovenosa do meio de contraste iodado.
 
 ANÁLISE:
+<!-- REGIAO:dispositivos -->
+<!-- /REGIAO:dispositivos -->
 <!-- REGIAO:calota -->
 Calota craniana íntegra.
 <!-- /REGIAO:calota -->
@@ -59,5 +61,3 @@ Seios venosos durais pérvios, sem sinais de trombose.
 Ateromatose das carótidas internas e vertebrais.
 <!-- /REGIAO:ateromatose -->
 
-<!-- REGIAO:dispositivos -->
-<!-- /REGIAO:dispositivos -->

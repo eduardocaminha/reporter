@@ -13,6 +13,8 @@ TÉCNICA:
 Exame realizado em aparelho multislice, antes e após a injeção endovenosa do meio de contraste iodado.
 
 ANÁLISE:
+<!-- REGIAO:dispositivos -->
+<!-- /REGIAO:dispositivos -->
 <!-- REGIAO:calota -->
 Calota craniana íntegra.
 <!-- /REGIAO:calota -->
@@ -49,5 +51,3 @@ Após a injeção do meio de contraste venoso, não se observaram realces anôma
 Seios venosos durais pérvios, sem sinais de trombose.
 <!-- /REGIAO:seios_venosos -->
 
-<!-- REGIAO:dispositivos -->
-<!-- /REGIAO:dispositivos -->

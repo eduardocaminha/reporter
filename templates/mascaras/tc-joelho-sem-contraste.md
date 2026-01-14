@@ -14,6 +14,8 @@ TÉCNICA:
 Aquisição volumétrica multislice, sem a administração endovenosa de meio de contraste iodado.
 
 ANÁLISE:
+<!-- REGIAO:dispositivos -->
+<!-- /REGIAO:dispositivos -->
 <!-- REGIAO:estruturas_osseas -->
 Estruturas ósseas de morfologia e textura habitual.
 <!-- /REGIAO:estruturas_osseas -->
@@ -30,5 +32,3 @@ Ausência de derrame articular.
 Planos miotendíneos sem alterações significativas detectáveis ao método.
 <!-- /REGIAO:planos_miotendineos -->
 
-<!-- REGIAO:dispositivos -->
-<!-- /REGIAO:dispositivos -->

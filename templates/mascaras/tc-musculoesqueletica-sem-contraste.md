@@ -14,6 +14,8 @@ TÉCNICA:
 Aquisição volumétrica multislice, sem a administração endovenosa de meio de contraste iodado.
 
 ANÁLISE:
+<!-- REGIAO:dispositivos -->
+<!-- /REGIAO:dispositivos -->
 <!-- REGIAO:estruturas_osseas -->
 Estruturas ósseas de forma conservada, sem sinais de fraturas.
 <!-- /REGIAO:estruturas_osseas -->
@@ -30,5 +32,3 @@ Não há sinais de derrame articular.
 Planos musculares sem alterações detectáveis ao método.
 <!-- /REGIAO:planos_musculares -->
 
-<!-- REGIAO:dispositivos -->
-<!-- /REGIAO:dispositivos -->

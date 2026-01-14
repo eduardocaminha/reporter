@@ -13,6 +13,8 @@ TÉCNICA:
 Exame realizado em aparelho multislice, sem a injeção endovenosa do meio de contraste iodado.
 
 ANÁLISE:
+<!-- REGIAO:dispositivos -->
+<!-- /REGIAO:dispositivos -->
 <!-- REGIAO:calota -->
 Calota craniana íntegra.
 <!-- /REGIAO:calota -->
@@ -41,5 +43,3 @@ Tronco cerebral e cerebelo de aspecto preservado.
 Estruturas da linha mediana sem desvios significativos.
 <!-- /REGIAO:linha_mediana -->
 
-<!-- REGIAO:dispositivos -->
-<!-- /REGIAO:dispositivos -->

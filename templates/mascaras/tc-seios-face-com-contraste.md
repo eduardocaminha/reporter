@@ -14,6 +14,8 @@ TÉCNICA:
 Aquisição volumétrica multislice, antes e após a administração endovenosa de meio de contraste iodado.
 
 ANÁLISE:
+<!-- REGIAO:dispositivos -->
+<!-- /REGIAO:dispositivos -->
 <!-- REGIAO:septo_nasal -->
 Septo nasal centrado.
 <!-- /REGIAO:septo_nasal -->
@@ -42,5 +44,3 @@ Rinofaringe e fossas pterigopalatinas de aspecto preservado.
 Arcabouço ósseo da face sem alterações significativas.
 <!-- /REGIAO:arcabouco_osseo -->
 
-<!-- REGIAO:dispositivos -->
-<!-- /REGIAO:dispositivos -->

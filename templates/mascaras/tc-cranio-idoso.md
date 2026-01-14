@@ -15,6 +15,8 @@ TÉCNICA:
 Exame realizado em aparelho multislice, sem a injeção endovenosa do meio de contraste iodado.
 
 ANÁLISE:
+<!-- REGIAO:dispositivos -->
+<!-- /REGIAO:dispositivos -->
 <!-- REGIAO:calota -->
 Calota craniana íntegra.
 <!-- /REGIAO:calota -->
@@ -47,5 +49,3 @@ Estruturas da linha mediana sem desvios significativos.
 Ateromatose das carótidas internas e vertebrais.
 <!-- /REGIAO:ateromatose -->
 
-<!-- REGIAO:dispositivos -->
-<!-- /REGIAO:dispositivos -->

@@ -13,6 +13,8 @@ TÉCNICA:
 Aquisição volumétrica multislice, antes e após a administração endovenosa de meio de contraste iodado.
 
 ANÁLISE:
+<!-- REGIAO:dispositivos -->
+<!-- /REGIAO:dispositivos -->
 <!-- REGIAO:corpos_vertebrais -->
 Corpos vertebrais alinhados e com alturas preservadas.
 <!-- /REGIAO:corpos_vertebrais -->
@@ -55,5 +57,3 @@ Dimensões normais do canal vertebral e dos forames intervertebrais.
 Planos musculares paravertebrais sem alterações significativas ao método.
 <!-- /REGIAO:planos_musculares -->
 
-<!-- REGIAO:dispositivos -->
-<!-- /REGIAO:dispositivos -->

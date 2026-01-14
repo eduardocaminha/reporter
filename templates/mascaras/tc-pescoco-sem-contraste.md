@@ -14,6 +14,8 @@ TÉCNICA:
 Aquisição volumétrica multislice, sem a administração endovenosa de meio de contraste iodado.
 
 ANÁLISE:
+<!-- REGIAO:dispositivos -->
+<!-- /REGIAO:dispositivos -->
 <!-- REGIAO:musculatura_espaco_mastigador -->
 Musculatura do espaço mastigador com morfologia habitual.
 <!-- /REGIAO:musculatura_espaco_mastigador -->
@@ -50,5 +52,3 @@ Músculos esternocleidomastoideos e musculatura paravertebral de aspecto preserv
 Estruturas ósseas preservadas.
 <!-- /REGIAO:estruturas_osseas -->
 
-<!-- REGIAO:dispositivos -->
-<!-- /REGIAO:dispositivos -->

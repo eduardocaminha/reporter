@@ -13,6 +13,8 @@ TÉCNICA:
 Aquisição volumétrica multislice, sem a administração endovenosa de meio de contraste iodado.
 
 ANÁLISE:
+<!-- REGIAO:dispositivos -->
+<!-- /REGIAO:dispositivos -->
 <!-- REGIAO:transicao_craniovertebral -->
 Transição craniovertebral sem alterações.
 <!-- /REGIAO:transicao_craniovertebral -->
@@ -63,5 +65,3 @@ Diâmetros normais do canal vertebral e dos forames intervertebrais.
 Planos musculares paravertebrais sem alterações significativas ao método.
 <!-- /REGIAO:planos_musculares -->
 
-<!-- REGIAO:dispositivos -->
-<!-- /REGIAO:dispositivos -->
