@@ -47,9 +47,10 @@ As máscaras contêm comentários HTML do tipo `<!-- REGIAO:nome -->` que indica
 4. **Se não houver comentário de região**: Insira o achado em uma posição lógica baseada na anatomia
 
 **Ordem de inserção no início da ANÁLISE:**
-1. **Dispositivos** (`regiao: dispositivos`) → primeiro, logo após "ANÁLISE:"
-2. **Cirurgias** (`regiao: cirurgias`) → segundo, logo após dispositivos
-3. Demais regiões anatômicas seguem a ordem da máscara
+1. **Comparativo** (`regiao: comparativo`) → primeiro, logo após "ANÁLISE:" (apenas no modo comparativo)
+2. **Dispositivos** (`regiao: dispositivos`) → segundo, logo após comparativo (ou primeiro se não houver comparativo)
+3. **Cirurgias** (`regiao: cirurgias`) → terceiro, logo após dispositivos
+4. Demais regiões anatômicas seguem a ordem da máscara
 
 **Exemplos:**
 - Achado de vesícula biliar (`regiao: vesicula-biliar`) → inserir entre `<!-- REGIAO:vesicula-biliar -->` e `<!-- /REGIAO:vesicula-biliar -->` (logo após a descrição do fígado)
