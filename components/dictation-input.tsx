@@ -57,7 +57,6 @@ export function DictationInput({
   const typewriterRef = useRef({
     currentPhraseIndex: 0,
     currentCharIndex: 0,
-    isDeleting: false,
     timeoutId: null as ReturnType<typeof setTimeout> | null,
   })
 
@@ -74,29 +73,21 @@ export function DictationInput({
       const state = typewriterRef.current
       const currentPhrase = placeholderPhrases[state.currentPhraseIndex]
 
-      if (state.isDeleting) {
-        if (state.currentCharIndex > 0) {
-          setAnimatedPlaceholder(currentPhrase.substring(0, state.currentCharIndex - 1))
-          state.currentCharIndex--
-          state.timeoutId = setTimeout(typeWriter, 30)
-        } else {
-          // Terminou de apagar, passa para próxima frase
-          state.isDeleting = false
-          state.currentPhraseIndex = (state.currentPhraseIndex + 1) % placeholderPhrases.length
-          state.timeoutId = setTimeout(typeWriter, 300)
-        }
+      if (state.currentCharIndex < currentPhrase.length) {
+        // Digita letra por letra
+        setAnimatedPlaceholder(currentPhrase.substring(0, state.currentCharIndex + 1))
+        state.currentCharIndex++
+        state.timeoutId = setTimeout(typeWriter, 30) // Mais rápido: 30ms ao invés de 50ms
       } else {
-        if (state.currentCharIndex < currentPhrase.length) {
-          setAnimatedPlaceholder(currentPhrase.substring(0, state.currentCharIndex + 1))
-          state.currentCharIndex++
-          state.timeoutId = setTimeout(typeWriter, 50)
-        } else {
-          // Terminou de digitar, espera e começa a apagar
-          state.timeoutId = setTimeout(() => {
-            state.isDeleting = true
-            typeWriter()
-          }, 2000)
-        }
+        // Terminou de digitar, segura a frase completa por 2 segundos
+        state.timeoutId = setTimeout(() => {
+          // Apaga tudo de uma vez e passa para próxima frase
+          setAnimatedPlaceholder("")
+          state.currentPhraseIndex = (state.currentPhraseIndex + 1) % placeholderPhrases.length
+          state.currentCharIndex = 0
+          // Espera um pouco antes de começar a próxima frase
+          state.timeoutId = setTimeout(typeWriter, 300)
+        }, 2000)
       }
     }
 
