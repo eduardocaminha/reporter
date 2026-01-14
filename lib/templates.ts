@@ -103,7 +103,7 @@ export function identificarContextoExame(texto: string): ContextoExame {
   // Identificar tipo de exame
   if (textoLower.match(/\b(tc|tomo|tomografia)\s*(abdome|abd[oô]men|abdominal)\b/)) {
     contexto.tipo = 'tc-abdome';
-    contexto.regioesRelevantes = ['rins', 'apendice', 'rim'];
+    contexto.regioesRelevantes = ['rins', 'apendice', 'rim', 'pelve', 'bexiga', 'colon', 'intestino'];
   } else if (textoLower.match(/\b(tc|tomo|tomografia)\s*(tor[áa]x|t[óo]rax)\b/)) {
     contexto.tipo = 'tc-torax';
     contexto.regioesRelevantes = [];
@@ -128,7 +128,10 @@ export function identificarContextoExame(texto: string): ContextoExame {
   } else if (textoLower.match(/\b(tc|tomo|tomografia)\s*(seios|face)\b/)) {
     contexto.tipo = 'tc-seios-face';
     contexto.regioesRelevantes = ['seios-face'];
-  } else if (textoLower.match(/\b(tc|tomo|tomografia)\s*(bacia|pelve|p[ée]lvis)\b/)) {
+  } else if (textoLower.match(/\b(tc|tomo|tomografia)\s*(pelve|p[ée]lvis)\b/)) {
+    contexto.tipo = 'tc-pelve';
+    contexto.regioesRelevantes = ['pelve', 'bexiga'];
+  } else if (textoLower.match(/\b(tc|tomo|tomografia)\s*(bacia)\b/)) {
     contexto.tipo = 'tc-bacia';
     contexto.regioesRelevantes = [];
   } else if (textoLower.match(/\b(tc|tomo|tomografia)\s*(quadril)\b/)) {
@@ -215,6 +218,14 @@ export function filtrarTemplatesRelevantes(contexto: ContextoExame): {
     );
     
     achadosFiltrados = [...new Set([...achadosFiltrados, ...achadosGerais])];
+    
+    // Se for tc-abdome, também incluir achados de pelve (abdome contempla pelve)
+    if (contexto.tipo === 'tc-abdome') {
+      const achadosPelve = todosAchados.filter(a => 
+        a.regiao === 'pelve' || a.regiao === 'bexiga'
+      );
+      achadosFiltrados = [...new Set([...achadosFiltrados, ...achadosPelve])];
+    }
   }
   
   return {
