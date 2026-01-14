@@ -131,7 +131,8 @@ export function DictationInput({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={onKeyDown}
-        className="min-h-[180px] bg-input border-border resize-none text-sm leading-relaxed placeholder:text-muted-foreground/50"
+        className="min-h-[2.5rem] bg-input border-border resize-none text-sm leading-relaxed placeholder:text-muted-foreground/50 overflow-hidden"
+        rows={1}
       />
 
       <div className="flex items-center justify-between mt-4">
