@@ -22,6 +22,13 @@ export interface Achado {
   conteudo: string;
 }
 
+export interface ContextoExame {
+  tipo?: string;
+  subtipo?: string;
+  contraste?: 'com' | 'sem';
+  regioesRelevantes?: string[];
+}
+
 const TEMPLATES_DIR = path.join(process.cwd(), 'templates');
 
 export function carregarMascaras(): Mascara[] {
@@ -89,9 +96,137 @@ export function carregarAchados(): Achado[] {
   return achados;
 }
 
-export function formatarTemplatesParaPrompt(): string {
-  const mascaras = carregarMascaras();
-  const achados = carregarAchados();
+export function identificarContextoExame(texto: string): ContextoExame {
+  const textoLower = texto.toLowerCase();
+  const contexto: ContextoExame = {};
+  
+  // Identificar tipo de exame
+  if (textoLower.match(/\b(tc|tomo|tomografia)\s*(abdome|abd[oô]men|abdominal)\b/)) {
+    contexto.tipo = 'tc-abdome';
+    contexto.regioesRelevantes = ['rins', 'apendice', 'rim'];
+  } else if (textoLower.match(/\b(tc|tomo|tomografia)\s*(tor[áa]x|t[óo]rax)\b/)) {
+    contexto.tipo = 'tc-torax';
+    contexto.regioesRelevantes = [];
+  } else if (textoLower.match(/\b(tc|tomo|tomografia)\s*(cr[âa]nio|cranio)\b/)) {
+    contexto.tipo = 'tc-cranio';
+    contexto.regioesRelevantes = [];
+  } else if (textoLower.match(/\b(tc|tomo|tomografia)\s*(mast[oó]ides|mastoides)\b/)) {
+    contexto.tipo = 'tc-mastoides';
+    contexto.regioesRelevantes = ['mastoides'];
+  } else if (textoLower.match(/\b(tc|tomo|tomografia)\s*(coluna|vertebral)\s*(cervical)\b/)) {
+    contexto.tipo = 'tc-coluna-cervical';
+    contexto.regioesRelevantes = ['coluna-cervical'];
+  } else if (textoLower.match(/\b(tc|tomo|tomografia)\s*(coluna|vertebral)\s*(tor[áa]cica|toracica)\b/)) {
+    contexto.tipo = 'tc-coluna-toracica';
+    contexto.regioesRelevantes = ['coluna-toracica'];
+  } else if (textoLower.match(/\b(tc|tomo|tomografia)\s*(coluna|vertebral)\s*(lombar)\b/)) {
+    contexto.tipo = 'tc-coluna-lombar';
+    contexto.regioesRelevantes = ['coluna-lombar'];
+  } else if (textoLower.match(/\b(tc|tomo|tomografia)\s*(pesco[çc]o|pescoco|colo)\b/)) {
+    contexto.tipo = 'tc-pescoco';
+    contexto.regioesRelevantes = ['pescoco'];
+  } else if (textoLower.match(/\b(tc|tomo|tomografia)\s*(seios|face)\b/)) {
+    contexto.tipo = 'tc-seios-face';
+    contexto.regioesRelevantes = ['seios-face'];
+  } else if (textoLower.match(/\b(tc|tomo|tomografia)\s*(bacia|pelve|p[ée]lvis)\b/)) {
+    contexto.tipo = 'tc-bacia';
+    contexto.regioesRelevantes = [];
+  } else if (textoLower.match(/\b(tc|tomo|tomografia)\s*(quadril)\b/)) {
+    contexto.tipo = 'tc-quadril';
+    contexto.regioesRelevantes = [];
+  } else if (textoLower.match(/\b(tc|tomo|tomografia)\s*(joelho)\b/)) {
+    contexto.tipo = 'tc-joelho';
+    contexto.regioesRelevantes = [];
+  } else if (textoLower.match(/\b(angio|angiotomografia)\s*(aorta)\b/)) {
+    contexto.tipo = 'angio-aorta';
+    contexto.regioesRelevantes = [];
+  }
+  
+  // Identificar subtipos
+  if (textoLower.match(/\b(tep|tromboembolismo|embolia)\s*(pulmonar)?\b/)) {
+    contexto.subtipo = 'tep';
+    contexto.tipo = 'tc-torax';
+  } else if (textoLower.match(/\b(idoso|idosa)\b/)) {
+    contexto.subtipo = 'idoso';
+    if (!contexto.tipo) contexto.tipo = 'tc-cranio';
+  }
+  
+  // Identificar contraste
+  if (textoLower.match(/\b(com|contrastado|contraste)\b/)) {
+    contexto.contraste = 'com';
+  } else if (textoLower.match(/\b(sem|sem\s+contraste)\b/)) {
+    contexto.contraste = 'sem';
+  }
+  
+  return contexto;
+}
+
+export function filtrarTemplatesRelevantes(contexto: ContextoExame): {
+  mascaras: Mascara[];
+  achados: Achado[];
+} {
+  const todasMascaras = carregarMascaras();
+  const todosAchados = carregarAchados();
+  
+  // Filtrar máscaras
+  let mascarasFiltradas = todasMascaras;
+  
+  if (contexto.tipo) {
+    mascarasFiltradas = todasMascaras.filter(m => {
+      // Match exato do tipo
+      if (m.tipo === contexto.tipo) {
+        // Se tem subtipo no contexto, priorizar máscaras com mesmo subtipo
+        if (contexto.subtipo) {
+          return m.subtipo === contexto.subtipo;
+        }
+        // Se tem contraste no contexto, priorizar máscaras com mesmo contraste
+        if (contexto.contraste) {
+          return m.contraste === contexto.contraste;
+        }
+        return true;
+      }
+      // Também incluir máscara genérica de musculoesquelética se não encontrou específica
+      if (m.tipo === 'tc-musculoesqueletica' && !todasMascaras.some(m2 => m2.tipo === contexto.tipo)) {
+        return true;
+      }
+      return false;
+    });
+    
+    // Se não encontrou match exato, incluir todas para segurança
+    if (mascarasFiltradas.length === 0) {
+      mascarasFiltradas = todasMascaras;
+    }
+  }
+  
+  // Filtrar achados por regiões relevantes
+  let achadosFiltrados = todosAchados;
+  
+  if (contexto.regioesRelevantes && contexto.regioesRelevantes.length > 0) {
+    achadosFiltrados = todosAchados.filter(a => 
+      contexto.regioesRelevantes!.some(regiao => 
+        a.regiao.includes(regiao) || regiao.includes(a.regiao)
+      )
+    );
+    
+    // Sempre incluir achados gerais (sem região específica ou de regiões comuns)
+    const achadosGerais = todosAchados.filter(a => 
+      !a.regiao || 
+      ['rins', 'ureteres'].includes(a.regiao) // Achados comuns que podem aparecer em vários exames
+    );
+    
+    achadosFiltrados = [...new Set([...achadosFiltrados, ...achadosGerais])];
+  }
+  
+  return {
+    mascaras: mascarasFiltradas,
+    achados: achadosFiltrados,
+  };
+}
+
+export function formatarTemplatesParaPrompt(contexto?: ContextoExame): string {
+  const { mascaras, achados } = contexto 
+    ? filtrarTemplatesRelevantes(contexto)
+    : { mascaras: carregarMascaras(), achados: carregarAchados() };
   
   let prompt = '## MÁSCARAS DISPONÍVEIS\n\n';
   

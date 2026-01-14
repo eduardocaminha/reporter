@@ -53,5 +53,5 @@ Estruturas ósseas sem alterações significativas.
 <!-- /REGIAO:osseo -->
 
 <!-- REGIAO:transicao -->
-Transição toracoabdominal: sem alterações significativas.
+Transição toracoabdominal sem alterações significativas.
 <!-- /REGIAO:transicao -->

@@ -214,7 +214,7 @@ export async function gerarLaudo(
   modoPS: boolean, 
   usarPesquisa: boolean = false
 ): Promise<ResultadoLaudo> {
-  const systemPrompt = montarSystemPrompt(modoPS, usarPesquisa);
+  const systemPrompt = montarSystemPrompt(modoPS, usarPesquisa, texto);
   
   try {
     const message = await chamarClaudeComRetry(systemPrompt, texto, usarPesquisa);

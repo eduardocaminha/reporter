@@ -69,7 +69,7 @@ export function DictationInput({
                 onClick={() => setHistoricoAberto(!historicoAberto)}
                 className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                <Clock className="w-4 h-4" />
+          <Clock className="w-4 h-4" />
                 Histórico ({historico.length})
               </button>
 
@@ -115,7 +115,7 @@ export function DictationInput({
                         >
                           <p className="text-sm text-foreground truncate">{item.texto}</p>
                           <p className="text-xs text-muted-foreground mt-1">{item.data}</p>
-                        </button>
+        </button>
                       ))}
                     </div>
                   </motion.div>

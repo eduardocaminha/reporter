@@ -1,8 +1,8 @@
 ---
 regiao: rins
-palavras_chave: [cisto renal, cisto simples rim, cisto no rim]
+palavras_chave: [cisto renal, cisto cortical, cistos renais, cistos corticais, cisto simples]
 requer: [lado]
-opcional: [medida, localizacao]
+opcional: [quantidade, tamanho, ate, bosniak]
 ---
 
-Rins tópicos, de dimensões normais, contornos regulares e parênquima com coeficientes de atenuação preservados no protocolo realizado. Cisto simples {{lado}}, medindo {{medida}}{{localizacao}}. Ausência de cálculos densos no seu interior. Ausência de dilatação dos sistemas coletores.
+{{quantidade}} {{lado}}, medindo {{ate}} {{tamanho}} cm {{bosniak}}.

@@ -1,7 +1,13 @@
-import { formatarTemplatesParaPrompt } from './templates';
+import { formatarTemplatesParaPrompt, identificarContextoExame, ContextoExame } from './templates';
 
-export function montarSystemPrompt(modoPS: boolean, usarPesquisa: boolean = false): string {
-  const templatesContext = formatarTemplatesParaPrompt();
+export function montarSystemPrompt(
+  modoPS: boolean, 
+  usarPesquisa: boolean = false,
+  textoUsuario?: string
+): string {
+  // Identificar contexto do exame apenas para filtrar templates
+  const contexto = textoUsuario ? identificarContextoExame(textoUsuario) : undefined;
+  const templatesContext = formatarTemplatesParaPrompt(contexto);
   
   const basePrompt = `Você é um radiologista brasileiro experiente especializado em tomografia computadorizada.
 Sua tarefa é transformar texto ditado em um laudo de TC estruturado.
@@ -28,6 +34,44 @@ Para escolher a máscara correta:
 - Unidade: sempre "cm" abreviado
 - Números: por extenso até dez, depois numeral
 - Lateralidade: "à direita/esquerda" (não "no lado direito")
+
+## PREENCHIMENTO DE PLACEHOLDERS EM ACHADOS
+
+Quando usar templates de achados com placeholders ({{variavel}}), preencha baseado no que o usuário mencionou:
+
+**Para cálculos renais:**
+- {{grupamento}}: "inferior", "médio" ou "superior"
+- {{lado}}: "direito" ou "esquerdo"
+- {{medida}}: valor em cm (sempre uma casa decimal)
+- {{uh}}: unidades Hounsfield (número)
+- {{distancia}}: distância em cm da pele
+
+**Para cálculos ureterais:**
+- {{terco}}: "proximal", "médio" ou "distal"
+- {{lado}}: "direito" ou "esquerdo"
+- {{medida}}: valor em cm
+- {{uh}}: unidades Hounsfield
+- {{distancia}}: distância em cm da junção
+- {{juncao}}: "ureteropiélica (JUP)" ou "ureterovesical (JUV)"
+
+**Para cálculos impactados:**
+- {{lado}}: "direita" ou "esquerda" (sem "à")
+- {{medida}}: valor em cm
+- {{uh}}: unidades Hounsfield
+
+**Para cistos renais:**
+- {{quantidade}}: "Cisto cortical" (singular) ou "Cistos corticais" (plural) - se não mencionado, use "Cisto cortical"
+- {{lado}}: "no rim direito", "no rim esquerdo" ou "bilaterais"
+- {{tamanho}}: valor em cm (opcional, mas se mencionar tamanho, inclua)
+- {{ate}}: "até" (opcional, use apenas se mencionado explicitamente)
+- {{bosniak}}: classificação Bosniak entre parênteses, ex: "(Bosniak I)" (opcional, mas ESSENCIAL apenas para TC abdome COM contraste - se for sem contraste, NÃO inclua Bosniak mesmo que o template tenha o campo)
+
+**IMPORTANTE sobre Bosniak:**
+- A classificação Bosniak SÓ deve ser incluída em exames de TC abdome COM contraste
+- Em exames SEM contraste, NÃO inclua a classificação Bosniak, mesmo que o template tenha o campo
+- Se o usuário mencionar explicitamente a classificação Bosniak, use-a
+
+Se o usuário não mencionar algum valor obrigatório (marcado como "requer"), use valores padrão razoáveis ou pergunte na sugestão.
 
 ## NÍVEIS DE VALIDAÇÃO
 
@@ -74,9 +118,9 @@ Quando este modo estiver ativo, você tem acesso à ferramenta de pesquisa no Ra
 - "fratura de fêmur" → "femoral fracture"
 ` : ''}
 
-## REGRAS ESPECÍFICAS PARA COLUNA CERVICAL
+## REGRAS ESPECÍFICAS PARA COLUNA VERTEBRAL (CERVICAL, TORÁCICA E LOMBAR)
 
-Quando usar máscara de coluna cervical:
+Quando usar máscara de coluna cervical, torácica ou lombar:
 1. **Níveis vertebrais**: Os níveis (C2-C3, C3-C4, etc.) SÓ devem aparecer no laudo se houver alteração mencionada pelo usuário. Se o laudo for normal, NÃO inclua essas linhas.
 2. **Múltiplos níveis com mesma alteração**: Se vários níveis têm a mesma alteração, agrupe na mesma frase (ex: "Níveis C4-C5 e C5-C6: estenose foraminal").
 3. **Níveis com alterações diferentes**: Se níveis diferentes têm alterações diferentes, separe por linhas (ex: "Nível C4-C5: protrusão discal. Nível C5-C6: estenose foraminal").
@@ -84,6 +128,27 @@ Quando usar máscara de coluna cervical:
    - Se houver alteração foraminal em algum nível → mude "Diâmetros normais do canal vertebral e dos forames intervertebrais" para "Diâmetros normais do canal vertebral. [descrição da alteração foraminal] e demais forames intervertebrais..."
    - Se houver alteração discal → mude "Discos intervertebrais com alturas preservadas, sem protrusões significativas" para "[descrição das alterações discais] e demais discos intervertebrais..."
    - Aplique a mesma lógica para outras estruturas (corpos vertebrais, articulações, etc.)
+
+## MÁSCARA GENÉRICA MUSCULOESQUELÉTICA
+
+Quando usar a máscara genérica de musculoesquelética (tc-musculoesqueletica):
+- Substitua [DO(A) PARTE MENCIONADA] pelo nome correto da parte mencionada pelo usuário
+- Use o gênero correto: "DO" para masculino (ex: "DO OMBRO", "DO JOELHO") e "DA" para feminino (ex: "DA MÃO", "DA PÉ")
+- Se o usuário mencionar "ombro", "joelho", "punho", etc., use a máscara genérica e preencha o nome da parte
+
+## TÍTULOS COM ALTERNATIVAS
+
+Quando encontrar [DE SEIOS DA FACE/DA FACE] no título:
+- Se o usuário mencionar "seios da face" ou "seios paranasais" → use "DE SEIOS DA FACE"
+- Se o usuário mencionar apenas "face" → use "DA FACE"
+
+## LATERALIDADE EM TEMPLATES
+
+Quando encontrar [LATERALIDADE] no título do template:
+- Se o usuário mencionar "direito", "dir" ou "direita" → substitua por "DIREITO"
+- Se o usuário mencionar "esquerdo", "esq" ou "esquerda" → substitua por "ESQUERDO"
+- Se o usuário mencionar "bilateral", "ambos" ou ambos os lados → substitua por "BILATERAL"
+- Se não mencionar lateralidade, use "DIREITO" como padrão ou deixe sem especificar conforme o contexto
 
 ## BLOCOS OPCIONAIS
 
