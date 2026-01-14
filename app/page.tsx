@@ -6,6 +6,7 @@ import { useState, useEffect } from "react"
 import { Header } from "@/components/header"
 import { DictationInput } from "@/components/dictation-input"
 import { ReportOutput } from "@/components/report-output"
+import { Sugestoes } from "@/components/sugestoes"
 
 type ReportMode = "ps" | "eletivo" | "comparativo"
 
@@ -21,6 +22,8 @@ const MAX_HISTORICO = 5
 export default function Home() {
   const [dictatedText, setDictatedText] = useState("")
   const [generatedReport, setGeneratedReport] = useState("")
+  const [sugestoes, setSugestoes] = useState<string[]>([])
+  const [erro, setErro] = useState<string | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
   const [reportMode, setReportMode] = useState<ReportMode>("ps")
   const [historico, setHistorico] = useState<ItemHistorico[]>([])
@@ -55,6 +58,9 @@ export default function Home() {
   const handleGenerate = async () => {
     if (!dictatedText.trim()) return
     setIsGenerating(true)
+    setErro(null)
+    setSugestoes([])
+    setGeneratedReport("")
 
     try {
       const response = await fetch("/api/gerar", {
@@ -68,14 +74,29 @@ export default function Home() {
 
       const data = await response.json()
 
+      // Erro essencial - bloqueia geração
       if (data.erro) {
-        setGeneratedReport(`<p class="text-destructive">${data.erro}</p>`)
-      } else if (data.laudo) {
+        setErro(data.erro)
+        setGeneratedReport("")
+        setSugestoes([])
+      } 
+      // Laudo gerado com sucesso
+      else if (data.laudo) {
         setGeneratedReport(data.laudo)
+        setErro(null)
+        setSugestoes(data.sugestoes || [])
         adicionarAoHistorico(dictatedText, data.laudo)
       }
+      // Caso inesperado
+      else {
+        setErro("Resposta inesperada do servidor")
+        setGeneratedReport("")
+        setSugestoes([])
+      }
     } catch {
-      setGeneratedReport('<p class="text-destructive">Erro ao conectar com o servidor</p>')
+      setErro("Erro ao conectar com o servidor")
+      setGeneratedReport("")
+      setSugestoes([])
     } finally {
       setIsGenerating(false)
     }
@@ -120,14 +141,39 @@ export default function Home() {
           />
         </motion.div>
 
-        <motion.div
-          variants={{
-            hidden: { opacity: 0, y: 20 },
-            visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
-          }}
-        >
-          <ReportOutput report={generatedReport} isGenerating={isGenerating} />
-        </motion.div>
+        {/* Erro essencial */}
+        {erro && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-destructive/10 border border-destructive/50 rounded-xl p-4"
+          >
+            <p className="text-sm font-medium text-destructive">{erro}</p>
+          </motion.div>
+        )}
+
+        {/* Laudo gerado */}
+        {generatedReport && (
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+            }}
+          >
+            <ReportOutput report={generatedReport} isGenerating={isGenerating} />
+          </motion.div>
+        )}
+
+        {/* Sugestões (aparecem junto com o laudo) */}
+        {sugestoes.length > 0 && generatedReport && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <Sugestoes sugestoes={sugestoes} />
+          </motion.div>
+        )}
       </motion.main>
     </div>
   )

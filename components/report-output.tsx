@@ -60,12 +60,15 @@ export function ReportOutput({ report, isGenerating }: ReportOutputProps) {
     setTimeout(() => setCopiedText(false), 2000)
   }
 
+  // Verifica se é uma mensagem de erro (começa com tag de erro)
+  const isError = report.includes('class="text-destructive"') || report.includes('text-destructive')
+
   return (
     <section className="bg-card rounded-xl border border-border p-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-sm font-medium text-foreground">Resultado</h2>
         <AnimatePresence>
-          {report && (
+          {report && !isError && (
             <motion.div
               initial={{ opacity: 0, x: 10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -100,7 +103,11 @@ export function ReportOutput({ report, isGenerating }: ReportOutputProps) {
         </AnimatePresence>
       </div>
 
-      <div className="min-h-[220px] rounded-lg bg-muted/50 border border-border p-4 overflow-hidden">
+      <div className={`min-h-[220px] rounded-lg border p-4 overflow-hidden ${
+        isError 
+          ? "bg-destructive/5 border-destructive/20" 
+          : "bg-muted/50 border-border"
+      }`}>
         <AnimatePresence mode="wait">
           {isGenerating ? (
             <motion.div
@@ -137,7 +144,11 @@ export function ReportOutput({ report, isGenerating }: ReportOutputProps) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="text-sm leading-relaxed text-foreground [&_p]:mb-3 [&_p:last-child]:mb-0"
+              className={`text-sm leading-relaxed ${
+                isError 
+                  ? "text-destructive" 
+                  : "text-foreground [&_p]:mb-3 [&_p:last-child]:mb-0"
+              }`}
               dangerouslySetInnerHTML={{ __html: reportHtml }}
             />
           ) : (
