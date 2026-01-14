@@ -3,6 +3,7 @@
 import { motion } from "motion/react"
 import { LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Toggle } from "@/components/ui/toggle"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Kbd, KbdGroup } from "@/components/ui/kbd"
 import { useRouter } from "next/navigation"
@@ -73,8 +74,9 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
       <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
         <span className="text-lg font-semibold tracking-tight text-foreground">RadReport</span>
 
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-1 bg-muted rounded-lg p-1 relative">
+        <div className="flex items-center gap-2 sm:gap-6">
+          {/* Desktop: Tabs com animação */}
+          <div className="hidden sm:flex items-center gap-1 bg-muted rounded-lg p-1 relative">
             {modes.map((mode) => (
               <Tooltip key={mode.value}>
                 <TooltipTrigger asChild>
@@ -99,19 +101,33 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <div className="flex items-center gap-2">
-                    <span>{mode.label}</span>
-                    <KbdGroup>
-                      <Kbd>{isMac ? '⌘' : 'Ctrl'}</Kbd>
-                      <span>+</span>
-                      <Kbd>Shift</Kbd>
-                      <span>+</span>
-                      <Kbd>{mode.key.toUpperCase()}</Kbd>
-                    </KbdGroup>
-                  </div>
+                  <KbdGroup>
+                    <Kbd>{isMac ? '⌘' : 'Ctrl'}</Kbd>
+                    <span>+</span>
+                    <Kbd>Shift</Kbd>
+                    <span>+</span>
+                    <Kbd>{mode.key.toUpperCase()}</Kbd>
+                  </KbdGroup>
                 </TooltipContent>
               </Tooltip>
             ))}
+          </div>
+
+          {/* Mobile: Toggle único que cicla entre os modos */}
+          <div className="sm:hidden">
+            <Toggle
+              pressed={true}
+              onPressedChange={() => {
+                const currentIndex = modes.findIndex(m => m.value === reportMode)
+                const nextIndex = (currentIndex + 1) % modes.length
+                onReportModeChange(modes[nextIndex].value)
+              }}
+              variant="outline"
+              size="sm"
+              className="px-3 py-1.5 text-sm font-medium data-[state=on]:bg-card data-[state=on]:shadow-sm"
+            >
+              {modes.find(m => m.value === reportMode)?.label}
+            </Toggle>
           </div>
 
           <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>

@@ -42,10 +42,62 @@ export function DictationInput({
 }: DictationInputProps) {
   const [historicoAberto, setHistoricoAberto] = useState(false)
   const [isMac, setIsMac] = useState(false)
+  const [animatedPlaceholder, setAnimatedPlaceholder] = useState("")
+
+  const placeholderPhrases = [
+    "tc abdome com contraste, microcalculo no rim esquerdo 0,2",
+    "tomo torax sem, normal",
+    "tc cranio sem contraste, avc isquemico no territorio da acm direita",
+  ]
 
   useEffect(() => {
     setIsMac(navigator.platform.toUpperCase().indexOf('MAC') >= 0 || navigator.userAgent.toUpperCase().indexOf('MAC') >= 0)
   }, [])
+
+  useEffect(() => {
+    if (value.trim()) {
+      setAnimatedPlaceholder("")
+      return
+    }
+
+    let currentPhraseIndex = 0
+    let currentCharIndex = 0
+    let isDeleting = false
+    let timeoutId: NodeJS.Timeout
+
+    const typeWriter = () => {
+      const currentPhrase = placeholderPhrases[currentPhraseIndex]
+
+      if (isDeleting) {
+        setAnimatedPlaceholder(currentPhrase.substring(0, currentCharIndex - 1))
+        currentCharIndex--
+        timeoutId = setTimeout(typeWriter, 30)
+      } else {
+        setAnimatedPlaceholder(currentPhrase.substring(0, currentCharIndex + 1))
+        currentCharIndex++
+        timeoutId = setTimeout(typeWriter, 50)
+      }
+
+      if (!isDeleting && currentCharIndex === currentPhrase.length) {
+        // Pausa após completar a frase
+        timeoutId = setTimeout(() => {
+          isDeleting = true
+          typeWriter()
+        }, 2000)
+      } else if (isDeleting && currentCharIndex === 0) {
+        // Passa para a próxima frase
+        isDeleting = false
+        currentPhraseIndex = (currentPhraseIndex + 1) % placeholderPhrases.length
+        timeoutId = setTimeout(typeWriter, 300)
+      }
+    }
+
+    typeWriter()
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId)
+    }
+  }, [value, placeholderPhrases])
 
   return (
     <section className="bg-card rounded-xl border border-border p-6">
@@ -133,7 +185,7 @@ export function DictationInput({
       </div>
 
       <Textarea
-        placeholder="Cole ou digite o texto ditado aqui...&#10;&#10;Exemplos:&#10;• tc abdome com contraste, microcalculo no rim esquerdo 0,2&#10;• tomo torax sem, normal&#10;• tc cranio sem contraste, avc isquemico no territorio da acm direita"
+        placeholder={animatedPlaceholder || "Cole ou digite o texto ditado aqui..."}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={onKeyDown}
