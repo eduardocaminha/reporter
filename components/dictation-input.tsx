@@ -174,7 +174,6 @@ export function DictationInput({
               </AnimatePresence>
             </div>
           )}
-        </div>
       </div>
 
       <Textarea
