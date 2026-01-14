@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { textoParaHTML, removerFormatacao } from '@/lib/formatador';
+import { formatarLaudoHTML, removerFormatacao } from '@/lib/formatador';
 
 interface CopyButtonsProps {
   laudo: string | null;
@@ -14,7 +14,7 @@ export function CopyButtons({ laudo }: CopyButtonsProps) {
   if (!laudo) return null;
 
   async function copiarHTML() {
-    const html = textoParaHTML(laudo!);
+    const html = formatarLaudoHTML(laudo!);
     
     try {
       // Copia HTML rico para o clipboard
