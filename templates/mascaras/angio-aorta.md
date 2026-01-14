@@ -16,6 +16,7 @@ Exame realizado em aparelho multislice, após a injeção do meio de contraste i
 ANÁLISE:
 <!-- REGIAO:comparativo -->
 <!-- /REGIAO:comparativo -->
+
 <!-- REGIAO:dispositivos -->
 <!-- /REGIAO:dispositivos -->
 

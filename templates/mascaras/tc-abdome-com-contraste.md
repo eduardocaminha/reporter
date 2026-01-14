@@ -15,6 +15,8 @@ Exame realizado em aparelho multislice, antes e após a injeção endovenosa do 
 ANÁLISE:
 <!-- REGIAO:comparativo -->
 <!-- /REGIAO:comparativo -->
+
+
 <!-- REGIAO:dispositivos -->
 <!-- /REGIAO:dispositivos -->
 

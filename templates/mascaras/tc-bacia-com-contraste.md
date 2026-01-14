@@ -16,6 +16,7 @@ Aquisição volumétrica multislice, antes e após a administração endovenosa 
 ANÁLISE:
 <!-- REGIAO:comparativo -->
 <!-- /REGIAO:comparativo -->
+
 <!-- REGIAO:dispositivos -->
 <!-- /REGIAO:dispositivos -->
 

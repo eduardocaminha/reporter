@@ -3,6 +3,7 @@
 import { motion } from "motion/react"
 import { LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
 
 type ReportMode = "ps" | "eletivo" | "comparativo"
 
@@ -12,11 +13,25 @@ interface HeaderProps {
 }
 
 export function Header({ reportMode, onReportModeChange }: HeaderProps) {
+  const router = useRouter()
   const modes: { value: ReportMode; label: string }[] = [
     { value: "ps", label: "PS" },
     { value: "eletivo", label: "Eletivo" },
     { value: "comparativo", label: "Comparativo" },
   ]
+
+  async function handleLogout() {
+    try {
+      await fetch("/api/auth", {
+        method: "DELETE",
+      })
+      router.push("/login")
+      router.refresh()
+    } catch {
+      // Em caso de erro, ainda redireciona para login
+      router.push("/login")
+    }
+  }
 
   return (
     <motion.header
@@ -54,7 +69,12 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
             ))}
           </div>
 
-          <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground gap-2">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="text-muted-foreground hover:text-foreground gap-2"
+            onClick={handleLogout}
+          >
             <LogOut className="w-4 h-4" />
             Sair
           </Button>

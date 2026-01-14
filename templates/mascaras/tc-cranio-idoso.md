@@ -17,6 +17,7 @@ Exame realizado em aparelho multislice, sem a injeção endovenosa do meio de co
 ANÁLISE:
 <!-- REGIAO:comparativo -->
 <!-- /REGIAO:comparativo -->
+
 <!-- REGIAO:dispositivos -->
 <!-- /REGIAO:dispositivos -->
 

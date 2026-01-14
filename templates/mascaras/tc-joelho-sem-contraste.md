@@ -16,6 +16,7 @@ Aquisição volumétrica multislice, sem a administração endovenosa de meio de
 ANÁLISE:
 <!-- REGIAO:comparativo -->
 <!-- /REGIAO:comparativo -->
+
 <!-- REGIAO:dispositivos -->
 <!-- /REGIAO:dispositivos -->
 
