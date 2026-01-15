@@ -39,11 +39,17 @@ Não há evidências de linfonodomegalias nos níveis estudados.
 Estruturas vasculares mediastinais tópicas, pérvias, com calibre preservado.
 <!-- /REGIAO:mediastino -->
 
-<!-- REGIAO:parede_toracica -->
-Parede torácica sem alterações significativas.
-<!-- /REGIAO:parede_toracica -->
+<!-- REGIAO:osseo -->
+Estruturas ósseas sem alterações significativas.
+<!-- /REGIAO:osseo -->
 
 <!-- REGIAO:transicao -->
 Transição toracoabdominal sem alterações significativas.
 <!-- /REGIAO:transicao -->
 
+
+<!-- REGIAO:observacao -->
+<!-- /REGIAO:observacao -->
+
+<!-- REGIAO:achados_adicionais -->
+<!-- /REGIAO:achados_adicionais -->

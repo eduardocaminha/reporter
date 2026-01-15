@@ -36,3 +36,9 @@ Ausência de derrame articular.
 Planos miotendíneos sem alterações significativas detectáveis ao método.
 <!-- /REGIAO:planos_miotendineos -->
 
+
+<!-- REGIAO:observacao -->
+<!-- /REGIAO:observacao -->
+
+<!-- REGIAO:achados_adicionais -->
+<!-- /REGIAO:achados_adicionais -->

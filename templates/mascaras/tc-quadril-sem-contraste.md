@@ -36,3 +36,9 @@ Não há sinais de derrame articular.
 Planos musculares e tendíneos sem alterações tomográficas.
 <!-- /REGIAO:planos_musculares_tendineos -->
 
+
+<!-- REGIAO:observacao -->
+<!-- /REGIAO:observacao -->
+
+<!-- REGIAO:achados_adicionais -->
+<!-- /REGIAO:achados_adicionais -->

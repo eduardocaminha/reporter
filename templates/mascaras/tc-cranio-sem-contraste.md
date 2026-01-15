@@ -47,3 +47,9 @@ Tronco cerebral e cerebelo de aspecto preservado.
 Estruturas da linha mediana sem desvios significativos.
 <!-- /REGIAO:linha_mediana -->
 
+
+<!-- REGIAO:observacao -->
+<!-- /REGIAO:observacao -->
+
+<!-- REGIAO:achados_adicionais -->
+<!-- /REGIAO:achados_adicionais -->

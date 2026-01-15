@@ -7,6 +7,7 @@ import { Header } from "@/components/header"
 import { DictationInput } from "@/components/dictation-input"
 import { ReportOutput } from "@/components/report-output"
 import { Sugestoes } from "@/components/sugestoes"
+import type { TokenUsage } from "@/lib/tokens"
 
 type ReportMode = "ps" | "eletivo" | "comparativo"
 
@@ -28,6 +29,8 @@ export default function Home() {
   const [reportMode, setReportMode] = useState<ReportMode>("ps")
   const [usarPesquisa, setUsarPesquisa] = useState(false)
   const [historico, setHistorico] = useState<ItemHistorico[]>([])
+  const [tokenUsage, setTokenUsage] = useState<TokenUsage | undefined>()
+  const [model, setModel] = useState<string | undefined>()
 
   useEffect(() => {
     const saved = localStorage.getItem("radreport_historico")
@@ -62,6 +65,8 @@ export default function Home() {
     setErro(null)
     setSugestoes([])
     setGeneratedReport("")
+    setTokenUsage(undefined)
+    setModel(undefined)
 
     try {
       const response = await fetch("/api/gerar", {
@@ -88,6 +93,8 @@ export default function Home() {
         setGeneratedReport(data.laudo)
         setErro(null)
         setSugestoes(data.sugestoes || [])
+        setTokenUsage(data.tokenUsage)
+        setModel(data.model)
         adicionarAoHistorico(dictatedText, data.laudo)
       }
       // Caso inesperado
@@ -165,7 +172,12 @@ export default function Home() {
               visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
             }}
           >
-            <ReportOutput report={generatedReport} isGenerating={isGenerating} />
+            <ReportOutput 
+              report={generatedReport} 
+              isGenerating={isGenerating}
+              tokenUsage={tokenUsage}
+              model={model}
+            />
           </motion.div>
         )}
 

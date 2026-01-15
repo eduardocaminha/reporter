@@ -53,3 +53,9 @@ Estruturas da linha mediana sem desvios significativos.
 Ateromatose das carótidas internas e vertebrais.
 <!-- /REGIAO:ateromatose -->
 
+
+<!-- REGIAO:observacao -->
+<!-- /REGIAO:observacao -->
+
+<!-- REGIAO:achados_adicionais -->
+<!-- /REGIAO:achados_adicionais -->

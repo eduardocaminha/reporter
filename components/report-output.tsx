@@ -2,8 +2,9 @@
 
 import { motion, AnimatePresence } from "motion/react"
 import { Button } from "@/components/ui/button"
-import { Copy, FileText, Check } from "lucide-react"
+import { Copy, FileText, Check, DollarSign } from "lucide-react"
 import { useState, useMemo, useEffect, useRef } from "react"
+import { calcularCusto, formatarCusto, formatarTokens, type TokenUsage } from "@/lib/tokens"
 
 // Função para formatar laudo no cliente (duplicada da lib/formatador para uso no cliente)
 function formatarLaudoHTMLCliente(texto: string): string {
@@ -99,9 +100,11 @@ function formatarLaudoHTMLCliente(texto: string): string {
 interface ReportOutputProps {
   report: string
   isGenerating: boolean
+  tokenUsage?: TokenUsage
+  model?: string
 }
 
-export function ReportOutput({ report, isGenerating }: ReportOutputProps) {
+export function ReportOutput({ report, isGenerating, tokenUsage, model }: ReportOutputProps) {
   const [copiedHtml, setCopiedHtml] = useState(false)
   const [copiedText, setCopiedText] = useState(false)
   const previousReportRef = useRef<string>("")
@@ -165,6 +168,12 @@ export function ReportOutput({ report, isGenerating }: ReportOutputProps) {
 
   // Verifica se é uma mensagem de erro (começa com tag de erro)
   const isError = report.includes('class="text-destructive"') || report.includes('text-destructive')
+  
+  // Calcular custo se houver informações de tokens
+  const costInfo = useMemo(() => {
+    if (!tokenUsage || !model) return null;
+    return calcularCusto(tokenUsage.inputTokens, tokenUsage.outputTokens, model);
+  }, [tokenUsage, model])
 
   return (
     <section className="bg-card rounded-xl border border-border p-6">
@@ -268,6 +277,24 @@ export function ReportOutput({ report, isGenerating }: ReportOutputProps) {
           )}
         </AnimatePresence>
       </div>
+      
+      {/* Informações de tokens e custo - na parte inferior, similar ao botão Gerar Laudo */}
+      {tokenUsage && costInfo && (
+        <div className="mt-4 pt-4 border-t border-border">
+          <div className="flex items-center justify-end gap-4 text-xs text-muted-foreground">
+            <div className="flex items-center gap-1">
+              <span>Tokens:</span>
+              <span className="font-medium text-foreground">
+                {formatarTokens(tokenUsage.inputTokens)} in + {formatarTokens(tokenUsage.outputTokens)} out = {formatarTokens(tokenUsage.totalTokens)}
+              </span>
+            </div>
+            <div className="flex items-center gap-1">
+              <DollarSign className="w-3.5 h-3.5" />
+              <span className="font-medium text-foreground">{formatarCusto(costInfo.totalCost)}</span>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   )
 }

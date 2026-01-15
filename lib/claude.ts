@@ -1,6 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { montarSystemPrompt } from './prompts';
 import { formatarLaudoHTML } from './formatador';
+import type { TokenUsage } from './tokens';
 
 const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -10,6 +11,8 @@ export interface ResultadoLaudo {
   laudo: string | null;
   sugestoes: string[];
   erro: string | null;
+  tokenUsage?: TokenUsage;
+  model?: string;
 }
 
 function limparRespostaJSON(resposta: string): string {
@@ -240,19 +243,37 @@ export async function gerarLaudo(
       // Formatar laudo em HTML se existir
       const laudoFormatado = laudoTexto ? formatarLaudoHTML(laudoTexto) : null;
       
+      // Capturar informações de uso de tokens
+      const tokenUsage: TokenUsage | undefined = message.usage ? {
+        inputTokens: message.usage.input_tokens,
+        outputTokens: message.usage.output_tokens,
+        totalTokens: message.usage.input_tokens + message.usage.output_tokens,
+      } : undefined;
+      
       return {
         laudo: laudoFormatado,
         sugestoes: resultado.sugestoes || [],
         erro: resultado.erro || null,
+        tokenUsage,
+        model: message.model,
       };
     } catch {
       // Se não for JSON válido, assume que é o laudo direto e formata
       const laudoFormatado = respostaRaw ? formatarLaudoHTML(respostaRaw) : null;
       
+      // Capturar informações de uso de tokens
+      const tokenUsage: TokenUsage | undefined = message.usage ? {
+        inputTokens: message.usage.input_tokens,
+        outputTokens: message.usage.output_tokens,
+        totalTokens: message.usage.input_tokens + message.usage.output_tokens,
+      } : undefined;
+      
       return {
         laudo: laudoFormatado,
         sugestoes: [],
         erro: null,
+        tokenUsage,
+        model: message.model,
       };
     }
   } catch (error) {

@@ -56,3 +56,9 @@ Músculos esternocleidomastoideos e musculatura paravertebral de aspecto preserv
 Estruturas ósseas preservadas.
 <!-- /REGIAO:estruturas_osseas -->
 
+
+<!-- REGIAO:observacao -->
+<!-- /REGIAO:observacao -->
+
+<!-- REGIAO:achados_adicionais -->
+<!-- /REGIAO:achados_adicionais -->

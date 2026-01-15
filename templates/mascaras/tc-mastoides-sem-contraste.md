@@ -75,3 +75,9 @@ Forames jugulares e canais carotídeos preservados.
 Rinofaringe de contornos regulares. Seios paranasais incluídos na aquisição do estudo normoaerados.
 <!-- /REGIAO:rinofaringe_seios -->
 
+
+<!-- REGIAO:observacao -->
+<!-- /REGIAO:observacao -->
+
+<!-- REGIAO:achados_adicionais -->
+<!-- /REGIAO:achados_adicionais -->

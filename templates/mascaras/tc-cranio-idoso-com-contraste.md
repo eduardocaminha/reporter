@@ -65,3 +65,9 @@ Seios venosos durais pérvios, sem sinais de trombose.
 Ateromatose das carótidas internas e vertebrais.
 <!-- /REGIAO:ateromatose -->
 
+
+<!-- REGIAO:observacao -->
+<!-- /REGIAO:observacao -->
+
+<!-- REGIAO:achados_adicionais -->
+<!-- /REGIAO:achados_adicionais -->

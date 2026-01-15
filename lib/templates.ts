@@ -103,10 +103,10 @@ export function identificarContextoExame(texto: string): ContextoExame {
   // Identificar tipo de exame
   if (textoLower.match(/\b(tc|tomo|tomografia)\s*(abdome|abd[oô]men|abdominal)\b/)) {
     contexto.tipo = 'tc-abdome';
-    contexto.regioesRelevantes = ['rins', 'apendice', 'rim', 'pelve', 'bexiga', 'colon', 'intestino', 'figado', 'vesicula-biliar'];
+    contexto.regioesRelevantes = ['rins', 'apendice', 'rim', 'pelve', 'bexiga', 'colon', 'intestino', 'figado', 'vesicula-biliar', 'abdome'];
   } else if (textoLower.match(/\b(tc|tomo|tomografia)\s*(tor[áa]x|t[óo]rax)\b/)) {
     contexto.tipo = 'tc-torax';
-    contexto.regioesRelevantes = [];
+    contexto.regioesRelevantes = ['torax'];
   } else if (textoLower.match(/\b(tc|tomo|tomografia)\s*(cr[âa]nio|cranio)\b/)) {
     contexto.tipo = 'tc-cranio';
     contexto.regioesRelevantes = [];
@@ -130,7 +130,14 @@ export function identificarContextoExame(texto: string): ContextoExame {
     contexto.regioesRelevantes = ['seios-face'];
   } else if (textoLower.match(/\b(tc|tomo|tomografia)\s*(pelve|p[ée]lvis)\b/)) {
     contexto.tipo = 'tc-pelve';
-    contexto.regioesRelevantes = ['pelve', 'bexiga'];
+    contexto.regioesRelevantes = ['pelve', 'bexiga', 'intestino', 'linfonodos', 'liquido_livre', 'estruturas_osseas'];
+    // Detectar se é pelve masculina
+    if (textoLower.match(/\b(masculina|masculino|homem|homens)\b/)) {
+      contexto.subtipo = 'masculina';
+    } else {
+      // Pelve feminina ou não especificado (assume feminino)
+      contexto.regioesRelevantes.push('utero', 'anexiais');
+    }
   } else if (textoLower.match(/\b(tc|tomo|tomografia)\s*(bacia)\b/)) {
     contexto.tipo = 'tc-bacia';
     contexto.regioesRelevantes = [];

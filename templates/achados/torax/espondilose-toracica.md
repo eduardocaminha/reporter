@@ -1,5 +1,5 @@
 ---
-regiao: coluna-toracica
+regiao: torax
 palavras_chave: [espondilose toracica, espondilose]
 ---
 

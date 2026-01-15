@@ -68,3 +68,9 @@ Estruturas ósseas sem alterações significativas.
 <!-- REGIAO:transicao -->
 Transição toracoabdominal sem alterações significativas.
 <!-- /REGIAO:transicao -->
+
+<!-- REGIAO:observacao -->
+<!-- /REGIAO:observacao -->
+
+<!-- REGIAO:achados_adicionais -->
+<!-- /REGIAO:achados_adicionais -->

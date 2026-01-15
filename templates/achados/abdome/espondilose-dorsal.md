@@ -1,5 +1,5 @@
 ---
-regiao: coluna-toracica
+regiao: abdome
 palavras_chave: [espondilose dorsal, espondilose]
 ---
 

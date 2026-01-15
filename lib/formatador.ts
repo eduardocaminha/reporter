@@ -72,12 +72,28 @@ export function formatarLaudoHTML(texto: string): string {
       i++;
       emAnalise = false;
       
-      // Próxima linha é o texto da técnica
-      if (i < linhas.length) {
-        const textoTecnica = formatarTextoComItalico(linhas[i]);
-        html += `<p class="laudo-texto">${textoTecnica}</p>`;
+      // Coletar todo o texto da técnica (pode ter múltiplas linhas)
+      const linhasTecnica: string[] = [];
+      while (i < linhas.length) {
+        const linhaTecnica = linhas[i];
+        const linhaTecnicaUpper = linhaTecnica.toUpperCase().trim();
+        
+        // Se encontrar outra seção, para
+        if (linhaTecnicaUpper.startsWith('ANÁLISE:') || 
+            linhaTecnicaUpper.startsWith('ANALISE:') ||
+            linhaTecnicaUpper.startsWith('OBSERVAÇÃO:') ||
+            linhaTecnicaUpper.startsWith('OBSERVACAO:') ||
+            linhaTecnicaUpper.startsWith('ACHADOS ADICIONAIS:')) {
+          break;
+        }
+        
+        linhasTecnica.push(linhaTecnica);
         i++;
       }
+      
+      // Formatar técnica: primeira parte normal, problemas técnicos em itálico
+      const textoTecnicaCompleto = formatarTextoTecnica(linhasTecnica.join(' '));
+      html += `<p class="laudo-texto">${textoTecnicaCompleto}</p>`;
       
       html += '<br>';
     } 
@@ -96,14 +112,31 @@ export function formatarLaudoHTML(texto: string): string {
         if (linhaAnaliseUpper.startsWith('TÉCNICA:') || 
             linhaAnaliseUpper.startsWith('TECNICA:') ||
             linhaAnaliseUpper.startsWith('ANÁLISE:') ||
-            linhaAnaliseUpper.startsWith('ANALISE:')) {
+            linhaAnaliseUpper.startsWith('ANALISE:') ||
+            linhaAnaliseUpper.startsWith('OBSERVAÇÃO:') ||
+            linhaAnaliseUpper.startsWith('OBSERVACAO:') ||
+            linhaAnaliseUpper.startsWith('ACHADOS ADICIONAIS:')) {
           break;
         }
         
         html += `<p class="laudo-texto">${linhaAnalise}</p>`;
         i++;
       }
-    } 
+    }
+    // Seção Observação
+    else if (linhaUpper.startsWith('OBSERVAÇÃO:') || linhaUpper.startsWith('OBSERVACAO:')) {
+      html += '<br>'; // Linha de espaço antes
+      const textoObservacao = linha.substring(linha.indexOf(':') + 1).trim();
+      html += `<p class="laudo-texto"><em>Observação: ${textoObservacao}</em></p>`;
+      i++;
+    }
+    // Seção Achados adicionais
+    else if (linhaUpper.startsWith('ACHADOS ADICIONAIS:')) {
+      html += '<br>'; // Linha de espaço antes
+      const textoAchados = linha.substring(linha.indexOf(':') + 1).trim();
+      html += `<p class="laudo-texto"><em>Achados adicionais: ${textoAchados}</em></p>`;
+      i++;
+    }
     // Linha normal - se já estamos em análise, trata como parágrafo
     else if (emAnalise) {
       html += `<p class="laudo-texto">${linha}</p>`;
@@ -120,9 +153,9 @@ export function formatarLaudoHTML(texto: string): string {
 }
 
 /**
- * Formata texto colocando palavras estrangeiras em itálico
+ * Formata texto da técnica: palavras estrangeiras e problemas técnicos em itálico
  */
-function formatarTextoComItalico(texto: string): string {
+function formatarTextoTecnica(texto: string): string {
   // Palavras estrangeiras comuns em laudos
   const palavrasEstrangeiras = [
     'multislice',
@@ -141,12 +174,80 @@ function formatarTextoComItalico(texto: string): string {
   
   let resultado = texto;
   
+  // Aplicar itálico a palavras estrangeiras primeiro
   for (const palavra of palavrasEstrangeiras) {
     const regex = new RegExp(`\\b${palavra}\\b`, 'gi');
     resultado = resultado.replace(regex, (match) => `<em>${match}</em>`);
   }
   
+  // Detectar problemas técnicos - palavras-chave que indicam problemas
+  const palavrasProblemaTecnico = [
+    'artefato',
+    'artefatos',
+    'limitação',
+    'limitações',
+    'problema',
+    'problemas',
+    'dificuldade',
+    'dificuldades',
+    'movimento',
+    'ruído',
+    'ruido',
+    'noise',
+    'limitando',
+    'limitado',
+    'artefact',
+    'artifacts',
+  ];
+  
+  // Encontrar onde começa o problema técnico (após vírgula ou ponto)
+  // E aplicar itálico a partir daí
+  let indiceProblema = -1;
+  const textoLower = resultado.toLowerCase();
+  
+  for (const palavra of palavrasProblemaTecnico) {
+    const indice = textoLower.indexOf(palavra.toLowerCase());
+    if (indice !== -1 && (indiceProblema === -1 || indice < indiceProblema)) {
+      indiceProblema = indice;
+    }
+  }
+  
+  // Se encontrou problema técnico, aplicar itálico a partir da vírgula/ponto anterior
+  if (indiceProblema !== -1) {
+    // Procurar vírgula ou ponto antes do problema
+    const antesProblema = resultado.substring(0, indiceProblema);
+    const depoisProblema = resultado.substring(indiceProblema);
+    
+    // Encontrar última vírgula ou ponto antes do problema
+    const ultimaVirgula = antesProblema.lastIndexOf(',');
+    const ultimoPonto = antesProblema.lastIndexOf('.');
+    const divisor = Math.max(ultimaVirgula, ultimoPonto);
+    
+    if (divisor !== -1) {
+      // Separar em parte normal e parte problema (em itálico)
+      const parteNormal = resultado.substring(0, divisor + 1);
+      const parteProblema = resultado.substring(divisor + 1).trim();
+      
+      // Aplicar itálico à parte do problema, mas preservar itálico já aplicado
+      // Remover tags <em> temporariamente para aplicar novo
+      const parteProblemaSemItalico = parteProblema.replace(/<em>/g, '').replace(/<\/em>/g, '');
+      resultado = parteNormal + ' ' + `<em>${parteProblemaSemItalico}</em>`;
+    } else {
+      // Se não há vírgula/ponto antes, aplicar itálico a partir do problema
+      const antesProblemaLimpo = antesProblema.trim();
+      const parteProblema = depoisProblema.replace(/<em>/g, '').replace(/<\/em>/g, '');
+      resultado = antesProblemaLimpo + ' ' + `<em>${parteProblema}</em>`;
+    }
+  }
+  
   return resultado;
+}
+
+/**
+ * Formata texto colocando palavras estrangeiras em itálico (função legada - mantida para compatibilidade)
+ */
+function formatarTextoComItalico(texto: string): string {
+  return formatarTextoTecnica(texto);
 }
 
 /**

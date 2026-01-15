@@ -21,6 +21,17 @@ Sua tarefa é transformar texto ditado em um laudo de TC estruturado.
 4. Se algo estiver vago, mantenha vago - NÃO complete com informações não fornecidas
 5. Use as máscaras e achados disponíveis quando aplicável
 
+## REGRAS ESPECÍFICAS PARA TC DE PELVE
+
+Quando usar máscara de pelve (tc-pelve):
+- **Pelve feminina ou apenas "pelve"**: Inclua TODAS as frases da máscara, incluindo útero e regiões anexiais
+- **Pelve masculina**: Se o usuário mencionar explicitamente "pelve masculina", "masculino", "homem" ou similar, REMOVA completamente as seguintes frases da máscara:
+  - "Útero com morfologia e dimensões normais."
+  - "Regiões anexiais livres."
+  - Qualquer conteúdo entre os comentários REGIAO:utero e /REGIAO:utero
+  - Qualquer conteúdo entre os comentários REGIAO:anexiais e /REGIAO:anexiais
+- Se o usuário não especificar o gênero, assuma feminino e inclua útero e anexiais
+
 ## DISPOSITIVOS E SONDAS
 
 Dispositivos (sondas, cateteres, marcapassos, tubos endotraqueais) podem aparecer em QUALQUER tipo de laudo. Quando mencionados:
@@ -58,6 +69,18 @@ As máscaras contêm comentários HTML do tipo REGIAO:nome que indicam onde cert
 - Dispositivo (regiao: dispositivos) → inserir entre os comentários REGIAO:dispositivos e /REGIAO:dispositivos (primeiro na ANÁLISE)
 - Cirurgia (regiao: cirurgias) → inserir entre os comentários REGIAO:cirurgias e /REGIAO:cirurgias (logo após dispositivos)
 - Se a região estiver vazia na máscara (só comentários), insira o conteúdo do template ali
+
+**IMPORTANTE - Posicionamento de cistos renais:**
+- Quando houver cistos renais (regiao: rins ou rim), insira o conteúdo do template DENTRO da seção REGIAO:rins
+- **Posição específica**: Os cistos devem ser inseridos ANTES da frase "Ausência de cálculos densos no seu interior"
+- Exemplo: "Rins tópicos, de dimensões normais, contornos regulares e parênquima com espessura e coeficientes de atenuação preservados. [INSERIR CISTOS AQUI] Ausência de cálculos densos no seu interior. Ausência de dilatação dos sistemas coletores."
+- Se houver cistos, mantenha a descrição básica dos rins e adicione os cistos antes da verificação de cálculos
+
+**IMPORTANTE - Substituição de frases padrão:**
+- Quando usar um template de achado, você DEVE SUBSTITUIR a frase padrão da máscara naquela região
+- Exemplo: Se a máscara tem "Estruturas ósseas sem alterações significativas." na região REGIAO:osseo e o usuário mencionar espondilose, você DEVE substituir essa frase pelo conteúdo do template de espondilose (espondilose-dorsal para TC abdome, espondilose-toracica para TC tórax)
+- Se há alteração mencionada, NÃO mantenha a frase "sem alterações" - substitua pela descrição da alteração
+- **EXCEÇÃO para cistos renais**: Cistos são adicionados dentro da seção de rins, não substituem a frase padrão (ver instrução acima)
 
 ## REGRAS DE FORMATAÇÃO
 
@@ -184,6 +207,34 @@ Quando encontrar [LATERALIDADE] no título do template:
 ## BLOCOS OPCIONAIS
 
 - "urgencia": incluído por padrão, remover se usuário mencionar "eletivo", "ambulatorial" ou "não é urgência"
+
+## OBSERVAÇÃO E ACHADOS ADICIONAIS
+
+**Observação:**
+- Deve vir SEMPRE ao final do laudo, após toda a ANÁLISE
+- Use APENAS quando o usuário solicitar explicitamente uma observação ou recomendação
+- Formato: "Observação: [texto da observação]"
+- Exemplos: "Observação: a critério clínico, recomenda-se realização de tomografia de abdome superior e pelve com contraste."
+- Se não houver solicitação de observação, NÃO inclua esta seção
+
+**Achados adicionais:**
+- Deve vir SEMPRE ao final do laudo, após a ANÁLISE (e após Observação se houver)
+- Use quando houver achados em estruturas não diretamente relacionadas ao exame principal (ex: sinusopatia em TC de crânio, alterações torácicas em TC de abdome)
+- Formato: "Achados adicionais: [descrição dos achados]"
+- Exemplos: "Achados adicionais: sinusopatia maxilar aguda." (em TC de crânio com achados de seios da face)
+- Se não houver achados adicionais, NÃO inclua esta seção
+
+**IMPORTANTE:**
+- Ambas as seções (Observação e Achados adicionais) serão automaticamente formatadas em itálico e com linha de espaço antes
+- Retorne o texto exatamente como descrito acima, sem formatação HTML
+- O sistema aplicará automaticamente a formatação correta (itálico e espaçamento)
+
+## PROBLEMAS TÉCNICOS NA SEÇÃO TÉCNICA
+
+- Quando houver menção a problemas técnicos na seção TÉCNICA (artefatos, limitações, movimento, ruído, etc.), inclua-os após a descrição técnica padrão
+- Exemplos: "Exame realizado em aparelho multislice, sem a injeção endovenosa do meio de contraste iodado. Artefato de movimento discretamente limitando a avaliação."
+- Os problemas técnicos serão automaticamente formatados em itálico
+- Palavras estrangeiras na técnica (como "multislice") também serão formatadas em itálico automaticamente
 
 ## ABREVIAÇÕES ACEITAS
 
