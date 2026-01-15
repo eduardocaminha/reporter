@@ -9,13 +9,16 @@ TOMOGRAFIA COMPUTADORIZADA DO ABDOME TOTAL
 Exame realizado em caráter de urgência
 <!-- /OPCIONAL:urgencia -->
 
+<!-- OPCIONAL:indicacao - inserir se mencionada -->
+INDICAÇÃO:
+<!-- /OPCIONAL:indicacao -->
+
 TÉCNICA:
 Exame realizado em aparelho multislice, antes e após a injeção endovenosa do meio de contraste iodado.
 
 ANÁLISE:
 <!-- REGIAO:comparativo -->
 <!-- /REGIAO:comparativo -->
-
 
 <!-- REGIAO:dispositivos -->
 <!-- /REGIAO:dispositivos -->

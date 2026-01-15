@@ -27,6 +27,8 @@
 | `mascaras/tc-seios-face-com-contraste.md` | TC Seios da Face | Com | - | ✅ Pronto |
 | `mascaras/tc-bacia-sem-contraste.md` | TC Bacia | Sem | - | ✅ Pronto |
 | `mascaras/tc-bacia-com-contraste.md` | TC Bacia | Com | - | ✅ Pronto |
+| `mascaras/tc-pelve-sem-contraste.md` | TC Pelve | Sem | - | ✅ Pronto |
+| `mascaras/tc-pelve-com-contraste.md` | TC Pelve | Com | - | ✅ Pronto |
 | `mascaras/tc-quadril-sem-contraste.md` | TC Quadril | Sem | - | ✅ Pronto |
 | `mascaras/tc-quadril-com-contraste.md` | TC Quadril | Com | - | ✅ Pronto |
 | `mascaras/tc-joelho-sem-contraste.md` | TC Joelho | Sem | - | ✅ Pronto |
@@ -54,12 +56,14 @@
 | `liquido-livre-pequeno.md` | líquido livre pequeno | ✅ Pronto |
 | `liquido-livre-moderado.md` | líquido livre moderado | ✅ Pronto |
 | `liquido-livre-volumoso.md` | líquido livre volumoso | ✅ Pronto |
+| `espondilose-dorsal.md` | espondilose dorsal | ✅ Pronto |
 
 ### Apêndice (`achados/apendice/`)
 
 | Arquivo | Palavras-chave | Status |
 |---------|----------------|--------|
 | `apendicite-aguda.md` | apendicite aguda | ✅ Pronto |
+| `apendicite-complicada.md` | apendicite complicada, apendicite com coleção, apendicite perfurada, abscesso apendicular | ✅ Pronto |
 | `aspecto-habitual.md` | apêndice normal, aspecto habitual | ✅ Pronto |
 | `dimensoes-limitrofes.md` | dimensões limítrofes | ✅ Pronto |
 | `nao-caracterizado.md` | apêndice não caracterizado | ✅ Pronto |
@@ -97,8 +101,6 @@
 | `protrusao-discal.md` | protrusão discal | ✅ Pronto |
 | `estenose-canal.md` | estenose canal vertebral | ✅ Pronto |
 | `estenose-foraminal.md` | estenose foraminal | ✅ Pronto |
-| `espondilose-dorsal.md` | espondilose dorsal | ✅ Pronto |
-| `espondilose-toracica.md` | espondilose torácica | ✅ Pronto |
 
 ### Coluna Lombar (`achados/coluna-lombar/`)
 
@@ -151,15 +153,15 @@
 
 | Arquivo | Palavras-chave | Status |
 |---------|----------------|--------|
-| `espessamento-conduto-externo.md` | espessamento conduto auditivo | ✅ Pronto |
-| `espessamento-conduto-externo-lateral.md` | espessamento conduto lateral | ✅ Pronto |
+| `espessamento-condutos-auditivos.md` | espessamento condutos auditivos | ✅ Pronto |
 | `espessamento-membrana-timpanica.md` | espessamento membrana timpânica | ✅ Pronto |
 | `material-partes-moles-mastoides.md` | material partes moles mastoides | ✅ Pronto |
-| `ocupacao-celulas-mastoides.md` | ocupação células mastoides | ✅ Pronto |
-| `material-epitimpano.md` | material epitímpano | ✅ Pronto |
+| `material-timpanico.md` | material timpânico | ✅ Pronto |
+| `ocupacao-mastoides.md` | ocupação mastoides | ✅ Pronto |
+| `pneumatizacao-extendida.md` | pneumatização estendida | ✅ Pronto |
+| `deiscencias-bulbos-jugulares.md` | deiscências bulbos jugulares | ✅ Pronto |
 | `otosclerose-fenestral.md` | otosclerose fenestral | ✅ Pronto |
 | `descontinuidade-canal-semicircular.md` | descontinuidade canal semicircular | ✅ Pronto |
-| `extensao-pneumatizacao-apices.md` | extensão pneumatização ápices | ✅ Pronto |
 
 ### Pelve (`achados/pelve/`)
 
@@ -177,18 +179,18 @@
 | Arquivo | Palavras-chave | Status |
 |---------|----------------|--------|
 | `ateromatose-carotidea.md` | ateromatose carotídea | ✅ Pronto |
-| `alteracoes-degenerativas-coluna.md` | alterações degenerativas coluna cervical | ✅ Pronto |
-| `porcoes-cavidades-paranasais.md` | porções cavidades paranasais | ✅ Pronto |
+| `alteracoes-degenerativas-cervical.md` | alterações degenerativas coluna cervical | ✅ Pronto |
+| `cavidades-paranasais.md` | cavidades paranasais | ✅ Pronto |
 
 ### Rim (`achados/rim/`)
 
 | Arquivo | Palavras-chave | Status |
 |---------|----------------|--------|
 | `calculo-calicinal.md` | cálculo calicinal | ✅ Pronto |
+| `microcalculo.md` | microcálculo | ✅ Pronto |
 | `microcalculos.md` | microcálculos | ✅ Pronto |
 | `microcalculos-bilaterais.md` | microcálculos bilaterais | ✅ Pronto |
-| `cisto-renal.md` | cisto renal | ✅ Pronto |
-| `cistos-renais.md` | cistos renais | ✅ Pronto |
+| `cisto-simples.md` | cisto renal simples | ✅ Pronto |
 
 ### Seios da Face (`achados/seios-face/`)
 
@@ -240,6 +242,7 @@
 | `linfonodos-calcificados.md` | linfonodos calcificados | ✅ Pronto |
 | `ateromatose-aortica-coronariana.md` | ateromatose aórtica coronariana | ✅ Pronto |
 | `ateromatose-extensa.md` | ateromatose extensa | ✅ Pronto |
+| `espondilose-toracica.md` | espondilose torácica | ✅ Pronto |
 | `lobo-azigos.md` | lobo ázigos | ✅ Pronto |
 
 ### Ureter (`achados/ureter/`)
@@ -275,6 +278,8 @@
 | `{{acesso}}` | Local de acesso venoso | cervical direita, subclávia esquerda |
 | `{{extremidade}}` | Extremidade de cateter | na veia cava superior, no átrio direito |
 | `{{lateralidade}}` | Lateralidade geral | direito, esquerdo, bilateral |
+| `{{colecao}}` | Coleção/abscesso apendicular (condicional) | Formato: dimensões + volume estimado |
+| `{{espessamento_ceco}}` | Espessamento do ceco/cólon (condicional) | Inclui apenas se mencionado |
 
 ---
 
@@ -289,13 +294,18 @@
    - `subtipo`: opcional (ex: `tep`, `idoso`)
    - `urgencia_padrao`: `true` ou `false`
    - `palavras_chave`: array de palavras-chave para matching
-3. Usar comentários `<!-- REGIAO:nome -->` e `<!-- /REGIAO:nome -->` para delimitar regiões substituíveis
+3. Estrutura do laudo:
+   - Título (maiúsculo)
+   - `<!-- OPCIONAL:urgencia -->` - Urgência (remover se eletivo/ambulatorial)
+   - `<!-- OPCIONAL:indicacao -->` - INDICAÇÃO (inserir se mencionada)
+   - TÉCNICA
+   - ANÁLISE com regiões delimitadas por `<!-- REGIAO:nome -->` e `<!-- /REGIAO:nome -->`
 4. Ordem de inserção no início da ANÁLISE:
    - `<!-- REGIAO:comparativo -->` (apenas modo comparativo)
    - `<!-- REGIAO:dispositivos -->`
    - `<!-- REGIAO:cirurgias -->`
    - Demais regiões anatômicas
-5. Atualizar este INDEX.md
+6. Atualizar este INDEX.md
 
 ### Novo Achado
 

@@ -11,6 +11,10 @@ TOMOGRAFIA COMPUTADORIZADA DE TÓRAX E ANGIOTOMOGRAFIA DAS ARTÉRIAS PULMONARES
 Exame realizado em caráter de urgência
 <!-- /OPCIONAL:urgencia -->
 
+<!-- OPCIONAL:indicacao - inserir se mencionada -->
+INDICAÇÃO:
+<!-- /OPCIONAL:indicacao -->
+
 TÉCNICA:
 Exame realizado em aparelho multislice, após a injeção do meio de contraste iodado, com protocolo direcionado para investigação de tromboembolismo pulmonar.
 

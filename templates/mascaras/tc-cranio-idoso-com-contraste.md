@@ -11,6 +11,10 @@ TOMOGRAFIA COMPUTADORIZADA DO CRÂNIO
 Exame realizado em caráter de urgência
 <!-- /OPCIONAL:urgencia -->
 
+<!-- OPCIONAL:indicacao - inserir se mencionada -->
+INDICAÇÃO:
+<!-- /OPCIONAL:indicacao -->
+
 TÉCNICA:
 Exame realizado em aparelho multislice, antes e após a injeção endovenosa do meio de contraste iodado.
 

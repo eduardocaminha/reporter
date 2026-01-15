@@ -66,8 +66,43 @@ export function formatarLaudoHTML(texto: string): string {
     const linha = linhas[i];
     const linhaUpper = linha.toUpperCase().trim();
     
+    // Seção INDICAÇÃO
+    if (linhaUpper.startsWith('INDICAÇÃO:') || linhaUpper.startsWith('INDICACAO:')) {
+      html += `<p class="laudo-secao">INDICAÇÃO:</p>`;
+      i++;
+      emAnalise = false;
+      
+      // Coletar todo o texto da indicação (pode ter múltiplas linhas)
+      const linhasIndicacao: string[] = [];
+      while (i < linhas.length) {
+        const linhaIndicacao = linhas[i];
+        const linhaIndicacaoUpper = linhaIndicacao.toUpperCase().trim();
+        
+        // Se encontrar outra seção, para
+        if (linhaIndicacaoUpper.startsWith('INDICAÇÃO:') || 
+            linhaIndicacaoUpper.startsWith('INDICACAO:') ||
+            linhaIndicacaoUpper.startsWith('TÉCNICA:') || 
+            linhaIndicacaoUpper.startsWith('TECNICA:') ||
+            linhaIndicacaoUpper.startsWith('ANÁLISE:') || 
+            linhaIndicacaoUpper.startsWith('ANALISE:') ||
+            linhaIndicacaoUpper.startsWith('OBSERVAÇÃO:') ||
+            linhaIndicacaoUpper.startsWith('OBSERVACAO:') ||
+            linhaIndicacaoUpper.startsWith('ACHADOS ADICIONAIS:')) {
+          break;
+        }
+        
+        linhasIndicacao.push(linhaIndicacao);
+        i++;
+      }
+      
+      // Formatar indicação como texto normal
+      const textoIndicacaoCompleto = linhasIndicacao.join(' ');
+      html += `<p class="laudo-texto">${textoIndicacaoCompleto}</p>`;
+      
+      html += '<br>';
+    }
     // Seção TÉCNICA
-    if (linhaUpper.startsWith('TÉCNICA:') || linhaUpper.startsWith('TECNICA:')) {
+    else if (linhaUpper.startsWith('TÉCNICA:') || linhaUpper.startsWith('TECNICA:')) {
       html += `<p class="laudo-secao">TÉCNICA:</p>`;
       i++;
       emAnalise = false;
@@ -79,7 +114,11 @@ export function formatarLaudoHTML(texto: string): string {
         const linhaTecnicaUpper = linhaTecnica.toUpperCase().trim();
         
         // Se encontrar outra seção, para
-        if (linhaTecnicaUpper.startsWith('ANÁLISE:') || 
+        if (linhaTecnicaUpper.startsWith('INDICAÇÃO:') ||
+            linhaTecnicaUpper.startsWith('INDICACAO:') ||
+            linhaTecnicaUpper.startsWith('TÉCNICA:') ||
+            linhaTecnicaUpper.startsWith('TECNICA:') ||
+            linhaTecnicaUpper.startsWith('ANÁLISE:') || 
             linhaTecnicaUpper.startsWith('ANALISE:') ||
             linhaTecnicaUpper.startsWith('OBSERVAÇÃO:') ||
             linhaTecnicaUpper.startsWith('OBSERVACAO:') ||
@@ -109,7 +148,9 @@ export function formatarLaudoHTML(texto: string): string {
         const linhaAnaliseUpper = linhaAnalise.toUpperCase().trim();
         
         // Se encontrar outra seção, para
-        if (linhaAnaliseUpper.startsWith('TÉCNICA:') || 
+        if (linhaAnaliseUpper.startsWith('INDICAÇÃO:') ||
+            linhaAnaliseUpper.startsWith('INDICACAO:') ||
+            linhaAnaliseUpper.startsWith('TÉCNICA:') || 
             linhaAnaliseUpper.startsWith('TECNICA:') ||
             linhaAnaliseUpper.startsWith('ANÁLISE:') ||
             linhaAnaliseUpper.startsWith('ANALISE:') ||

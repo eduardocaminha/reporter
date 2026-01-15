@@ -91,7 +91,36 @@ function formatarLaudoHTMLCliente(texto: string): string {
     const linha = linhas[i]
     const linhaUpper = linha.toUpperCase().trim()
     
-    if (linhaUpper.startsWith('TÉCNICA:') || linhaUpper.startsWith('TECNICA:')) {
+    // Seção INDICAÇÃO
+    if (linhaUpper.startsWith('INDICAÇÃO:') || linhaUpper.startsWith('INDICACAO:')) {
+      html += `<p class="laudo-secao">INDICAÇÃO:</p>`
+      i++
+      emAnalise = false
+      
+      const linhasIndicacao: string[] = []
+      while (i < linhas.length) {
+        const linhaIndicacao = linhas[i]
+        const linhaIndicacaoUpper = linhaIndicacao.toUpperCase().trim()
+        
+        if (linhaIndicacaoUpper.startsWith('INDICAÇÃO:') ||
+            linhaIndicacaoUpper.startsWith('INDICACAO:') ||
+            linhaIndicacaoUpper.startsWith('TÉCNICA:') ||
+            linhaIndicacaoUpper.startsWith('TECNICA:') ||
+            linhaIndicacaoUpper.startsWith('ANÁLISE:') ||
+            linhaIndicacaoUpper.startsWith('ANALISE:')) {
+          break
+        }
+        
+        linhasIndicacao.push(linhaIndicacao)
+        i++
+      }
+      
+      const textoIndicacaoCompleto = linhasIndicacao.join(' ')
+      html += `<p class="laudo-texto">${textoIndicacaoCompleto}</p>`
+      html += '<br>'
+    }
+    // Seção TÉCNICA
+    else if (linhaUpper.startsWith('TÉCNICA:') || linhaUpper.startsWith('TECNICA:')) {
       html += `<p class="laudo-secao">TÉCNICA:</p>`
       i++
       emAnalise = false

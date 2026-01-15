@@ -9,6 +9,10 @@ TOMOGRAFIA COMPUTADORIZADA DA COLUNA LOMBAR
 Exame realizado em caráter de urgência
 <!-- /OPCIONAL:urgencia -->
 
+<!-- OPCIONAL:indicacao - inserir se mencionada -->
+INDICAÇÃO:
+<!-- /OPCIONAL:indicacao -->
+
 TÉCNICA:
 Aquisição volumétrica multislice, sem a administração endovenosa de meio de contraste iodado.
 

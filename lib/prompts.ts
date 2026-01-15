@@ -30,6 +30,13 @@ Sua tarefa é transformar texto ditado em um laudo de TC estruturado.
 4. Se algo estiver vago, mantenha vago - NÃO complete com informações não fornecidas
 5. Use as máscaras e achados disponíveis quando aplicável
 
+## SEÇÃO INDICAÇÃO
+
+- A seção INDICAÇÃO é **OPCIONAL** e deve ser incluída apenas quando o usuário mencionar a indicação clínica ou motivo do exame
+- Se o usuário mencionar indicação clínica (ex: "dor abdominal", "suspeita de apendicite", "investigação de massa", "follow-up de lesão", etc.), insira a seção INDICAÇÃO entre a urgência e TÉCNICA
+- A indicação deve ser formatada como texto normal (sem itálico ou formatação especial), apenas o título "INDICAÇÃO:" em negrito e maiúsculo
+- Se não houver menção a indicação clínica, NÃO inclua esta seção
+
 ## REGRAS ESPECÍFICAS PARA TC DE PELVE
 
 Quando usar máscara de pelve (tc-pelve):
@@ -128,6 +135,18 @@ Quando usar templates de achados com placeholders ({{variavel}}), preencha basea
 - {{tamanho}}: valor em cm (opcional, mas se mencionar tamanho, inclua)
 - {{ate}}: "até" (opcional, use apenas se mencionado explicitamente)
 - {{bosniak}}: classificação Bosniak entre parênteses, ex: "(Bosniak I)" (opcional, mas ESSENCIAL apenas para TC abdome COM contraste - se for sem contraste, NÃO inclua Bosniak mesmo que o template tenha o campo)
+
+**Para apendicite complicada:**
+- {{medida}}: valor em cm (sempre uma casa decimal) - REQUERIDO
+- {{colecao}}: Se houver menção a coleção, abscesso, irregularidade parietal ou formação de limites imprecisos no apêndice:
+  - Use este formato: "Identifica-se ainda discreta irregularidade parietal do apêndice, associada a pequena coleção de limites imprecisos medindo cerca de [largura] x [altura] x [profundidade] cm (volume estimado em [volume] mL)."
+  - Calcule o volume automaticamente: volume (mL) = (largura × altura × profundidade) / 2
+  - Use sempre medidas em cm com uma casa decimal (ex: 1,0 x 2,0 x 3,0 cm)
+  - Se o usuário mencionar dimensões específicas, use-as. Se não, mas mencionar coleção, você pode inferir dimensões razoáveis ou deixar como "[dimensões]"
+  - Se não houver menção a coleção ou irregularidade, deixe este placeholder COMPLETAMENTE VAZIO (não inclua a linha, nem espaços)
+- {{espessamento_ceco}}: Se houver menção a espessamento do ceco, cólon ascendente, edema da submucosa ou alteração inflamatória do cólon:
+  - Use: "Espessamento difuso do ceco e cólon ascendente, associada a edema da submucosa, provavelmente relacionada a alteração inflamatória adjacente."
+  - Se não houver menção a isso, deixe este placeholder COMPLETAMENTE VAZIO (não inclua a linha, nem espaços)
 
 **IMPORTANTE sobre Bosniak:**
 - A classificação Bosniak SÓ deve ser incluída em exames de TC abdome COM contraste
