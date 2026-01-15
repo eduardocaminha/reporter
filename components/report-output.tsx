@@ -122,6 +122,48 @@ export function ReportOutput({ report, isGenerating, tokenUsage, model }: Report
     return formatarLaudoHTMLCliente(report)
   }, [report])
 
+  // Extrair texto puro do HTML formatado
+  const plainTextFromHtml = useMemo(() => {
+    if (!reportHtml) return ""
+    const tempDiv = document.createElement("div")
+    tempDiv.innerHTML = reportHtml
+    return tempDiv.textContent || tempDiv.innerText || ""
+  }, [reportHtml])
+
+  // Criar HTML completo com estilos inline para manter formatação ao colar
+  const htmlCompleto = useMemo(() => {
+    if (!reportHtml) return ""
+    
+    // Se já tem estilos inline, retorna como está
+    if (reportHtml.includes('style=')) {
+      return reportHtml
+    }
+    
+    // Adiciona estilos inline baseados nas classes CSS
+    let htmlComEstilos = reportHtml
+      .replace(/class="laudo-titulo"/g, 'style="font-family: Arial, sans-serif; font-size: 12pt; font-weight: bold; text-align: center; text-transform: uppercase;"')
+      .replace(/class="laudo-urgencia"/g, 'style="font-family: Arial, sans-serif; font-size: 12pt; font-style: italic; text-align: center;"')
+      .replace(/class="laudo-secao"/g, 'style="font-family: Arial, sans-serif; font-size: 12pt; font-weight: bold; text-transform: uppercase;"')
+      .replace(/class="laudo-texto"/g, 'style="font-family: Arial, sans-serif; font-size: 12pt; margin: 0; padding: 0;"')
+    
+    return htmlComEstilos
+  }, [reportHtml])
+
+  // Texto plano com quebras de linha preservadas
+  const plainText = useMemo(() => {
+    if (!report) return ""
+    
+    // Se tem tags HTML, extrai o texto
+    if (report.includes("<") && report.includes(">")) {
+      const tempDiv = document.createElement("div")
+      tempDiv.innerHTML = report
+      return tempDiv.textContent || tempDiv.innerText || ""
+    }
+    
+    // Se já é texto plano, retorna como está
+    return report
+  }, [report])
+
   // Copiar automaticamente quando um novo laudo é gerado
   useEffect(() => {
     // Copia quando a geração termina (isGenerating muda de true para false) e há um novo laudo
@@ -155,48 +197,6 @@ export function ReportOutput({ report, isGenerating, tokenUsage, model }: Report
       }
     }
   }, [report, isGenerating, reportHtml, htmlCompleto, plainTextFromHtml])
-
-  // Texto plano com quebras de linha preservadas
-  const plainText = useMemo(() => {
-    if (!report) return ""
-    
-    // Se tem tags HTML, extrai o texto
-    if (report.includes("<") && report.includes(">")) {
-      const tempDiv = document.createElement("div")
-      tempDiv.innerHTML = report
-      return tempDiv.textContent || tempDiv.innerText || ""
-    }
-    
-    // Se já é texto plano, retorna como está
-    return report
-  }, [report])
-
-  // Extrair texto puro do HTML formatado
-  const plainTextFromHtml = useMemo(() => {
-    if (!reportHtml) return ""
-    const tempDiv = document.createElement("div")
-    tempDiv.innerHTML = reportHtml
-    return tempDiv.textContent || tempDiv.innerText || ""
-  }, [reportHtml])
-
-  // Criar HTML completo com estilos inline para manter formatação ao colar
-  const htmlCompleto = useMemo(() => {
-    if (!reportHtml) return ""
-    
-    // Se já tem estilos inline, retorna como está
-    if (reportHtml.includes('style=')) {
-      return reportHtml
-    }
-    
-    // Adiciona estilos inline baseados nas classes CSS
-    let htmlComEstilos = reportHtml
-      .replace(/class="laudo-titulo"/g, 'style="font-family: Arial, sans-serif; font-size: 12pt; font-weight: bold; text-align: center; text-transform: uppercase;"')
-      .replace(/class="laudo-urgencia"/g, 'style="font-family: Arial, sans-serif; font-size: 12pt; font-style: italic; text-align: center;"')
-      .replace(/class="laudo-secao"/g, 'style="font-family: Arial, sans-serif; font-size: 12pt; font-weight: bold; text-transform: uppercase;"')
-      .replace(/class="laudo-texto"/g, 'style="font-family: Arial, sans-serif; font-size: 12pt; margin: 0; padding: 0;"')
-    
-    return htmlComEstilos
-  }, [reportHtml])
 
   const handleCopyHtml = async () => {
     try {
