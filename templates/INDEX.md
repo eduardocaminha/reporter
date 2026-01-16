@@ -99,7 +99,14 @@
 | `abaulamento-discal-reducao-forames-bilateral.md` | abaulamento discal, redução foraminal bilateral | ✅ Pronto |
 | `abaulamento-discal-reducao-forame-lateral.md` | abaulamento discal, redução foraminal | ✅ Pronto |
 | `abaulamento-discal-sem-estenose.md` | abaulamento discal, sem estenose | ✅ Pronto |
-| `protrusao-discal.md` | protrusão discal | ✅ Pronto |
+| `protrusao-discal.md` | protrusão discal (genérico) | ✅ Pronto |
+| `protrusao-discal-central-sem-estenose.md` | protrusão discal posterior central, protrusão sem estenose | ✅ Pronto |
+| `protrusao-discal-central-reducao-canal.md` | protrusão discal posterior central, redução discreta moderada | ✅ Pronto |
+| `protrusao-discal-paramediana-reducao-recesso.md` | protrusão discal posterior paramediana, redução recesso lateral | ✅ Pronto |
+| `protrusao-discal-paramediana-ocupando-recesso-canal.md` | protrusão discal paramediana, ocupando recesso e reduzindo canal | ✅ Pronto |
+| `protrusao-discal-foraminal-reducao-amplitude.md` | protrusão discal foraminal, redução amplitude forame neural | ✅ Pronto |
+| `protrusao-discal-foraminal-acentuada-reducao.md` | protrusão discal foraminal, acentuada redução forame neural | ✅ Pronto |
+| `protrusao-discal-extraforaminal.md` | protrusão discal extraforaminal, projetando-se além forame | ✅ Pronto |
 | `estenose-canal.md` | estenose canal vertebral | ✅ Pronto |
 | `estenose-foraminal.md` | estenose foraminal | ✅ Pronto |
 
@@ -115,7 +122,14 @@
 | `abaulamento-discal-reducao-forames-bilateral.md` | abaulamento discal, redução foraminal bilateral | ✅ Pronto |
 | `abaulamento-discal-reducao-forame-lateral.md` | abaulamento discal, redução foraminal | ✅ Pronto |
 | `abaulamento-discal-sem-estenose.md` | abaulamento discal, sem estenose | ✅ Pronto |
-| `protrusao-discal.md` | protrusão discal | ✅ Pronto |
+| `protrusao-discal.md` | protrusão discal (genérico) | ✅ Pronto |
+| `protrusao-discal-central-sem-estenose.md` | protrusão discal posterior central, protrusão sem estenose | ✅ Pronto |
+| `protrusao-discal-central-reducao-canal.md` | protrusão discal posterior central, redução discreta moderada | ✅ Pronto |
+| `protrusao-discal-paramediana-reducao-recesso.md` | protrusão discal posterior paramediana, redução recesso lateral | ✅ Pronto |
+| `protrusao-discal-paramediana-ocupando-recesso-canal.md` | protrusão discal paramediana, ocupando recesso e reduzindo canal | ✅ Pronto |
+| `protrusao-discal-foraminal-reducao-amplitude.md` | protrusão discal foraminal, redução amplitude forame neural | ✅ Pronto |
+| `protrusao-discal-foraminal-acentuada-reducao.md` | protrusão discal foraminal, acentuada redução forame neural | ✅ Pronto |
+| `protrusao-discal-extraforaminal.md` | protrusão discal extraforaminal, projetando-se além forame | ✅ Pronto |
 | `estenose-canal.md` | estenose canal vertebral | ✅ Pronto |
 | `estenose-foraminal.md` | estenose foraminal | ✅ Pronto |
 
@@ -131,7 +145,14 @@
 | `abaulamento-discal-reducao-forames-bilateral.md` | abaulamento discal, redução foraminal bilateral | ✅ Pronto |
 | `abaulamento-discal-reducao-forame-lateral.md` | abaulamento discal, redução foraminal | ✅ Pronto |
 | `abaulamento-discal-sem-estenose.md` | abaulamento discal, sem estenose | ✅ Pronto |
-| `protrusao-discal.md` | protrusão discal | ✅ Pronto |
+| `protrusao-discal.md` | protrusão discal (genérico) | ✅ Pronto |
+| `protrusao-discal-central-sem-estenose.md` | protrusão discal posterior central, protrusão sem estenose | ✅ Pronto |
+| `protrusao-discal-central-reducao-canal.md` | protrusão discal posterior central, redução discreta moderada | ✅ Pronto |
+| `protrusao-discal-paramediana-reducao-recesso.md` | protrusão discal posterior paramediana, redução recesso lateral | ✅ Pronto |
+| `protrusao-discal-paramediana-ocupando-recesso-canal.md` | protrusão discal paramediana, ocupando recesso e reduzindo canal | ✅ Pronto |
+| `protrusao-discal-foraminal-reducao-amplitude.md` | protrusão discal foraminal, redução amplitude forame neural | ✅ Pronto |
+| `protrusao-discal-foraminal-acentuada-reducao.md` | protrusão discal foraminal, acentuada redução forame neural | ✅ Pronto |
+| `protrusao-discal-extraforaminal.md` | protrusão discal extraforaminal, projetando-se além forame | ✅ Pronto |
 | `estenose-canal.md` | estenose canal vertebral | ✅ Pronto |
 | `estenose-foraminal.md` | estenose foraminal | ✅ Pronto |
 
@@ -300,6 +321,7 @@
 | `{{extremidade}}` | Extremidade de cateter | na veia cava superior, no átrio direito |
 | `{{lateralidade}}` | Lateralidade geral | direito, esquerdo, bilateral, à direita, à esquerda |
 | `{{quantidade}}` | Quantidade (singular/plural) | Microcálculo/Microcálculos, Flebólito/Flebólitos |
+| `{{grau_reducao}}` | Grau de redução (protrusão discal) | discreta, moderada, acentuada |
 | `{{colecao}}` | Coleção/abscesso apendicular (condicional) | Formato: dimensões + volume estimado |
 | `{{espessamento_ceco}}` | Espessamento do ceco/cólon (condicional) | Inclui apenas se mencionado |
 
