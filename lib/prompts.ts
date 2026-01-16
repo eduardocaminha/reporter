@@ -1,14 +1,48 @@
-import { formatarTemplatesParaPrompt, identificarContextoExame, ContextoExame } from './templates';
+import { formatarTemplatesParaPrompt, identificarContextoExame, ContextoExame, type Mascara, type Achado } from './templates';
 
 export function montarSystemPrompt(
   modoPS: boolean, 
   modoComparativo: boolean = false,
   usarPesquisa: boolean = false,
-  textoUsuario?: string
+  textoUsuario?: string,
+  templatesPreSelecionados?: { mascaras: Mascara[], achados: Achado[] }
 ): string {
-  // Identificar contexto do exame apenas para filtrar templates
-  const contexto = textoUsuario ? identificarContextoExame(textoUsuario) : undefined;
-  const templatesContext = formatarTemplatesParaPrompt(contexto);
+  let templatesContext: string;
+  
+  if (templatesPreSelecionados) {
+    // Usar templates pré-selecionados (modo otimizado)
+    let prompt = '## MÁSCARAS DISPONÍVEIS\n\n';
+    
+    for (const mascara of templatesPreSelecionados.mascaras) {
+      prompt += `### ${mascara.arquivo}\n`;
+      prompt += `- Tipo: ${mascara.tipo}\n`;
+      if (mascara.subtipo) prompt += `- Subtipo: ${mascara.subtipo}\n`;
+      prompt += `- Contraste: ${mascara.contraste}\n`;
+      prompt += `- Urgência padrão: ${mascara.urgencia_padrao ? 'sim' : 'não'}\n`;
+      if (mascara.palavras_chave && mascara.palavras_chave.length > 0) {
+        prompt += `- Palavras-chave: ${mascara.palavras_chave.join(', ')}\n`;
+      }
+      prompt += '\n```\n' + mascara.conteudo + '\n```\n\n';
+    }
+    
+    prompt += '## ACHADOS DISPONÍVEIS\n\n';
+    
+    for (const achado of templatesPreSelecionados.achados) {
+      prompt += `### ${achado.arquivo}\n`;
+      prompt += `- Região: ${achado.regiao}\n`;
+      prompt += `- Palavras-chave: ${achado.palavras_chave.join(', ')}\n`;
+      if (achado.requer) prompt += `- Campos obrigatórios: ${achado.requer.join(', ')}\n`;
+      if (achado.opcional) prompt += `- Campos opcionais: ${achado.opcional.join(', ')}\n`;
+      if (achado.medida_default) prompt += `- Medida padrão: ${achado.medida_default}\n`;
+      prompt += '\n```\n' + achado.conteudo + '\n```\n\n';
+    }
+    
+    templatesContext = prompt;
+  } else {
+    // Fluxo original: identificar contexto e filtrar
+    const contexto = textoUsuario ? identificarContextoExame(textoUsuario) : undefined;
+    templatesContext = formatarTemplatesParaPrompt(contexto);
+  }
   
   // Obter data atual no formato brasileiro
   const dataAtual = new Date().toLocaleDateString('pt-BR', {
@@ -326,28 +360,57 @@ Quando este modo estiver ativo, o usuário provavelmente colou um laudo anterior
 4. **GERAR O LAUDO COMPARATIVO**:
    - **SE HOUVER ALTERAÇÕES**: Use o template "comparativo-com-alteracoes":
      Exame comparativo com a tomografia de [DATA] evidencia:
-     [Lista das alterações mencionadas pelo usuário]
+     [Lista das alterações mencionadas pelo usuário - SEM hífens, SEM linhas extras, apenas texto corrido]
      
      Restante permanece sem alterações evolutivas significativas:
-     [Laudo anterior completo, formatado em HTML, apenas com correções ortográficas]
+     [Laudo anterior completo, TEXTO PLANO, apenas com correções ortográficas - NÃO repita achados que já estão no laudo anterior]
    
    - **SE NÃO HOUVER ALTERAÇÕES**: Use o template "comparativo-sem-alteracoes":
      Exame comparativo com a tomografia de [DATA] não evidencia alterações evolutivas significativas, permanecendo:
-     [Laudo anterior completo, formatado em HTML, apenas com correções ortográficas]
+     [Laudo anterior completo, TEXTO PLANO, apenas com correções ortográficas]
 
 5. **FORMATAÇÃO DO LAUDO ANTERIOR**:
    - Mantenha EXATAMENTE o conteúdo do laudo anterior
-   - Apenas corrija ortografia e formate em HTML (título, urgência, técnica, análise)
-   - NÃO altere o conteúdo descritivo, apenas formate
-   - Use as classes CSS corretas (laudo-titulo, laudo-urgencia, laudo-secao, laudo-texto)
+   - Retorne TEXTO PLANO (não HTML) - o sistema formatará automaticamente
+   - Apenas corrija ortografia e mantenha a estrutura (título, urgência, técnica, análise)
+   - **TÍTULO**: Mantenha em maiúsculas como está
+   - **URGÊNCIA**: Mantenha "Exame realizado em caráter de urgência" (primeira letra maiúscula, resto minúsculas, SEM ALL CAPS)
+   - **TÉCNICA e ANÁLISE**: Mantenha como está, apenas corrija ortografia
+   - NÃO altere o conteúdo descritivo, apenas formate ortografia
+   - NÃO adicione "Achados adicionais" ou "Observação" a menos que explicitamente solicitado
 
 6. **IDENTIFICAÇÃO DE ALTERAÇÕES**:
    - Se o usuário mencionar "não existe mais X" → X foi resolvido/removido
    - Se o usuário mencionar "novo Y" → Y é uma nova alteração
-   - Se o usuário mencionar "Y aumentou/diminuiu" → Y mudou
+   - Se o usuário mencionar "Y aumentou/diminuiu" ou "redução de Y" → Y mudou
    - Se não mencionar nada específico → não há alterações
+   - **Liste as alterações SEM hífens no início, SEM linhas extras, apenas texto corrido após "evidencia:"**
 
-**IMPORTANTE**: O laudo anterior deve ser repetido EXATAMENTE como estava, apenas formatado. Não invente ou modifique descrições.` : '';
+7. **REPETIÇÃO DO LAUDO ANTERIOR**:
+   - Repita o laudo anterior EXATAMENTE como estava, apenas com correções ortográficas
+   - **NÃO REPITA ACHADOS**: Se um achado já está descrito no laudo anterior (ex: "Fratura da parede anterior do seio maxilar esquerdo"), NÃO o mencione novamente
+   - **NÃO ADICIONE "Achados adicionais"**: Esta seção só deve aparecer se o usuário solicitar explicitamente. Se o laudo anterior já menciona todos os achados, NÃO crie esta seção
+   - **NÃO ADICIONE "Observação"**: Esta seção só deve aparecer se o usuário solicitar explicitamente
+   - O laudo anterior já contém TODOS os achados - você só precisa listar as ALTERAÇÕES mencionadas pelo usuário
+
+8. **FORMATO DAS ALTERAÇÕES**:
+   - Após "evidencia:", liste as alterações em texto corrido, SEM hífens no início
+   - Cada alteração em uma linha separada, mas SEM hífens ou marcadores
+   - Exemplo CORRETO:
+     Exame comparativo com a tomografia de 12/01/2025 evidencia:
+     Redução do volume do hematoma subgaleal frontal e temporal direitos.
+     Redução do volume do hemossinus no seio maxilar esquerdo e nas células etmoidais.
+   - Exemplo ERRADO (não fazer):
+     Exame comparativo com a tomografia de 12/01/2025 evidencia:
+     - Redução do volume...
+     - Redução do volume...
+
+**IMPORTANTE**: 
+- Retorne TEXTO PLANO (não HTML) - o sistema aplicará formatação automaticamente
+- A urgência deve ser "Exame realizado em caráter de urgência" (primeira letra maiúscula, resto minúsculas, NÃO ALL CAPS)
+- Não adicione hífens, marcadores ou formatação extra nas alterações
+- Não repita achados que já estão no laudo anterior
+- Não adicione "Achados adicionais" ou "Observação" a menos que explicitamente solicitado` : '';
 
   return basePrompt + psAddendum + comparativoAddendum;
 }

@@ -53,7 +53,13 @@ export function formatarLaudoHTML(texto: string): string {
   if (i < linhas.length) {
     const linha = linhas[i].toLowerCase();
     if (linha.includes('urgência') || linha.includes('urgencia') || linha.includes('eletivo')) {
-      html += `<p class="laudo-urgencia">${linhas[i]}</p>`;
+      // Garantir que não está em ALL CAPS - converter para formato correto
+      let textoUrgencia = linhas[i];
+      if (textoUrgencia === textoUrgencia.toUpperCase() && textoUrgencia.length > 10) {
+        // Se está em ALL CAPS, converter para primeira letra maiúscula
+        textoUrgencia = textoUrgencia.charAt(0).toUpperCase() + textoUrgencia.slice(1).toLowerCase();
+      }
+      html += `<p class="laudo-urgencia">${textoUrgencia}</p>`;
       i++;
     }
   }
@@ -160,15 +166,18 @@ export function formatarLaudoHTML(texto: string): string {
           break;
         }
         
+        // Verificar se é linha vazia (não adicionar parágrafo)
+        if (linhaAnalise.trim() === '') {
+          i++;
+          continue;
+        }
+        
         // Detectar frases do modo comparativo que precisam estar em negrito
         const linhaFormatada = formatarLinhaComparativo(linhaAnalise);
         
         html += `<p class="laudo-texto">${linhaFormatada}</p>`;
         
-        // Adicionar linha de espaço após frase de "evidencia:"
-        if (linhaAnaliseUpper.includes('EVIDENCIA:') || linhaAnaliseUpper.includes('EVIDÊNCIA:')) {
-          html += '<br>';
-        }
+        // NÃO adicionar linha de espaço após "evidencia:" - o próximo parágrafo já terá espaçamento natural
         
         i++;
       }
@@ -208,12 +217,18 @@ export function formatarLaudoHTML(texto: string): string {
 function formatarLinhaComparativo(linha: string): string {
   const linhaUpper = linha.toUpperCase();
   
+  // Remover hífens no início da linha (erro comum do LLM)
+  let linhaLimpa = linha.trim();
+  if (linhaLimpa.startsWith('-') || linhaLimpa.startsWith('•')) {
+    linhaLimpa = linhaLimpa.substring(1).trim();
+  }
+  
   // Detectar "Exame comparativo com a tomografia de [data] evidencia:"
   if (linhaUpper.includes('EXAME COMPARATIVO') && linhaUpper.includes('EVIDENCIA:')) {
     // Separar a parte "Exame comparativo... evidencia:" do resto
     const indiceEvidencia = linhaUpper.indexOf('EVIDENCIA:');
-    const parteInicial = linha.substring(0, linha.toLowerCase().indexOf('evidencia:') + 'evidencia:'.length);
-    const parteFinal = linha.substring(linha.toLowerCase().indexOf('evidencia:') + 'evidencia:'.length).trim();
+    const parteInicial = linhaLimpa.substring(0, linhaLimpa.toLowerCase().indexOf('evidencia:') + 'evidencia:'.length);
+    const parteFinal = linhaLimpa.substring(linhaLimpa.toLowerCase().indexOf('evidencia:') + 'evidencia:'.length).trim();
     
     let resultado = `<strong>${parteInicial}</strong>`;
     if (parteFinal) {
@@ -226,10 +241,10 @@ function formatarLinhaComparativo(linha: string): string {
   if (linhaUpper.includes('RESTANTE PERMANECE SEM ALTERAÇÕES EVOLUTIVAS SIGNIFICATIVAS:') || 
       linhaUpper.includes('RESTANTE PERMANECE SEM ALTERACOES EVOLUTIVAS SIGNIFICATIVAS:')) {
     // Separar a parte da frase até os dois pontos do resto
-    const indiceDoisPontos = linha.indexOf(':');
+    const indiceDoisPontos = linhaLimpa.indexOf(':');
     if (indiceDoisPontos !== -1) {
-      const parteInicial = linha.substring(0, indiceDoisPontos + 1);
-      const parteFinal = linha.substring(indiceDoisPontos + 1).trim();
+      const parteInicial = linhaLimpa.substring(0, indiceDoisPontos + 1);
+      const parteFinal = linhaLimpa.substring(indiceDoisPontos + 1).trim();
       
       let resultado = `<strong>${parteInicial}</strong>`;
       if (parteFinal) {
@@ -237,11 +252,11 @@ function formatarLinhaComparativo(linha: string): string {
       }
       return resultado;
     }
-    return `<strong>${linha}</strong>`;
+    return `<strong>${linhaLimpa}</strong>`;
   }
   
-  // Se não for frase comparativa, retorna como está
-  return linha;
+  // Se não for frase comparativa, retorna como está (sem hífens)
+  return linhaLimpa;
 }
 
 /**

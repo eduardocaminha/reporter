@@ -2,6 +2,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { montarSystemPrompt } from './prompts';
 import { formatarLaudoHTML } from './formatador';
 import type { TokenUsage } from './tokens';
+import { criarCatalogoResumido, buscarTemplatesPorArquivos, identificarContextoExame } from './templates';
 
 const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -32,6 +33,100 @@ function limparRespostaJSON(resposta: string): string {
   }
   
   return limpo.trim();
+}
+
+interface SelecaoTemplates {
+  mascara: string;
+  achados: string[];
+}
+
+async function selecionarTemplates(
+  texto: string,
+  catalogo: ReturnType<typeof criarCatalogoResumido>
+): Promise<SelecaoTemplates> {
+  const catalogoTexto = `
+## MÁSCARAS DISPONÍVEIS (escolha UMA):
+
+${catalogo.mascaras.map((m, i) => {
+  let linha = `${i + 1}. ${m.arquivo}`;
+  linha += ` - Tipo: ${m.tipo}`;
+  if (m.subtipo) linha += `, Subtipo: ${m.subtipo}`;
+  linha += `, Contraste: ${m.contraste}`;
+  if (m.palavras_chave && m.palavras_chave.length > 0) {
+    linha += `, Palavras-chave: ${m.palavras_chave.join(', ')}`;
+  }
+  return linha;
+}).join('\n')}
+
+## ACHADOS DISPONÍVEIS (escolha os relevantes, pode ser zero ou mais):
+
+${catalogo.achados.map((a, i) => {
+  let linha = `${i + 1}. ${a.arquivo}`;
+  linha += ` - Região: ${a.regiao}`;
+  linha += `, Palavras-chave: ${a.palavras_chave.join(', ')}`;
+  if (a.requer && a.requer.length > 0) {
+    linha += `, Requer: ${a.requer.join(', ')}`;
+  }
+  return linha;
+}).join('\n')}
+`;
+
+  const promptSelecao = `Você é um assistente que analisa texto ditado de laudos de tomografia e seleciona quais templates usar.
+
+Analise o texto abaixo e retorne APENAS um JSON válido no formato:
+{
+  "mascara": "nome-do-arquivo.md",
+  "achados": ["achado1.md", "achado2.md"]
+}
+
+REGRAS:
+1. Escolha EXATAMENTE UMA máscara baseada no tipo de exame e contraste mencionado
+2. Escolha zero ou mais achados baseados nas alterações mencionadas
+3. Use apenas os arquivos listados no catálogo
+4. Se não encontrar achado relevante, deixe o array "achados" vazio
+
+TEXTO DITADO:
+${texto}
+
+${catalogoTexto}
+
+Retorne APENAS o JSON, sem explicações adicionais.`;
+
+  try {
+    const message = await client.messages.create({
+      model: process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-5-20250929',
+      max_tokens: 1024,
+      system: 'Você é um assistente que retorna apenas JSON válido, sem explicações.',
+      messages: [
+        { role: 'user', content: promptSelecao }
+      ],
+    });
+
+    let respostaRaw = '';
+    for (const content of message.content) {
+      if (content.type === 'text') {
+        respostaRaw = content.text;
+        break;
+      }
+    }
+
+    const respostaLimpa = limparRespostaJSON(respostaRaw);
+    const resultado = JSON.parse(respostaLimpa) as SelecaoTemplates;
+
+    // Validar que a máscara foi escolhida
+    if (!resultado.mascara) {
+      throw new Error('Nenhuma máscara foi selecionada');
+    }
+
+    return resultado;
+  } catch (error) {
+    console.error('Erro ao selecionar templates:', error);
+    // Fallback: retornar primeira máscara e nenhum achado
+    return {
+      mascara: catalogo.mascaras[0]?.arquivo || '',
+      achados: [],
+    };
+  }
 }
 
 async function sleep(ms: number) {
@@ -219,7 +314,31 @@ export async function gerarLaudo(
   modoComparativo: boolean = false,
   usarPesquisa: boolean = false
 ): Promise<ResultadoLaudo> {
-  const systemPrompt = montarSystemPrompt(modoPS, modoComparativo, usarPesquisa, texto);
+  const usarOtimizacao = process.env.ENABLE_TEMPLATE_OPTIMIZATION === 'true';
+  
+  let systemPrompt: string;
+  let templatesEscolhidos: { mascaras: any[], achados: any[] } | null = null;
+  
+  if (usarOtimizacao) {
+    // Etapa 1: Regex identifica contexto
+    const contexto = identificarContextoExame(texto);
+    const catalogo = criarCatalogoResumido(contexto);
+    
+    // Etapa 2: LLM seleciona templates
+    const selecao = await selecionarTemplates(texto, catalogo);
+    
+    // Etapa 3: Buscar conteúdo completo dos templates escolhidos
+    templatesEscolhidos = buscarTemplatesPorArquivos([
+      selecao.mascara,
+      ...selecao.achados,
+    ]);
+    
+    // Montar prompt apenas com templates escolhidos
+    systemPrompt = montarSystemPrompt(modoPS, modoComparativo, usarPesquisa, texto, templatesEscolhidos);
+  } else {
+    // Fluxo original
+    systemPrompt = montarSystemPrompt(modoPS, modoComparativo, usarPesquisa, texto);
+  }
   
   try {
     const message = await chamarClaudeComRetry(systemPrompt, texto, usarPesquisa);

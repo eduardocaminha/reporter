@@ -10,11 +10,17 @@ import { calcularCusto, formatarCusto, formatarTokens, type TokenUsage } from "@
 function formatarLinhaComparativoCliente(linha: string): string {
   const linhaUpper = linha.toUpperCase()
   
+  // Remover hífens no início da linha (erro comum do LLM)
+  let linhaLimpa = linha.trim()
+  if (linhaLimpa.startsWith('-') || linhaLimpa.startsWith('•')) {
+    linhaLimpa = linhaLimpa.substring(1).trim()
+  }
+  
   // Detectar "Exame comparativo com a tomografia de [data] evidencia:"
   if (linhaUpper.includes('EXAME COMPARATIVO') && linhaUpper.includes('EVIDENCIA:')) {
-    const indiceEvidencia = linha.toLowerCase().indexOf('evidencia:')
-    const parteInicial = linha.substring(0, indiceEvidencia + 'evidencia:'.length)
-    const parteFinal = linha.substring(indiceEvidencia + 'evidencia:'.length).trim()
+    const indiceEvidencia = linhaLimpa.toLowerCase().indexOf('evidencia:')
+    const parteInicial = linhaLimpa.substring(0, indiceEvidencia + 'evidencia:'.length)
+    const parteFinal = linhaLimpa.substring(indiceEvidencia + 'evidencia:'.length).trim()
     
     let resultado = `<strong>${parteInicial}</strong>`
     if (parteFinal) {
@@ -26,10 +32,10 @@ function formatarLinhaComparativoCliente(linha: string): string {
   // Detectar "Restante permanece sem alterações evolutivas significativas:"
   if (linhaUpper.includes('RESTANTE PERMANECE SEM ALTERAÇÕES EVOLUTIVAS SIGNIFICATIVAS:') || 
       linhaUpper.includes('RESTANTE PERMANECE SEM ALTERACOES EVOLUTIVAS SIGNIFICATIVAS:')) {
-    const indiceDoisPontos = linha.indexOf(':')
+    const indiceDoisPontos = linhaLimpa.indexOf(':')
     if (indiceDoisPontos !== -1) {
-      const parteInicial = linha.substring(0, indiceDoisPontos + 1)
-      const parteFinal = linha.substring(indiceDoisPontos + 1).trim()
+      const parteInicial = linhaLimpa.substring(0, indiceDoisPontos + 1)
+      const parteFinal = linhaLimpa.substring(indiceDoisPontos + 1).trim()
       
       let resultado = `<strong>${parteInicial}</strong>`
       if (parteFinal) {
@@ -37,10 +43,10 @@ function formatarLinhaComparativoCliente(linha: string): string {
       }
       return resultado
     }
-    return `<strong>${linha}</strong>`
+    return `<strong>${linhaLimpa}</strong>`
   }
   
-  return linha
+  return linhaLimpa
 }
 
 // Função para formatar laudo no cliente (duplicada da lib/formatador para uso no cliente)
@@ -79,7 +85,13 @@ function formatarLaudoHTMLCliente(texto: string): string {
   if (i < linhas.length) {
     const linha = linhas[i].toLowerCase()
     if (linha.includes('urgência') || linha.includes('urgencia') || linha.includes('eletivo')) {
-      html += `<p class="laudo-urgencia">${linhas[i]}</p>`
+      // Garantir que não está em ALL CAPS - converter para formato correto
+      let textoUrgencia = linhas[i]
+      if (textoUrgencia === textoUrgencia.toUpperCase() && textoUrgencia.length > 10) {
+        // Se está em ALL CAPS, converter para primeira letra maiúscula
+        textoUrgencia = textoUrgencia.charAt(0).toUpperCase() + textoUrgencia.slice(1).toLowerCase()
+      }
+      html += `<p class="laudo-urgencia">${textoUrgencia}</p>`
       i++
     }
   }
@@ -148,15 +160,18 @@ function formatarLaudoHTMLCliente(texto: string): string {
           break
         }
         
+        // Verificar se é linha vazia (não adicionar parágrafo)
+        if (linhaAnalise.trim() === '') {
+          i++
+          continue
+        }
+        
         // Detectar frases do modo comparativo para negrito
         const linhaFormatada = formatarLinhaComparativoCliente(linhaAnalise)
         
         html += `<p class="laudo-texto">${linhaFormatada}</p>`
         
-        // Adicionar linha de espaço após frase de "evidencia:"
-        if (linhaAnaliseUpper.includes('EVIDENCIA:') || linhaAnaliseUpper.includes('EVIDÊNCIA:')) {
-          html += '<br>'
-        }
+        // NÃO adicionar linha de espaço após "evidencia:" - o próximo parágrafo já terá espaçamento natural
         
         i++
       }

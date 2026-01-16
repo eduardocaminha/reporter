@@ -280,3 +280,83 @@ export function formatarTemplatesParaPrompt(contexto?: ContextoExame): string {
   
   return prompt;
 }
+
+export interface CatalogoResumido {
+  mascaras: Array<{
+    arquivo: string;
+    tipo: string;
+    subtipo?: string;
+    contraste: string;
+    palavras_chave?: string[];
+  }>;
+  achados: Array<{
+    arquivo: string;
+    regiao: string;
+    palavras_chave: string[];
+    requer?: string[];
+    opcional?: string[];
+  }>;
+}
+
+export function criarCatalogoResumido(contexto?: ContextoExame): CatalogoResumido {
+  const { mascaras, achados } = contexto 
+    ? filtrarTemplatesRelevantes(contexto)
+    : { mascaras: carregarMascaras(), achados: carregarAchados() };
+  
+  return {
+    mascaras: mascaras.map(m => ({
+      arquivo: m.arquivo,
+      tipo: m.tipo,
+      subtipo: m.subtipo,
+      contraste: m.contraste,
+      palavras_chave: m.palavras_chave,
+    })),
+    achados: achados.map(a => ({
+      arquivo: a.arquivo,
+      regiao: a.regiao,
+      palavras_chave: a.palavras_chave,
+      requer: a.requer,
+      opcional: a.opcional,
+    })),
+  };
+}
+
+export function buscarTemplatesPorArquivos(arquivos: string[]): {
+  mascaras: Mascara[];
+  achados: Achado[];
+} {
+  const todasMascaras = carregarMascaras();
+  const todosAchados = carregarAchados();
+  
+  const mascarasEncontradas: Mascara[] = [];
+  const achadosEncontrados: Achado[] = [];
+  
+  for (const arquivo of arquivos) {
+    // Tentar encontrar como máscara
+    const mascara = todasMascaras.find(m => m.arquivo === arquivo);
+    if (mascara) {
+      mascarasEncontradas.push(mascara);
+      continue;
+    }
+    
+    // Tentar encontrar como achado
+    const achado = todosAchados.find(a => a.arquivo === arquivo);
+    if (achado) {
+      achadosEncontrados.push(achado);
+      continue;
+    }
+    
+    // Tentar encontrar por caminho relativo (para achados)
+    const achadoRelativo = todosAchados.find(a => 
+      a.arquivo.endsWith(arquivo) || arquivo.endsWith(a.arquivo)
+    );
+    if (achadoRelativo) {
+      achadosEncontrados.push(achadoRelativo);
+    }
+  }
+  
+  return {
+    mascaras: mascarasEncontradas,
+    achados: achadosEncontrados,
+  };
+}
