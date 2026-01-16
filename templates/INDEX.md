@@ -132,6 +132,7 @@
 | `protrusao-discal-extraforaminal.md` | protrusão discal extraforaminal, projetando-se além forame | ✅ Pronto |
 | `estenose-canal.md` | estenose canal vertebral | ✅ Pronto |
 | `estenose-foraminal.md` | estenose foraminal | ✅ Pronto |
+| `osteofitos-uncinados.md` | osteófitos uncinados, uncinatos, redução forames neurais | ✅ Pronto |
 
 ### Coluna Lombar (`achados/coluna-lombar/`)
 
@@ -155,6 +156,30 @@
 | `protrusao-discal-extraforaminal.md` | protrusão discal extraforaminal, projetando-se além forame | ✅ Pronto |
 | `estenose-canal.md` | estenose canal vertebral | ✅ Pronto |
 | `estenose-foraminal.md` | estenose foraminal | ✅ Pronto |
+| `ligamento-amarelo-calcificado.md` | ligamento amarelo calcificado, ligamento amarelo espessado | ✅ Pronto |
+| `artrose-facetaria-reducao-recesso.md` | artrose facetária, artroses articulações interapofisárias, hipertrofia facetária | ✅ Pronto |
+| `hipertrofia-facetaria-bilateral.md` | hipertrofia facetária bilateral, estenose canal vertebral | ✅ Pronto |
+| `esclerose-platos-oseos.md` | esclerose platôs ósseos, modic tipo III, sinal modic III | ✅ Pronto |
+| `osteofitos-marginais-posteriores.md` | osteófitos marginais posteriores, osteófitos posteriores | ✅ Pronto |
+| `calcificacao-discal.md` | calcificação discal, calcificação disco intervertebral | ✅ Pronto |
+| `gas-intravertebral.md` | gás intravertebral, fenômeno vácuo, vácuo intravertebral | ✅ Pronto |
+| `cisto-facetario.md` | cisto facetário, cisto articulação facetária, redução amplitude foraminal | ✅ Pronto |
+| `espondilolistese-anterior-grau-i.md` | espondilolistese anterior grau I, deslizamento anterior até 25% | ✅ Pronto |
+| `espondilolistese-anterior-grau-ii.md` | espondilolistese anterior grau II, deslizamento anterior 25-50% | ✅ Pronto |
+| `espondilolistese-posterior-grau-i.md` | espondilolistese posterior grau I, retrolistese grau 1 | ✅ Pronto |
+| `espondilolistese-posterior-grau-ii.md` | espondilolistese posterior grau II, retrolistese grau 2 | ✅ Pronto |
+| `retrolistese.md` | retrolistese, deslizamento posterior, espondilolistese posterior | ✅ Pronto |
+| `reducao-densidade-ossea.md` | redução densidade óssea, osteopenia, osteoporose | ✅ Pronto |
+| `esclerose-osea-difusa.md` | esclerose óssea difusa, esclerose corpos vertebrais | ✅ Pronto |
+| `hipotrofia-paravertebrais.md` | hipotrofia paravertebrais, hipotrofia músculos paravertebrais | ✅ Pronto |
+| `infiltracao-gordurosa-paravertebrais.md` | infiltração gordurosa paravertebrais, degeneração gordurosa muscular | ✅ Pronto |
+| `limitacao-estruturas-neurais.md` | limitação avaliação estruturas neurais, medula espinhal, ressonância magnética | ✅ Pronto |
+| `limitacao-partes-moles.md` | limitação partes moles, estudo limitado, ressonância magnética | ✅ Pronto |
+| `complexo-disco-osteofitario-posterior.md` | complexo disco-osteofitário posterior, redução canal vertebral | ✅ Pronto |
+| `complexo-disco-osteofitario-central-estenose.md` | complexo disco-osteofitário posterior central, estenose canal vertebral | ✅ Pronto |
+| `complexo-disco-osteofitario-paramediano.md` | complexo disco-osteofitário posterior paramediano, redução recesso lateral | ✅ Pronto |
+| `complexo-disco-osteofitario-foraminal.md` | complexo disco-osteofitário foraminal, redução amplitude forame neural | ✅ Pronto |
+| `osteofitos-associados-protrusao.md` | osteófitos posteriores marginais protrusão discal, redução canal vertebral | ✅ Pronto |
 
 ### Colon (`achados/colon/`)
 
@@ -322,6 +347,7 @@
 | `{{lateralidade}}` | Lateralidade geral | direito, esquerdo, bilateral, à direita, à esquerda |
 | `{{quantidade}}` | Quantidade (singular/plural) | Microcálculo/Microcálculos, Flebólito/Flebólitos |
 | `{{grau_reducao}}` | Grau de redução (protrusão discal) | discreta, moderada, acentuada |
+| `{{nivel}}` | Nível vertebral (coluna) | C5-C6, L4-L5, T8-T9 |
 | `{{colecao}}` | Coleção/abscesso apendicular (condicional) | Formato: dimensões + volume estimado |
 | `{{espessamento_ceco}}` | Espessamento do ceco/cólon (condicional) | Inclui apenas se mencionado |
 
