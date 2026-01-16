@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "motion/react"
 import { AlertCircle } from "lucide-react"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 interface SugestoesProps {
   sugestoes: string[]
@@ -15,28 +16,25 @@ export function Sugestoes({ sugestoes }: SugestoesProps) {
   return (
     <AnimatePresence>
       <motion.div
-        initial={{ opacity: 0, y: -10 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
+        exit={{ opacity: 0, y: 10 }}
         transition={{ duration: 0.3 }}
-        className="bg-accent/50 border border-accent rounded-xl p-4"
       >
-        <div className="flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-accent-foreground mt-0.5 shrink-0" />
-          <div className="flex-1">
-            <p className="text-sm font-medium text-accent-foreground mb-2">
-              Sugestões de completude:
-            </p>
+        <Alert className="bg-accent/50 border-accent">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Sugestões de completude:</AlertTitle>
+          <AlertDescription className="mt-2">
             <ul className="space-y-1.5">
               {sugestoes.map((sugestao, index) => (
-                <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
-                  <span className="text-accent-foreground mt-1">•</span>
+                <li key={index} className="flex items-start gap-2">
+                  <span className="text-accent-foreground mt-1 shrink-0">•</span>
                   <span>{sugestao}</span>
                 </li>
               ))}
             </ul>
-          </div>
-        </div>
+          </AlertDescription>
+        </Alert>
       </motion.div>
     </AnimatePresence>
   )
