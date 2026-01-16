@@ -57,6 +57,14 @@ Dispositivos (sondas, cateteres, marcapassos, tubos endotraqueais) podem aparece
 - Procure por comentários HTML do tipo REGIAO:dispositivos na máscara (geralmente logo após "ANÁLISE:") e insira o conteúdo entre os comentários
 - Se não houver comentário de região na máscara, adicione o dispositivo como primeiro item da ANÁLISE
 
+**IMPORTANTE - Achados pós-cirúrgicos de órgãos específicos:**
+- Achados pós-cirúrgicos relacionados a ÓRGÃOS ESPECÍFICOS (ex: vesícula biliar, apêndice) devem ir na REGIÃO DO ÓRGÃO, NÃO na seção de cirurgias
+- Exemplos:
+  - "Vesícula biliar não caracterizada (condição pós-cirúrgica)" → vai em REGIAO:vesicula-biliar (não em REGIAO:cirurgias)
+  - "Apêndice não caracterizado (condição pós-cirúrgica)" → vai em REGIAO:apendice (não em REGIAO:cirurgias)
+  - "Clipes metálicos no leito vesicular" → vai em REGIAO:vesicula-biliar junto com a descrição da vesícula
+- A seção REGIAO:cirurgias é APENAS para cirurgias genéricas (implante mamário, gastroplastia, esternorrafia, manipulação cirúrgica genérica) que não são específicas de um único órgão
+
 ## SELEÇÃO DE MÁSCARA
 
 Para escolher a máscara correta:
@@ -81,9 +89,13 @@ As máscaras contêm comentários HTML do tipo REGIAO:nome que indicam onde cert
 
 **Exemplos:**
 - Achado de vesícula biliar (regiao: vesicula-biliar) → inserir entre os comentários REGIAO:vesicula-biliar e /REGIAO:vesicula-biliar (logo após a descrição do fígado)
+  - **INCLUSIVE achados pós-cirúrgicos da vesícula**: "Vesícula biliar não caracterizada (condição pós-cirúrgica)" ou "Clipes metálicos no leito vesicular" → sempre em REGIAO:vesicula-biliar, NÃO em REGIAO:cirurgias
 - Achado de apêndice (regiao: apendice) → inserir entre os comentários REGIAO:apendice e /REGIAO:apendice
+  - **INCLUSIVE achados pós-cirúrgicos do apêndice**: "Apêndice não caracterizado (condição pós-cirúrgica)" → sempre em REGIAO:apendice, NÃO em REGIAO:cirurgias
 - Dispositivo (regiao: dispositivos) → inserir entre os comentários REGIAO:dispositivos e /REGIAO:dispositivos (primeiro na ANÁLISE)
-- Cirurgia (regiao: cirurgias) → inserir entre os comentários REGIAO:cirurgias e /REGIAO:cirurgias (logo após dispositivos)
+- Cirurgia genérica (regiao: cirurgias) → inserir entre os comentários REGIAO:cirurgias e /REGIAO:cirurgias (logo após dispositivos)
+  - **APENAS cirurgias genéricas**: implante mamário, gastroplastia, esternorrafia, manipulação cirúrgica genérica
+  - **NÃO incluir**: achados pós-cirúrgicos de órgãos específicos (vesícula, apêndice, etc.) - estes vão na região do órgão
 - Se a região estiver vazia na máscara (só comentários), insira o conteúdo do template ali
 
 **IMPORTANTE - Posicionamento de cistos renais:**

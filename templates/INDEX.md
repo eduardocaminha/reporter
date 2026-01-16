@@ -58,6 +58,7 @@
 | `liquido-livre-volumoso.md` | líquido livre volumoso | ✅ Pronto |
 | `espondilose-dorsal.md` | espondilose dorsal | ✅ Pronto |
 | `paniculite-mesenterica.md` | paniculite mesentérica, densificação mesentérica | ✅ Pronto |
+| `adenite-mesenterica.md` | adenite mesentérica, obliteração omento, processo inflamatório mesentérico | ✅ Pronto |
 
 ### Apêndice (`achados/apendice/`)
 
