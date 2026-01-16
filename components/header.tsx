@@ -4,6 +4,7 @@ import { motion } from "motion/react"
 import { LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Toggle } from "@/components/ui/toggle"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Kbd, KbdGroup } from "@/components/ui/kbd"
 import { useRouter } from "next/navigation"
@@ -75,42 +76,30 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
         <span className="text-lg font-semibold tracking-tight text-foreground font-[family-name:var(--font-outfit)]">RadReport</span>
 
         <div className="flex items-center gap-2 sm:gap-6">
-          {/* Desktop: Tabs com animação */}
-          <div className="hidden sm:flex items-center gap-1 bg-muted rounded-lg p-1 relative">
-            {modes.map((mode) => (
-              <Tooltip key={mode.value}>
-                <TooltipTrigger asChild>
-                  <button
-                    onClick={() => onReportModeChange(mode.value)}
-                    className="relative px-3 py-1.5 text-sm font-medium rounded-md transition-colors z-10"
-                  >
-                    {reportMode === mode.value && (
-                      <motion.div
-                        layoutId="activeMode"
-                        className="absolute inset-0 bg-card shadow-sm rounded-md"
-                        transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
-                      />
-                    )}
-                    <span
-                      className={`relative z-10 ${
-                        reportMode === mode.value ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-                      }`}
-                    >
-                      {mode.label}
-                    </span>
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <KbdGroup>
-                    <Kbd>{isMac ? '⌘' : 'Ctrl'}</Kbd>
-                    <span>+</span>
-                    <Kbd>Shift</Kbd>
-                    <span>+</span>
-                    <Kbd>{mode.key.toUpperCase()}</Kbd>
-                  </KbdGroup>
-                </TooltipContent>
-              </Tooltip>
-            ))}
+          {/* Desktop: Tabs do shadcn */}
+          <div className="hidden sm:block">
+            <Tabs value={reportMode} onValueChange={(value) => onReportModeChange(value as ReportMode)}>
+              <TabsList>
+                {modes.map((mode) => (
+                  <Tooltip key={mode.value}>
+                    <TooltipTrigger asChild>
+                      <TabsTrigger value={mode.value}>
+                        {mode.label}
+                      </TabsTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <KbdGroup>
+                        <Kbd>{isMac ? '⌘' : 'Ctrl'}</Kbd>
+                        <span>+</span>
+                        <Kbd>Shift</Kbd>
+                        <span>+</span>
+                        <Kbd>{mode.key.toUpperCase()}</Kbd>
+                      </KbdGroup>
+                    </TooltipContent>
+                  </Tooltip>
+                ))}
+              </TabsList>
+            </Tabs>
           </div>
 
           {/* Mobile: Toggle único que cicla entre os modos */}
@@ -133,6 +122,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
           <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
             <Button 
               onClick={handleLogout}
+              size="sm"
               className="gap-2"
             >
               <LogOut className="w-4 h-4" />
