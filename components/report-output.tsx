@@ -328,7 +328,7 @@ export function ReportOutput({ report, isGenerating, tokenUsage, model }: Report
   }, [tokenUsage, model])
 
   return (
-    <section className="bg-card rounded-2xl border border-border/50 p-8">
+    <section className="bg-card rounded-2xl p-8">
       <div className="flex items-center justify-between mb-5">
         <h2 className="text-sm font-medium text-muted-foreground">Resultado</h2>
         <AnimatePresence>
