@@ -132,7 +132,7 @@ export default function Home() {
             transition: { staggerChildren: 0.1 },
           },
         }}
-        className="max-w-6xl mx-auto px-8 sm:px-12 py-10 flex flex-col gap-10"
+        className="max-w-6xl mx-auto px-8 sm:px-12 py-10 flex flex-col"
       >
         <motion.div
           variants={{
@@ -158,19 +158,20 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-destructive/5 border border-destructive/30 rounded-2xl p-5"
+            className="bg-destructive/5 border border-destructive/30 rounded-2xl p-5 mt-6"
           >
             <p className="text-sm font-medium text-destructive">{erro}</p>
           </motion.div>
         )}
 
-        {/* Laudo gerado */}
+        {/* Laudo gerado - imediatamente abaixo do botao */}
         {generatedReport && (
           <motion.div
             variants={{
               hidden: { opacity: 0, y: 20 },
               visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
             }}
+            className="mt-6"
           >
             <ReportOutput 
               report={generatedReport} 
@@ -187,6 +188,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
+            className="mt-6"
           >
             <Sugestoes sugestoes={sugestoes} />
           </motion.div>
