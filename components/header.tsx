@@ -87,7 +87,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
                     {reportMode === mode.value && (
                       <motion.div
                         layoutId="activeMode"
-                        className="absolute inset-0 bg-card shadow-sm rounded-full"
+                        className="absolute inset-0 bg-card rounded-full"
                         transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
                       />
                     )}
@@ -124,7 +124,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
               }}
               variant="outline"
               size="sm"
-              className="rounded-full px-4 py-1.5 text-sm font-medium data-[state=on]:bg-card data-[state=on]:shadow-sm"
+              className="rounded-full px-4 py-1.5 text-sm font-medium data-[state=on]:bg-card"
             >
               {modes.find(m => m.value === reportMode)?.label}
             </Toggle>
