@@ -101,7 +101,7 @@ export function DictationInput({
   }, [value])
 
   return (
-    <section className="bg-card rounded-2xl border border-border/50 p-8 shadow-sm">
+    <section className="bg-card rounded-2xl border border-border/50 p-8">
       <div className="flex items-center justify-between mb-5">
         <h2 className="text-sm font-medium text-muted-foreground">Texto ditado</h2>
         {historico.length > 0 && (
@@ -146,7 +146,7 @@ export function DictationInput({
                         </Button>
                       </div>
                     </div>
-                    <div className="max-h-60 overflow-y-auto">
+                    <div className="max-h-60 overflow-y-auto scrollbar-none">
                       {historico.map((item) => (
                         <button
                           key={item.id}

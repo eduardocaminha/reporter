@@ -69,7 +69,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="bg-card/80 backdrop-blur-sm shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] sticky top-0 z-50"
+      className="bg-card/80 backdrop-blur-sm border-b border-border/30 sticky top-0 z-50"
     >
       <div className="max-w-4xl mx-auto px-6 h-[72px] flex items-center justify-between">
         <span className="text-lg font-medium tracking-tight text-foreground">RadReport</span>
