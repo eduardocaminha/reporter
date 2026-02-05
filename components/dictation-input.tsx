@@ -4,7 +4,6 @@ import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "motion/react"
 import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Kbd, KbdGroup } from "@/components/ui/kbd"
@@ -101,10 +100,37 @@ export function DictationInput({
   }, [value])
 
   return (
-    <section className="bg-card rounded-2xl p-8">
-      <div className="flex items-center justify-between mb-5">
-        <h2 className="text-sm font-medium text-muted-foreground">Texto ditado</h2>
-        {historico.length > 0 && (
+    <section>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-5">
+          {/* Checkbox de pesquisa */}
+          <div className="flex items-center gap-2.5">
+            <Switch
+              id="pesquisa-radiopaedia"
+              checked={usarPesquisa}
+              onCheckedChange={onUsarPesquisaChange}
+              disabled={isGenerating}
+            />
+            <Label
+              htmlFor="pesquisa-radiopaedia"
+              className="text-xs text-muted-foreground cursor-pointer flex items-center gap-1.5"
+            >
+              <Search className="w-3.5 h-3.5" />
+              Radiopaedia
+            </Label>
+          </div>
+
+          <span className="text-xs text-muted-foreground/50 flex items-center gap-1">
+            <KbdGroup>
+              <Kbd>{isMac ? '⌘' : 'Ctrl'}</Kbd>
+              <span className="text-muted-foreground/40">+</span>
+              <Kbd>Enter</Kbd>
+            </KbdGroup>
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          {historico.length > 0 && (
             <div className="relative">
               <Button
                 variant="ghost"
@@ -113,7 +139,7 @@ export function DictationInput({
                 className="gap-2 text-muted-foreground"
               >
                 <Clock className="w-4 h-4" />
-                Histórico ({historico.length})
+                Historico ({historico.length})
               </Button>
 
               <AnimatePresence>
@@ -166,51 +192,27 @@ export function DictationInput({
               </AnimatePresence>
             </div>
           )}
-      </div>
 
-      <Textarea
-        placeholder={animatedPlaceholder}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onKeyDown={onKeyDown}
-        className="min-h-10 bg-input/40 border-border/50 resize-none text-sm leading-relaxed placeholder:text-muted-foreground/40 overflow-hidden"
-        rows={1}
-      />
-
-      <div className="flex items-center justify-between mt-5">
-        <span className="text-xs text-muted-foreground/70 flex items-center gap-1">
-          <KbdGroup>
-            <Kbd>{isMac ? '⌘' : 'Ctrl'}</Kbd>
-            <span className="text-muted-foreground/50">+</span>
-            <Kbd>Enter</Kbd>
-          </KbdGroup>
-          {" "}para gerar
-        </span>
-
-        <div className="flex items-center gap-5">
-          {/* Checkbox de pesquisa */}
-          <div className="flex items-center gap-2.5">
-            <Switch
-              id="pesquisa-radiopaedia"
-              checked={usarPesquisa}
-              onCheckedChange={onUsarPesquisaChange}
-              disabled={isGenerating}
-            />
-            <Label
-              htmlFor="pesquisa-radiopaedia"
-              className="text-xs text-muted-foreground cursor-pointer flex items-center gap-1.5"
-            >
-              <Search className="w-3.5 h-3.5" />
-              Radiopaedia
-            </Label>
-          </div>
-
-          <Button onClick={onGenerate} disabled={isGenerating || !value.trim()} size="sm" className="gap-2">
+          <Button
+            onClick={onGenerate}
+            disabled={isGenerating || !value.trim()}
+            size="lg"
+            className="gap-2 bg-muted/60 text-foreground/70 hover:bg-accent hover:text-accent-foreground shadow-none"
+          >
             {isGenerating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
             Gerar Laudo
           </Button>
         </div>
       </div>
+
+      <textarea
+        placeholder={animatedPlaceholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onKeyDown={onKeyDown}
+        className="w-full min-h-[120px] bg-transparent border-none outline-none resize-none text-2xl sm:text-3xl leading-relaxed text-foreground placeholder:text-muted-foreground/30 font-light"
+        rows={3}
+      />
     </section>
   )
 }

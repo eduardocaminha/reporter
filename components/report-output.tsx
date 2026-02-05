@@ -328,9 +328,9 @@ export function ReportOutput({ report, isGenerating, tokenUsage, model }: Report
   }, [tokenUsage, model])
 
   return (
-    <section className="bg-card rounded-2xl p-8">
-      <div className="flex items-center justify-between mb-5">
-        <h2 className="text-sm font-medium text-muted-foreground">Resultado</h2>
+    <section className="border-t border-border/30 pt-10">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-sm font-medium text-muted-foreground/60">Resultado</h2>
         <AnimatePresence>
           {report && !isError && (
             <motion.div
@@ -363,10 +363,8 @@ export function ReportOutput({ report, isGenerating, tokenUsage, model }: Report
         </AnimatePresence>
       </div>
 
-      <div className={`min-h-[220px] rounded-xl border p-5 overflow-hidden ${
-        isError 
-          ? "bg-destructive/5 border-destructive/20" 
-          : "bg-muted/30 border-border/40"
+      <div className={`overflow-hidden ${
+        isError ? "text-destructive" : ""
       }`}>
         <AnimatePresence mode="wait">
           {isGenerating ? (
@@ -376,7 +374,7 @@ export function ReportOutput({ report, isGenerating, tokenUsage, model }: Report
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="h-full min-h-[188px] flex flex-col items-center justify-center gap-3 text-muted-foreground"
+              className="min-h-[120px] flex flex-col items-center justify-center gap-3 text-muted-foreground"
             >
               <div className="flex gap-1.5">
                 <motion.span
@@ -418,26 +416,26 @@ export function ReportOutput({ report, isGenerating, tokenUsage, model }: Report
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="h-full min-h-[188px] flex items-center justify-center"
+              className="min-h-[80px] flex items-center justify-center"
             >
-              <span className="text-sm text-muted-foreground/60">O laudo gerado aparecera aqui</span>
+              <span className="text-sm text-muted-foreground/40">O laudo gerado aparecera aqui</span>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
       
       {tokenUsage && costInfo && (
-        <div className="mt-5 pt-5 border-t border-border/30">
-          <div className="flex items-center justify-end gap-5 text-xs text-muted-foreground">
+        <div className="mt-6 pt-5 border-t border-border/20">
+          <div className="flex items-center justify-end gap-5 text-xs text-muted-foreground/60">
             <div className="flex items-center gap-1.5">
               <span>Tokens:</span>
-              <span className="font-medium text-foreground/70">
+              <span className="font-medium text-foreground/50">
                 {formatarTokens(tokenUsage.inputTokens)} in + {formatarTokens(tokenUsage.outputTokens)} out = {formatarTokens(tokenUsage.totalTokens)}
               </span>
             </div>
             <div className="flex items-center gap-1.5">
               <DollarSign className="w-3.5 h-3.5" />
-              <span className="font-medium text-foreground/70">{formatarCusto(costInfo.totalCost)}</span>
+              <span className="font-medium text-foreground/50">{formatarCusto(costInfo.totalCost)}</span>
             </div>
           </div>
         </div>

@@ -132,7 +132,7 @@ export default function Home() {
             transition: { staggerChildren: 0.1 },
           },
         }}
-        className="max-w-4xl mx-auto px-6 py-12 flex flex-col gap-8"
+        className="max-w-6xl mx-auto px-8 sm:px-12 py-10 flex flex-col gap-10"
       >
         <motion.div
           variants={{
