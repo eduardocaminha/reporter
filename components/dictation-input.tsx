@@ -125,16 +125,16 @@ export function DictationInput({
               >
                 <button
                   onClick={() => setAudioGravando(true)}
-                  className="w-10 h-10 rounded-full bg-accent text-accent-foreground flex items-center justify-center hover:bg-accent/80 transition-colors"
+                  className="w-10 h-10 rounded-full bg-muted text-foreground/70 flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition-colors"
                 >
                   <AudioLines className="w-5 h-5" />
                 </button>
                 <div className="flex items-center overflow-hidden">
                   <div className="-translate-x-[calc(100%+0.75rem)] opacity-0 group-hover/audio:translate-x-0 group-hover/audio:opacity-100 transition-all duration-300 ease-out ml-3">
                     <KbdGroup>
-                      <Kbd className="bg-accent text-accent-foreground">{isMac ? '⌘' : 'Ctrl'}</Kbd>
-                      <span className="text-xs text-accent-foreground/50">+</span>
-                      <Kbd className="bg-accent text-accent-foreground">G</Kbd>
+                      <Kbd className="group-hover/audio:bg-accent group-hover/audio:text-accent-foreground">{isMac ? '⌘' : 'Ctrl'}</Kbd>
+                      <span className="text-xs text-foreground/30 group-hover/audio:text-accent-foreground/50">+</span>
+                      <Kbd className="group-hover/audio:bg-accent group-hover/audio:text-accent-foreground">G</Kbd>
                     </KbdGroup>
                   </div>
                 </div>
