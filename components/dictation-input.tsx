@@ -5,7 +5,7 @@ import { useState, useEffect, useRef, useCallback } from "react"
 import { motion, AnimatePresence } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { Kbd, KbdGroup } from "@/components/ui/kbd"
-import { Clock, Sparkles, Loader2, X, Search, Mic, Plus, Check } from "lucide-react"
+import { Clock, Sparkles, Loader2, X, Search, AudioLines, Check } from "lucide-react"
 
 interface ItemHistorico {
   id: string
@@ -126,7 +126,7 @@ export function DictationInput({
                   onClick={() => setAudioGravando(true)}
                   className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center hover:bg-foreground/80 transition-colors"
                 >
-                  <Mic className="w-4.5 h-4.5" />
+                  <AudioLines className="w-5 h-5" />
                 </button>
               </motion.div>
             ) : (
@@ -136,14 +136,8 @@ export function DictationInput({
                 animate={{ opacity: 1, width: "auto" }}
                 exit={{ opacity: 0, width: 0 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
-                className="flex items-center gap-3 border border-border/50 rounded-full px-4 py-2 h-10 overflow-hidden"
+                className="flex items-center gap-3 bg-background rounded-full px-4 py-2 h-10 overflow-hidden"
               >
-                <button
-                  className="text-foreground/40 hover:text-foreground transition-colors shrink-0"
-                >
-                  <Plus className="w-4 h-4" />
-                </button>
-
                 {/* Fake waveform bars */}
                 <div className="flex items-center gap-[2px] h-6 min-w-[200px]">
                   {Array.from({ length: 50 }).map((_, i) => {
@@ -161,18 +155,22 @@ export function DictationInput({
                 </div>
 
                 <div className="flex items-center gap-1 shrink-0">
-                  <button
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => setAudioGravando(false)}
-                    className="text-foreground/40 hover:text-foreground transition-colors p-1"
+                    className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-7 w-7 p-0"
                   >
-                    <X className="w-4 h-4" />
-                  </button>
-                  <button
+                    <X className="w-3.5 h-3.5" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => setAudioGravando(false)}
-                    className="text-foreground/40 hover:text-foreground transition-colors p-1"
+                    className="text-muted-foreground hover:bg-accent hover:text-accent-foreground h-7 w-7 p-0"
                   >
-                    <Check className="w-4 h-4" />
-                  </button>
+                    <Check className="w-3.5 h-3.5" />
+                  </Button>
                 </div>
               </motion.div>
             )}
