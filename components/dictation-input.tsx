@@ -5,7 +5,7 @@ import { useState, useEffect, useRef, useCallback } from "react"
 import { motion, AnimatePresence } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { Kbd, KbdGroup } from "@/components/ui/kbd"
-import { Clock, Sparkles, Loader2, X, Search } from "lucide-react"
+import { Clock, Sparkles, Loader2, X, Search, Mic, Plus, Check } from "lucide-react"
 
 interface ItemHistorico {
   id: string
@@ -38,6 +38,7 @@ export function DictationInput({
   onUsarPesquisaChange,
 }: DictationInputProps) {
   const [historicoAberto, setHistoricoAberto] = useState(false)
+  const [audioGravando, setAudioGravando] = useState(false)
   const [isMac, setIsMac] = useState(false)
   const [animatedPlaceholder, setAnimatedPlaceholder] = useState("")
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -108,8 +109,78 @@ export function DictationInput({
 
   return (
     <section>
-      {/* Top bar: Radiopaedia + Historico no canto superior direito */}
-      <div className="flex items-center justify-end gap-4 mb-6">
+      {/* Top bar: Audio à esquerda, Radiopaedia + Historico à direita */}
+      <div className="flex items-center justify-between mb-6">
+        {/* Audio button / waveform */}
+        <div className="flex items-center">
+          <AnimatePresence mode="wait">
+            {!audioGravando ? (
+              <motion.div
+                key="mic-button"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.2 }}
+              >
+                <button
+                  onClick={() => setAudioGravando(true)}
+                  className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center hover:bg-foreground/80 transition-colors"
+                >
+                  <Mic className="w-4.5 h-4.5" />
+                </button>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="waveform-bar"
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: "auto" }}
+                exit={{ opacity: 0, width: 0 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="flex items-center gap-3 border border-border/50 rounded-full px-4 py-2 h-10 overflow-hidden"
+              >
+                <button
+                  className="text-foreground/40 hover:text-foreground transition-colors shrink-0"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+
+                {/* Fake waveform bars */}
+                <div className="flex items-center gap-[2px] h-6 min-w-[200px]">
+                  {Array.from({ length: 50 }).map((_, i) => {
+                    const heights = [3, 6, 4, 10, 14, 8, 18, 12, 5, 20, 16, 7, 22, 9, 4, 15, 11, 6, 19, 13, 3, 8, 17, 10, 5, 14, 21, 7, 12, 6, 16, 9, 4, 18, 11, 8, 3, 13, 20, 6, 15, 10, 7, 4, 9, 17, 12, 5, 11, 8]
+                    return (
+                      <motion.div
+                        key={i}
+                        className="w-[2px] rounded-full bg-foreground/70 shrink-0"
+                        initial={{ height: 2 }}
+                        animate={{ height: heights[i] }}
+                        transition={{ duration: 0.4, delay: i * 0.015 }}
+                      />
+                    )
+                  })}
+                </div>
+
+                <div className="flex items-center gap-1 shrink-0">
+                  <button
+                    onClick={() => setAudioGravando(false)}
+                    className="text-foreground/40 hover:text-foreground transition-colors p-1"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => setAudioGravando(false)}
+                    className="text-foreground/40 hover:text-foreground transition-colors p-1"
+                  >
+                    <Check className="w-4 h-4" />
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Radiopaedia + Historico */}
+        <div className="flex items-center gap-4">
         <Button
           variant="ghost"
           size="sm"
@@ -183,6 +254,7 @@ export function DictationInput({
             </AnimatePresence>
           </div>
         )}
+        </div>
       </div>
 
       {/* Textarea auto-grow: comeca com 1 linha, expande com wrap */}
