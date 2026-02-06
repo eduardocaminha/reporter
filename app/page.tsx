@@ -132,67 +132,72 @@ export default function Home() {
             transition: { staggerChildren: 0.1 },
           },
         }}
-        className="max-w-6xl mx-auto px-8 sm:px-12 py-10 flex flex-col"
+        className="max-w-6xl lg:max-w-7xl mx-auto px-8 sm:px-12 py-10 flex flex-col"
       >
-        <motion.div
-          variants={{
-            hidden: { opacity: 0, y: 20 },
-            visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
-          }}
-        >
-          <DictationInput
-            value={dictatedText}
-            onChange={setDictatedText}
-            onGenerate={handleGenerate}
-            onKeyDown={handleKeyDown}
-            isGenerating={isGenerating}
-            historico={historico}
-            onLimparHistorico={limparHistorico}
-            usarPesquisa={usarPesquisa}
-            onUsarPesquisaChange={setUsarPesquisa}
-          />
-        </motion.div>
-
-        {/* Erro essencial */}
-        {erro && (
+        <div className="flex flex-col lg:flex-row lg:gap-8">
+          {/* Coluna esquerda - Input */}
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-destructive/5 border border-destructive/30 rounded-2xl p-5 mt-6"
-          >
-            <p className="text-sm font-medium text-destructive">{erro}</p>
-          </motion.div>
-        )}
-
-        {/* Laudo gerado - imediatamente abaixo do botao */}
-        {generatedReport && (
-          <motion.div
+            className="lg:w-1/2"
             variants={{
               hidden: { opacity: 0, y: 20 },
               visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
             }}
-            className="mt-6"
           >
-            <ReportOutput 
-              report={generatedReport} 
+            <DictationInput
+              value={dictatedText}
+              onChange={setDictatedText}
+              onGenerate={handleGenerate}
+              onKeyDown={handleKeyDown}
               isGenerating={isGenerating}
-              tokenUsage={tokenUsage}
-              model={model}
+              historico={historico}
+              onLimparHistorico={limparHistorico}
+              usarPesquisa={usarPesquisa}
+              onUsarPesquisaChange={setUsarPesquisa}
             />
           </motion.div>
-        )}
 
-        {/* Sugestões (aparecem junto com o laudo) */}
-        {sugestoes.length > 0 && generatedReport && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="mt-6"
-          >
-            <Sugestoes sugestoes={sugestoes} />
-          </motion.div>
-        )}
+          {/* Coluna direita - Output */}
+          <div className="mt-6 lg:mt-0 lg:w-1/2 flex flex-col gap-6">
+            {/* Erro essencial */}
+            {erro && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-destructive/5 border border-destructive/30 rounded-2xl p-5"
+              >
+                <p className="text-sm font-medium text-destructive">{erro}</p>
+              </motion.div>
+            )}
+
+            {/* Laudo gerado */}
+            {generatedReport && (
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+                }}
+              >
+                <ReportOutput
+                  report={generatedReport}
+                  isGenerating={isGenerating}
+                  tokenUsage={tokenUsage}
+                  model={model}
+                />
+              </motion.div>
+            )}
+
+            {/* Sugestões (aparecem junto com o laudo) */}
+            {sugestoes.length > 0 && generatedReport && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <Sugestoes sugestoes={sugestoes} />
+              </motion.div>
+            )}
+          </div>
+        </div>
       </motion.main>
     </div>
   )
