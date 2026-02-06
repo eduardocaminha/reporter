@@ -157,7 +157,7 @@ export function DictationInput({
                         variant="ghost"
                         size="sm"
                         onClick={onLimparHistorico}
-                        className="text-xs text-muted-foreground hover:bg-destructive hover:text-destructive-foreground h-7 px-3"
+                        className="text-xs text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-7 px-3"
                       >
                         Limpar
                       </Button>
@@ -165,7 +165,7 @@ export function DictationInput({
                         variant="ghost"
                         size="sm"
                         onClick={() => setHistoricoAberto(false)}
-                        className="h-7 w-7 p-0"
+                        className="text-muted-foreground hover:bg-accent hover:text-accent-foreground h-7 w-7 p-0"
                       >
                         <X className="w-3.5 h-3.5" />
                       </Button>
