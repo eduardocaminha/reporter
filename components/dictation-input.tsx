@@ -131,13 +131,15 @@ export function DictationInput({
 
         {historico.length > 0 && (
           <div className="relative">
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => setHistoricoAberto(!historicoAberto)}
-              className="text-sm font-medium text-foreground/40 hover:text-foreground/70 underline-offset-4 hover:underline cursor-pointer flex items-center gap-1.5 transition-colors"
+              className={`gap-1.5 ${historicoAberto ? "bg-foreground/5 text-foreground/60" : "text-foreground/40 hover:text-foreground"}`}
             >
               <Clock className="w-3.5 h-3.5" />
               Histórico ({historico.length})
-            </button>
+            </Button>
 
             <AnimatePresence>
               {historicoAberto && (
