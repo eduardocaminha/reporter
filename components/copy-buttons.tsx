@@ -62,7 +62,7 @@ export function CopyButtons({ laudo }: CopyButtonsProps) {
         className="gap-2 text-muted-foreground hover:text-foreground"
       >
         {copiado === "texto" ? <Check className="w-4 h-4 text-primary" /> : <FileText className="w-4 h-4" />}
-        {copiado === "texto" ? "Copiado" : "Copiar Texto"}
+        {copiado === "texto" ? "Copiado" : "Copiar texto"}
       </Button>
     </div>
   )

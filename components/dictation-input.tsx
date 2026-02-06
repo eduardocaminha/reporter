@@ -220,7 +220,7 @@ export function DictationInput({
           className="gap-2 bg-muted/60 text-foreground/70 hover:bg-accent hover:text-accent-foreground shadow-none"
         >
           {isGenerating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-          Gerar Laudo
+          Gerar laudo
         </Button>
       </div>
     </section>

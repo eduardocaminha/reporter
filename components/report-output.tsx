@@ -356,7 +356,7 @@ export function ReportOutput({ report, isGenerating, tokenUsage, model }: Report
                 className="gap-2 text-muted-foreground hover:text-foreground"
               >
                 {copiedText ? <Check className="w-4 h-4 text-primary" /> : <FileText className="w-4 h-4" />}
-                {copiedText ? "Copiado" : "Copiar Texto"}
+                {copiedText ? "Copiado" : "Copiar texto"}
               </Button>
             </motion.div>
           )}
