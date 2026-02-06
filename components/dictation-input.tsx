@@ -209,7 +209,7 @@ export function DictationInput({
             <KbdGroup>
               <Kbd className={value.trim() ? "bg-accent text-accent-foreground" : ""}>{isMac ? '⌘' : 'Ctrl'}</Kbd>
               <span className={`text-xs ${value.trim() ? "text-accent-foreground/50" : "text-foreground/30"}`}>+</span>
-              <Kbd className={value.trim() ? "bg-accent text-accent-foreground" : ""}>Enter</Kbd>
+              <Kbd className={value.trim() ? "bg-accent text-accent-foreground" : ""}>{isMac ? 'Return' : 'Enter'}</Kbd>
             </KbdGroup>
           </div>
         </div>
