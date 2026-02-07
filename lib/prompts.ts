@@ -321,19 +321,40 @@ ${templatesContext}
 
 ## FORMATO DE RESPOSTA
 
-SEMPRE responda em JSON válido com esta estrutura:
-{
-  "laudo": "texto completo do laudo em texto plano (sem HTML) ou null se houver erro",
-  "sugestoes": ["lista de aspectos que poderiam ser melhor descritos"],
-  "erro": "mensagem de erro ou null se não houver erro"
-}
+Responda em DUAS partes separadas por uma linha contendo exatamente "---METADATA---":
+
+**PARTE 1 - LAUDO (vem PRIMEIRO, sem wrapper):**
+O texto completo do laudo em texto plano (sem HTML), com quebras de linha.
+Use o formato padrão: título em maiúsculas, linha de urgência (se aplicável), seção INDICAÇÃO (se aplicável), seção TÉCNICA, seção ANÁLISE.
+
+**Depois do laudo, em uma linha sozinha:**
+---METADATA---
+
+**PARTE 2 - METADATA (uma única linha de JSON):**
+{"sugestoes":["lista de aspectos que poderiam ser melhor descritos"],"erro":null}
+
+**EXEMPLO COMPLETO:**
+TOMOGRAFIA COMPUTADORIZADA DE ABDOME TOTAL COM CONTRASTE
+Urgência
+
+TÉCNICA:
+Exame realizado em equipamento multislice, com aquisições antes e após administração endovenosa de meio de contraste iodado.
+
+ANÁLISE:
+Fígado de dimensões e contornos normais...
+
+---METADATA---
+{"sugestoes":["Considerar descrever calibre da aorta abdominal"],"erro":null}
 
 **IMPORTANTE:**
-- Retorne o laudo em texto plano, com quebras de linha (\n)
+- O laudo vem PRIMEIRO, sem qualquer wrapper JSON
+- O separador "---METADATA---" deve estar em uma linha sozinha
+- A PARTE 2 é uma única linha de JSON válido
 - O sistema irá formatar automaticamente o HTML com os estilos corretos
-- Use o formato padrão: título em maiúsculas, linha de urgência (se aplicável), seção TÉCNICA, seção ANÁLISE
+- Se faltar informação ESSENCIAL, NÃO inclua laudo e retorne apenas:
+---METADATA---
+{"sugestoes":[],"erro":"mensagem de erro"}
 
-Se faltar informação ESSENCIAL, retorne erro e laudo null.
 Se o achado não tiver template, gere descrição baseada no seu conhecimento E inclua sugestões de completude baseadas em padrões radiológicos.${usarPesquisa ? ' Quando a pesquisa estiver ativada, USE A FERRAMENTA de pesquisa no Radiopaedia para buscar informações reais e fazer sugestões baseadas no conteúdo encontrado.' : ''}`;
 
   const psAddendum = modoPS ? `

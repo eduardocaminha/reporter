@@ -19,20 +19,135 @@ export interface ResultadoLaudo {
 function limparRespostaJSON(resposta: string): string {
   // Remove markdown code blocks se existirem
   let limpo = resposta.trim();
-  
+
   // Remove ```json no início
   if (limpo.startsWith('```json')) {
     limpo = limpo.slice(7);
   } else if (limpo.startsWith('```')) {
     limpo = limpo.slice(3);
   }
-  
+
   // Remove ``` no final
   if (limpo.endsWith('```')) {
     limpo = limpo.slice(0, -3);
   }
-  
+
   return limpo.trim();
+}
+
+const METADATA_DELIMITER = '---METADATA---';
+
+function parseStreamedResponse(text: string): {
+  laudo: string | null;
+  sugestoes: string[];
+  erro: string | null;
+} {
+  const delimIdx = text.indexOf(METADATA_DELIMITER);
+
+  if (delimIdx !== -1) {
+    const laudoText = text.substring(0, delimIdx).trim();
+    const metadataText = text.substring(delimIdx + METADATA_DELIMITER.length).trim();
+
+    try {
+      const metadata = JSON.parse(limparRespostaJSON(metadataText));
+      return {
+        laudo: laudoText || null,
+        sugestoes: metadata.sugestoes || [],
+        erro: metadata.erro || null,
+      };
+    } catch {
+      return { laudo: laudoText || null, sugestoes: [], erro: null };
+    }
+  }
+
+  // Fallback: tentar parsear como JSON antigo
+  try {
+    const limpo = limparRespostaJSON(text);
+    const resultado = JSON.parse(limpo);
+    return {
+      laudo: resultado.laudo || null,
+      sugestoes: resultado.sugestoes || [],
+      erro: resultado.erro || null,
+    };
+  } catch {
+    // Texto plano sem metadata
+    return { laudo: text.trim() || null, sugestoes: [], erro: null };
+  }
+}
+
+function getRadiopaediaTools(): Anthropic.Tool[] {
+  return [{
+    name: 'pesquisar_radiopaedia',
+    description: 'Pesquisa informações sobre achados radiológicos no site Radiopaedia.org. Use esta ferramenta quando precisar de informações detalhadas sobre alterações descritas no laudo para fazer sugestões mais precisas. Busca no Google por "radiopaedia [termo]" e acessa o primeiro resultado.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        termo: {
+          type: 'string',
+          description: 'Termo de busca relacionado ao achado radiológico (ex: "humeral fracture", "appendicitis", "pneumonia"). Use termos em inglês para melhor resultado no Radiopaedia.',
+        },
+      },
+      required: ['termo'],
+    },
+  }];
+}
+
+async function resolveToolsNonStreaming(
+  systemPrompt: string,
+  messages: Anthropic.MessageParam[],
+  tools: Anthropic.Tool[],
+  maxRetries = 3
+): Promise<void> {
+  const model = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-5-20250929';
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      let response = await client.messages.create({
+        model, max_tokens: 4096, system: systemPrompt,
+        messages, tools,
+      });
+
+      while (response.stop_reason === 'tool_use' && response.content) {
+        const toolUses = response.content.filter(
+          (item) => item.type === 'tool_use'
+        ) as Array<{ type: 'tool_use'; id: string; name: string; input: Record<string, unknown> }>;
+
+        if (toolUses.length === 0) break;
+
+        messages.push({ role: 'assistant', content: response.content });
+
+        const toolResults: Anthropic.ToolResultBlockParam[] = [];
+        for (const toolUse of toolUses) {
+          if (toolUse.name === 'pesquisar_radiopaedia') {
+            const termo = toolUse.input.termo as string;
+            console.log(`Pesquisando Radiopaedia para: ${termo}`);
+            const resultado = await pesquisarRadiopaedia(termo);
+            toolResults.push({ type: 'tool_result', tool_use_id: toolUse.id, content: resultado });
+          }
+        }
+
+        messages.push({ role: 'user', content: toolResults });
+
+        response = await client.messages.create({
+          model, max_tokens: 4096, system: systemPrompt,
+          messages, tools,
+        });
+      }
+
+      // Tools resolvidas — NÃO adicionamos a resposta final às messages
+      // para que a chamada streaming gere texto fresco
+      return;
+    } catch (error) {
+      const statusCode = (error as { status?: number }).status;
+      if ((statusCode === 529 || statusCode === 429) && attempt < maxRetries - 1) {
+        const waitTime = Math.pow(2, attempt) * 1000;
+        console.log(`API sobrecarregada (tools), retry em ${waitTime/1000}s`);
+        await sleep(waitTime);
+        continue;
+      }
+      throw error;
+    }
+  }
 }
 
 interface SelecaoTemplates {
@@ -308,6 +423,128 @@ async function chamarClaudeComRetry(
   throw lastError;
 }
 
+export async function gerarLaudoStream(
+  texto: string,
+  modoPS: boolean,
+  modoComparativo: boolean = false,
+  usarPesquisa: boolean = false
+): Promise<ReadableStream<Uint8Array>> {
+  const usarOtimizacao = process.env.ENABLE_TEMPLATE_OPTIMIZATION === 'true';
+
+  let systemPrompt: string;
+
+  if (usarOtimizacao) {
+    const contexto = identificarContextoExame(texto);
+    const catalogo = criarCatalogoResumido(contexto);
+    const selecao = await selecionarTemplates(texto, catalogo);
+    const templatesEscolhidos = buscarTemplatesPorArquivos([selecao.mascara, ...selecao.achados]);
+    systemPrompt = montarSystemPrompt(modoPS, modoComparativo, usarPesquisa, texto, templatesEscolhidos);
+  } else {
+    systemPrompt = montarSystemPrompt(modoPS, modoComparativo, usarPesquisa, texto);
+  }
+
+  const messages: Anthropic.MessageParam[] = [{ role: 'user', content: texto }];
+  const encoder = new TextEncoder();
+
+  // Resolver tools se necessário (non-streaming)
+  if (usarPesquisa) {
+    const tools = getRadiopaediaTools();
+    await resolveToolsNonStreaming(systemPrompt, messages, tools);
+  }
+
+  return new ReadableStream({
+    async start(controller) {
+      try {
+        const messageStream = client.messages.stream({
+          model: process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-5-20250929',
+          max_tokens: 4096,
+          system: systemPrompt,
+          messages,
+          // Sem tools — força geração de texto
+        });
+
+        let accumulatedText = '';
+        let buffer = '';
+        let metadataStarted = false;
+
+        messageStream.on('text', (textDelta) => {
+          accumulatedText += textDelta;
+
+          if (metadataStarted) return;
+
+          buffer += textDelta;
+
+          // Detectar delimitador
+          const delimIdx = buffer.indexOf(METADATA_DELIMITER);
+          if (delimIdx !== -1) {
+            metadataStarted = true;
+            const toEmit = buffer.substring(0, delimIdx);
+            if (toEmit.trimEnd()) {
+              controller.enqueue(encoder.encode(
+                JSON.stringify({ type: 'text_delta', text: toEmit }) + '\n'
+              ));
+            }
+            buffer = '';
+            return;
+          }
+
+          // Buffer de segurança para delimitador parcial
+          if (buffer.length > METADATA_DELIMITER.length) {
+            const safe = buffer.substring(0, buffer.length - METADATA_DELIMITER.length);
+            buffer = buffer.substring(buffer.length - METADATA_DELIMITER.length);
+            controller.enqueue(encoder.encode(
+              JSON.stringify({ type: 'text_delta', text: safe }) + '\n'
+            ));
+          }
+        });
+
+        const finalMsg = await messageStream.finalMessage();
+
+        // Flush buffer restante
+        if (!metadataStarted && buffer.trimEnd()) {
+          controller.enqueue(encoder.encode(
+            JSON.stringify({ type: 'text_delta', text: buffer }) + '\n'
+          ));
+        }
+
+        // Parsear metadata
+        const parsed = parseStreamedResponse(accumulatedText);
+
+        const tokenUsage: TokenUsage = {
+          inputTokens: finalMsg.usage.input_tokens,
+          outputTokens: finalMsg.usage.output_tokens,
+          totalTokens: finalMsg.usage.input_tokens + finalMsg.usage.output_tokens,
+        };
+
+        controller.enqueue(encoder.encode(
+          JSON.stringify({
+            type: 'done',
+            sugestoes: parsed.sugestoes,
+            erro: parsed.erro,
+            tokenUsage,
+            model: finalMsg.model,
+          }) + '\n'
+        ));
+        controller.close();
+      } catch (error) {
+        const statusCode = (error as { status?: number }).status;
+        let message = 'Erro ao processar. Tente novamente';
+
+        if (statusCode === 529 || statusCode === 429) {
+          message = 'API do Claude está sobrecarregada. Tente novamente em alguns segundos.';
+        } else if (statusCode === 401) {
+          message = 'Chave da API inválida';
+        }
+
+        controller.enqueue(encoder.encode(
+          JSON.stringify({ type: 'error', message }) + '\n'
+        ));
+        controller.close();
+      }
+    }
+  });
+}
+
 export async function gerarLaudo(
   texto: string, 
   modoPS: boolean, 
@@ -352,49 +589,22 @@ export async function gerarLaudo(
       }
     }
     
-    const resposta = limparRespostaJSON(respostaRaw);
-    
-    // Tentar parsear como JSON
-    try {
-      const resultado = JSON.parse(resposta);
-      const laudoTexto = resultado.laudo || null;
-      
-      // Formatar laudo em HTML se existir
-      const laudoFormatado = laudoTexto ? formatarLaudoHTML(laudoTexto) : null;
-      
-      // Capturar informações de uso de tokens
-      const tokenUsage: TokenUsage | undefined = message.usage ? {
-        inputTokens: message.usage.input_tokens,
-        outputTokens: message.usage.output_tokens,
-        totalTokens: message.usage.input_tokens + message.usage.output_tokens,
-      } : undefined;
-      
-      return {
-        laudo: laudoFormatado,
-        sugestoes: resultado.sugestoes || [],
-        erro: resultado.erro || null,
-        tokenUsage,
-        model: message.model,
-      };
-    } catch {
-      // Se não for JSON válido, assume que é o laudo direto e formata
-      const laudoFormatado = respostaRaw ? formatarLaudoHTML(respostaRaw) : null;
-      
-      // Capturar informações de uso de tokens
-      const tokenUsage: TokenUsage | undefined = message.usage ? {
-        inputTokens: message.usage.input_tokens,
-        outputTokens: message.usage.output_tokens,
-        totalTokens: message.usage.input_tokens + message.usage.output_tokens,
-      } : undefined;
-      
-      return {
-        laudo: laudoFormatado,
-        sugestoes: [],
-        erro: null,
-        tokenUsage,
-        model: message.model,
-      };
-    }
+    const parsed = parseStreamedResponse(respostaRaw);
+    const laudoFormatado = parsed.laudo ? formatarLaudoHTML(parsed.laudo) : null;
+
+    const tokenUsage: TokenUsage | undefined = message.usage ? {
+      inputTokens: message.usage.input_tokens,
+      outputTokens: message.usage.output_tokens,
+      totalTokens: message.usage.input_tokens + message.usage.output_tokens,
+    } : undefined;
+
+    return {
+      laudo: laudoFormatado,
+      sugestoes: parsed.sugestoes,
+      erro: parsed.erro,
+      tokenUsage,
+      model: message.model,
+    };
   } catch (error) {
     const statusCode = (error as { status?: number }).status;
     

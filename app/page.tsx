@@ -2,11 +2,12 @@
 
 import type React from "react"
 import { motion } from "motion/react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Header } from "@/components/header"
 import { DictationInput } from "@/components/dictation-input"
 import { ReportOutput } from "@/components/report-output"
 import { Sugestoes } from "@/components/sugestoes"
+import { formatarLaudoHTML } from "@/lib/formatador"
 import type { TokenUsage } from "@/lib/tokens"
 
 type ReportMode = "ps" | "eletivo" | "comparativo"
@@ -23,6 +24,8 @@ const MAX_HISTORICO = 5
 export default function Home() {
   const [dictatedText, setDictatedText] = useState("")
   const [generatedReport, setGeneratedReport] = useState("")
+  const [streamedText, setStreamedText] = useState("")
+  const [isStreaming, setIsStreaming] = useState(false)
   const [sugestoes, setSugestoes] = useState<string[]>([])
   const [erro, setErro] = useState<string | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
@@ -31,6 +34,7 @@ export default function Home() {
   const [historico, setHistorico] = useState<ItemHistorico[]>([])
   const [tokenUsage, setTokenUsage] = useState<TokenUsage | undefined>()
   const [model, setModel] = useState<string | undefined>()
+  const abortControllerRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
     const saved = localStorage.getItem("radreport_historico")
@@ -61,10 +65,20 @@ export default function Home() {
 
   const handleGenerate = async () => {
     if (!dictatedText.trim()) return
+
+    // Cancelar stream anterior se existir
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort()
+    }
+    const abortController = new AbortController()
+    abortControllerRef.current = abortController
+
     setIsGenerating(true)
+    setIsStreaming(false)
     setErro(null)
     setSugestoes([])
     setGeneratedReport("")
+    setStreamedText("")
     setTokenUsage(undefined)
     setModel(undefined)
 
@@ -72,43 +86,95 @@ export default function Home() {
       const response = await fetch("/api/gerar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            texto: dictatedText,
-            modoPS: reportMode === "ps",
-            modoComparativo: reportMode === "comparativo",
-            usarPesquisa,
-          }),
+        body: JSON.stringify({
+          texto: dictatedText,
+          modoPS: reportMode === "ps",
+          modoComparativo: reportMode === "comparativo",
+          usarPesquisa,
+        }),
+        signal: abortController.signal,
       })
 
-      const data = await response.json()
+      // Erro HTTP (validação, API key, etc.)
+      if (!response.ok) {
+        const data = await response.json()
+        setErro(data.erro || "Erro ao gerar laudo")
+        setIsGenerating(false)
+        return
+      }
 
-      // Erro essencial - bloqueia geração
-      if (data.erro) {
-        setErro(data.erro)
-        setGeneratedReport("")
-        setSugestoes([])
-      } 
-      // Laudo gerado com sucesso
-      else if (data.laudo) {
-        setGeneratedReport(data.laudo)
-        setErro(null)
-        setSugestoes(data.sugestoes || [])
-        setTokenUsage(data.tokenUsage)
-        setModel(data.model)
-        adicionarAoHistorico(dictatedText, data.laudo)
+      const reader = response.body!.getReader()
+      const decoder = new TextDecoder()
+      let accumulated = ""
+      let leftover = ""
+      setIsStreaming(true)
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        const chunk = leftover + decoder.decode(value, { stream: true })
+        const lines = chunk.split("\n")
+
+        // A última linha pode estar incompleta — guardar para o próximo chunk
+        leftover = lines.pop() || ""
+
+        for (const line of lines) {
+          if (!line.trim()) continue
+          try {
+            const event = JSON.parse(line)
+
+            if (event.type === "text_delta") {
+              accumulated += event.text
+              setStreamedText(accumulated)
+            } else if (event.type === "done") {
+              const laudoHTML = formatarLaudoHTML(accumulated)
+              setGeneratedReport(laudoHTML)
+              setSugestoes(event.sugestoes || [])
+              if (event.erro) setErro(event.erro)
+              setTokenUsage(event.tokenUsage)
+              setModel(event.model)
+              adicionarAoHistorico(dictatedText, laudoHTML)
+            } else if (event.type === "error") {
+              setErro(event.message)
+            }
+          } catch {
+            // Linha malformada — ignorar
+          }
+        }
       }
-      // Caso inesperado
-      else {
-        setErro("Resposta inesperada do servidor")
-        setGeneratedReport("")
-        setSugestoes([])
+
+      // Processar leftover final
+      if (leftover.trim()) {
+        try {
+          const event = JSON.parse(leftover)
+          if (event.type === "done") {
+            const laudoHTML = formatarLaudoHTML(accumulated)
+            setGeneratedReport(laudoHTML)
+            setSugestoes(event.sugestoes || [])
+            if (event.erro) setErro(event.erro)
+            setTokenUsage(event.tokenUsage)
+            setModel(event.model)
+            adicionarAoHistorico(dictatedText, laudoHTML)
+          } else if (event.type === "error") {
+            setErro(event.message)
+          }
+        } catch {
+          // Ignorar
+        }
       }
-    } catch {
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") {
+        // Cancelado pelo usuário — não mostrar erro
+        return
+      }
       setErro("Erro ao conectar com o servidor")
       setGeneratedReport("")
       setSugestoes([])
     } finally {
       setIsGenerating(false)
+      setIsStreaming(false)
+      abortControllerRef.current = null
     }
   }
 
@@ -169,8 +235,8 @@ export default function Home() {
               </motion.div>
             )}
 
-            {/* Laudo gerado */}
-            {generatedReport && (
+            {/* Laudo gerado ou streaming */}
+            {(generatedReport || isStreaming || isGenerating) && (
               <motion.div
                 variants={{
                   hidden: { opacity: 0, y: 20 },
@@ -179,6 +245,8 @@ export default function Home() {
               >
                 <ReportOutput
                   report={generatedReport}
+                  streamedText={isStreaming ? streamedText : ""}
+                  isStreaming={isStreaming}
                   isGenerating={isGenerating}
                   tokenUsage={tokenUsage}
                   model={model}
