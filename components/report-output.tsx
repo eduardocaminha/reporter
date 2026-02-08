@@ -333,43 +333,36 @@ export function ReportOutput({ report, streamedText, isStreaming, isGenerating, 
     return calcularCusto(tokenUsage.inputTokens, tokenUsage.outputTokens, model);
   }, [tokenUsage, model])
 
+  const hasContent = !!(report || streamedText)
+
   return (
     <section>
-      <div className="flex items-center justify-between mb-6">
-        <div />
-        <AnimatePresence>
-          {(report || streamedText) && !isError && (
-            <motion.div
-              initial={{ opacity: 0, x: 10 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 10 }}
-              transition={{ duration: 0.2 }}
-              className="flex items-center gap-1"
-            >
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleCopyHtml}
-                className="gap-2 text-muted-foreground hover:text-foreground"
-              >
-                {copiedHtml ? <Check className="w-4 h-4 text-primary" /> : <Copy className="w-4 h-4" />}
-                {copiedHtml ? "Copiado" : "Copiar HTML"}
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleCopyText}
-                className="gap-2 text-muted-foreground hover:text-foreground"
-              >
-                {copiedText ? <Check className="w-4 h-4 text-primary" /> : <FileText className="w-4 h-4" />}
-                {copiedText ? "Copiado" : "Copiar texto"}
-              </Button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+      <div className="flex items-center justify-end mb-6">
+        <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleCopyHtml}
+            disabled={!hasContent || isError}
+            className="gap-2 text-muted-foreground hover:text-foreground disabled:opacity-30"
+          >
+            {copiedHtml ? <Check className="w-4 h-4 text-primary" /> : <Copy className="w-4 h-4" />}
+            {copiedHtml ? "Copiado" : "Copiar HTML"}
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleCopyText}
+            disabled={!hasContent || isError}
+            className="gap-2 text-muted-foreground hover:text-foreground disabled:opacity-30"
+          >
+            {copiedText ? <Check className="w-4 h-4 text-primary" /> : <FileText className="w-4 h-4" />}
+            {copiedText ? "Copiado" : "Copiar texto"}
+          </Button>
+        </div>
       </div>
 
-      <div className={`overflow-hidden ${isError ? "text-destructive" : ""}`}>
+      <div className={`bg-card rounded-2xl p-8 min-h-[200px] ${isError ? "text-destructive" : ""}`}>
         <AnimatePresence mode="wait">
           {isGenerating && !isStreaming ? (
             <motion.div
@@ -441,12 +434,10 @@ export function ReportOutput({ report, streamedText, isStreaming, isGenerating, 
       </div>
 
       {costInfo && (
-        <div className="mt-6 pt-5 border-t border-border/20">
-          <div className="flex items-center justify-end text-xs text-muted-foreground/60">
-            <div className="flex items-center gap-1.5">
-              <DollarSign className="w-3.5 h-3.5" />
-              <span className="font-medium text-foreground/50">{formatarCusto(costInfo.totalCost)}</span>
-            </div>
+        <div className="mt-4 flex items-center justify-end text-xs text-muted-foreground/60">
+          <div className="flex items-center gap-1.5">
+            <DollarSign className="w-3.5 h-3.5" />
+            <span className="font-medium text-foreground/50">{formatarCusto(costInfo.totalCost)}</span>
           </div>
         </div>
       )}
