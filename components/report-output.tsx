@@ -230,16 +230,16 @@ export function ReportOutput({ report, streamedText, isStreaming, isGenerating, 
 
   // Extrair texto puro do HTML (respeita ordem reordenada)
   const plainTextFromHtml = useMemo(() => {
-    const sourceHtml = reorderedHtml || reportHtml
+    const sourceHtml = reorderedHtml || reportHtml || streamingHtml
     if (!sourceHtml) return ""
     const tempDiv = document.createElement("div")
     tempDiv.innerHTML = sourceHtml
     return tempDiv.textContent || tempDiv.innerText || ""
-  }, [reorderedHtml, reportHtml])
+  }, [reorderedHtml, reportHtml, streamingHtml])
 
   // Criar HTML completo com estilos inline (respeita ordem reordenada)
   const htmlCompleto = useMemo(() => {
-    const sourceHtml = reorderedHtml || reportHtml
+    const sourceHtml = reorderedHtml || reportHtml || streamingHtml
     if (!sourceHtml) return ""
 
     if (sourceHtml.includes('style=')) {
@@ -253,11 +253,11 @@ export function ReportOutput({ report, streamedText, isStreaming, isGenerating, 
       .replace(/class="laudo-texto"/g, 'style="font-family: Arial, sans-serif; font-size: 12pt; margin: 0; padding: 0;"')
 
     return htmlComEstilos
-  }, [reorderedHtml, reportHtml])
+  }, [reorderedHtml, reportHtml, streamingHtml])
 
   // Texto plano com quebras de linha preservadas
   const plainText = useMemo(() => {
-    const sourceHtml = reorderedHtml || reportHtml
+    const sourceHtml = reorderedHtml || reportHtml || streamingHtml
     if (!sourceHtml) return ""
 
     if (sourceHtml.includes("<") && sourceHtml.includes(">")) {
@@ -267,7 +267,7 @@ export function ReportOutput({ report, streamedText, isStreaming, isGenerating, 
     }
 
     return sourceHtml
-  }, [reorderedHtml, reportHtml])
+  }, [reorderedHtml, reportHtml, streamingHtml])
 
   // Copiar automaticamente quando um novo laudo é gerado
   useEffect(() => {
@@ -338,7 +338,7 @@ export function ReportOutput({ report, streamedText, isStreaming, isGenerating, 
       <div className="flex items-center justify-between mb-6">
         <div />
         <AnimatePresence>
-          {report && !isError && !isStreaming && (
+          {(report || streamedText) && !isError && (
             <motion.div
               initial={{ opacity: 0, x: 10 }}
               animate={{ opacity: 1, x: 0 }}

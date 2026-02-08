@@ -152,7 +152,7 @@ export function DictationInput({
           size="sm"
           onClick={() => onUsarPesquisaChange(!usarPesquisa)}
           disabled={isGenerating}
-          className={`gap-1.5 ${usarPesquisa ? "bg-foreground/80 text-background hover:bg-foreground/70 hover:text-background" : "text-foreground/40 hover:text-foreground"}`}
+          className={`gap-1.5 ${usarPesquisa ? "bg-foreground/80 text-background hover:bg-foreground/70 hover:text-background" : "text-muted-foreground hover:text-foreground"}`}
         >
           <Search className="w-3.5 h-3.5" />
           Radiopaedia
@@ -164,7 +164,7 @@ export function DictationInput({
               variant="ghost"
               size="sm"
               onClick={() => setHistoricoAberto(!historicoAberto)}
-              className={`gap-1.5 ${historicoAberto ? "bg-foreground/5 text-foreground/60" : "text-foreground/40 hover:text-foreground"}`}
+              className={`gap-1.5 ${historicoAberto ? "bg-foreground/5 text-muted-foreground" : "text-muted-foreground hover:text-foreground"}`}
             >
               <Clock className="w-3.5 h-3.5" />
               Histórico ({historico.length})
