@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "motion/react"
 import { LogOut } from "lucide-react"
 import { TextEffect } from "@/components/ui/text-effect"
 import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
@@ -99,15 +100,20 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
           </AnimatePresence>
         </div>
 
-        <Button
-          onClick={handleLogout}
-          variant="ghost"
-          size="sm"
-          className="gap-2 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-        >
-          <LogOut className="w-4 h-4" />
-          Sair
-        </Button>
+        <div className="flex items-center gap-2">
+          <Avatar size="sm">
+            <AvatarFallback>U</AvatarFallback>
+          </Avatar>
+          <Button
+            onClick={handleLogout}
+            variant="ghost"
+            size="sm"
+            className="gap-2 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+          >
+            <LogOut className="w-4 h-4" />
+            Sair
+          </Button>
+        </div>
       </div>
     </motion.header>
   )
