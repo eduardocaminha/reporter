@@ -62,7 +62,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
     >
       <div className="max-w-6xl lg:max-w-none mx-auto px-8 sm:px-12 lg:px-16 h-[72px] flex items-center justify-between">
         <div
-          className="h-6 overflow-hidden cursor-default select-none min-w-[140px]"
+          className="h-6 overflow-hidden cursor-pointer select-none min-w-[140px]"
           onMouseEnter={() => setLogoHovered(true)}
           onMouseLeave={() => setLogoHovered(false)}
         >
