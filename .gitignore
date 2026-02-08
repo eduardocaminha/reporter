@@ -36,6 +36,13 @@ yarn-error.log*
 # vercel
 .vercel
 
+# assets grandes (usar Vercel Blob)
+/public/brainmri.mp4
+/public/brainmri/
+
+# screenshots/assets de referência
+/public/Captura*.png
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

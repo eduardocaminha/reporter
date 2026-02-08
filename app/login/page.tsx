@@ -60,7 +60,7 @@ export default function LoginPage() {
               },
             }}
           >
-            Reporter™ by Radiologic™
+            Reporter by Radiologic™
           </TextEffect>
         </div>
       </header>

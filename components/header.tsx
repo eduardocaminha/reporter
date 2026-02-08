@@ -82,7 +82,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
                   },
                 }}
               >
-                Reporter™
+                Reporter
               </TextEffect>
             ) : (
               <motion.span
