@@ -285,11 +285,11 @@ export function ReportOutput({ report, streamedText, isStreaming, isGenerating, 
 
             await navigator.clipboard.write([clipboardItem])
             setCopiedHtml(true)
-            setTimeout(() => setCopiedHtml(false), 2000)
+            setTimeout(() => setCopiedHtml(false), 5000)
           } catch {
             await navigator.clipboard.writeText(plainTextFromHtml)
             setCopiedHtml(true)
-            setTimeout(() => setCopiedHtml(false), 2000)
+            setTimeout(() => setCopiedHtml(false), 5000)
           }
         }
 
@@ -334,6 +334,7 @@ export function ReportOutput({ report, streamedText, isStreaming, isGenerating, 
   }, [tokenUsage, model])
 
   const hasContent = !!(report || streamedText)
+  const showCard = isGenerating || isStreaming || !!report
 
   return (
     <section>
@@ -362,76 +363,77 @@ export function ReportOutput({ report, streamedText, isStreaming, isGenerating, 
         </div>
       </div>
 
-      <div className={`bg-card rounded-2xl p-8 min-h-[200px] ${isError ? "text-destructive" : ""}`}>
-        <AnimatePresence mode="wait">
-          {isGenerating && !isStreaming ? (
-            <motion.div
-              key="loading"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="space-y-4"
-            >
-              <div className="h-5 w-3/5 mx-auto rounded bg-muted animate-pulse" />
-              <div className="h-4 w-2/5 mx-auto rounded bg-muted animate-pulse" />
-              <div className="h-4 w-1/4 rounded bg-muted/70 animate-pulse mt-6" />
-              <div className="space-y-2.5">
-                <div className="h-3.5 w-full rounded bg-muted/50 animate-pulse" />
-                <div className="h-3.5 w-11/12 rounded bg-muted/50 animate-pulse" />
-              </div>
-              <div className="h-4 w-1/4 rounded bg-muted/70 animate-pulse mt-4" />
-              <div className="space-y-2.5">
-                <div className="h-3.5 w-full rounded bg-muted/50 animate-pulse" />
-                <div className="h-3.5 w-10/12 rounded bg-muted/50 animate-pulse" />
-                <div className="h-3.5 w-full rounded bg-muted/50 animate-pulse" />
-                <div className="h-3.5 w-9/12 rounded bg-muted/50 animate-pulse" />
-              </div>
-            </motion.div>
-          ) : isStreaming && streamedText ? (
-            <motion.div
-              key="streaming"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="text-foreground [&_.laudo-texto]:mb-0 [&_.laudo-texto+br]:block"
-            >
-              <div dangerouslySetInnerHTML={{ __html: streamingHtml }} />
-            </motion.div>
-          ) : report ? (
-            <motion.div
-              key="result"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              className={`${
-                isError
-                  ? "text-destructive"
-                  : "text-foreground [&_.laudo-texto]:mb-0 [&_.laudo-texto+br]:block"
-              } pl-6`}
-            >
-              {blocks.length > 0 && !isError ? (
-                <DraggableReport blocks={blocks} onReorder={handleReorder} />
-              ) : (
-                <div dangerouslySetInnerHTML={{ __html: reportHtml }} />
-              )}
-            </motion.div>
-          ) : (
-            <motion.div
-              key="empty"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="min-h-[80px] flex items-center justify-center"
-            >
-              <span className="text-sm text-muted-foreground/40">O laudo gerado aparecera aqui</span>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+      <AnimatePresence>
+        {showCard && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="overflow-hidden"
+          >
+            <div className={`bg-card rounded-2xl p-8 min-h-[200px] ${isError ? "text-destructive" : ""}`}>
+              <AnimatePresence mode="wait">
+                {isGenerating && !isStreaming ? (
+                  <motion.div
+                    key="loading"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="space-y-4"
+                  >
+                    <div className="h-5 w-3/5 mx-auto rounded bg-muted animate-pulse" />
+                    <div className="h-4 w-2/5 mx-auto rounded bg-muted animate-pulse" />
+                    <div className="h-4 w-1/4 rounded bg-muted/70 animate-pulse mt-6" />
+                    <div className="space-y-2.5">
+                      <div className="h-3.5 w-full rounded bg-muted/50 animate-pulse" />
+                      <div className="h-3.5 w-11/12 rounded bg-muted/50 animate-pulse" />
+                    </div>
+                    <div className="h-4 w-1/4 rounded bg-muted/70 animate-pulse mt-4" />
+                    <div className="space-y-2.5">
+                      <div className="h-3.5 w-full rounded bg-muted/50 animate-pulse" />
+                      <div className="h-3.5 w-10/12 rounded bg-muted/50 animate-pulse" />
+                      <div className="h-3.5 w-full rounded bg-muted/50 animate-pulse" />
+                      <div className="h-3.5 w-9/12 rounded bg-muted/50 animate-pulse" />
+                    </div>
+                  </motion.div>
+                ) : isStreaming && streamedText ? (
+                  <motion.div
+                    key="streaming"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="text-foreground [&_.laudo-texto]:mb-0 [&_.laudo-texto+br]:block"
+                  >
+                    <div dangerouslySetInnerHTML={{ __html: streamingHtml }} />
+                  </motion.div>
+                ) : report ? (
+                  <motion.div
+                    key="result"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    className={`${
+                      isError
+                        ? "text-destructive"
+                        : "text-foreground [&_.laudo-texto]:mb-0 [&_.laudo-texto+br]:block"
+                    } pl-6`}
+                  >
+                    {blocks.length > 0 && !isError ? (
+                      <DraggableReport blocks={blocks} onReorder={handleReorder} />
+                    ) : (
+                      <div dangerouslySetInnerHTML={{ __html: reportHtml }} />
+                    )}
+                  </motion.div>
+                ) : null}
+              </AnimatePresence>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {costInfo && (
         <div className="mt-4 flex items-center justify-end text-xs text-muted-foreground/60">
