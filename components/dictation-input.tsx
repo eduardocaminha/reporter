@@ -288,7 +288,7 @@ export function DictationInput({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={onKeyDown}
-        className="w-full bg-transparent border-none outline-none resize-none text-2xl sm:text-3xl leading-relaxed text-foreground placeholder:text-muted-foreground/30 font-light overflow-hidden"
+        className="w-full bg-transparent border-none outline-none resize-none text-sm sm:text-base leading-relaxed text-foreground placeholder:text-muted-foreground/30 font-light overflow-hidden"
         rows={1}
       />
 
