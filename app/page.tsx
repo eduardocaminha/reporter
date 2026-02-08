@@ -236,23 +236,21 @@ export default function Home() {
             )}
 
             {/* Laudo gerado ou streaming */}
-            {(generatedReport || isStreaming || isGenerating) && (
-              <motion.div
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
-                }}
-              >
-                <ReportOutput
-                  report={generatedReport}
-                  streamedText={isStreaming ? streamedText : ""}
-                  isStreaming={isStreaming}
-                  isGenerating={isGenerating}
-                  tokenUsage={tokenUsage}
-                  model={model}
-                />
-              </motion.div>
-            )}
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+              }}
+            >
+              <ReportOutput
+                report={generatedReport}
+                streamedText={isStreaming ? streamedText : ""}
+                isStreaming={isStreaming}
+                isGenerating={isGenerating}
+                tokenUsage={tokenUsage}
+                model={model}
+              />
+            </motion.div>
 
             {/* Sugestões (aparecem junto com o laudo) */}
             {sugestoes.length > 0 && generatedReport && (
