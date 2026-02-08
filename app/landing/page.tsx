@@ -45,7 +45,7 @@ export default function LandingPage() {
               {["Produto", "Tecnologia", "Seguranca"].map((item) => (
                 <button
                   key={item}
-                  className="px-5 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-full hover:bg-muted/50 cursor-default"
+                  className="px-5 py-2 text-xl text-muted-foreground hover:text-foreground transition-colors rounded-full hover:bg-muted/50 cursor-default"
                 >
                   {item}
                 </button>
@@ -71,7 +71,7 @@ export default function LandingPage() {
             preset="blur"
             per="word"
             as="h1"
-            className="text-3xl sm:text-4xl lg:text-5xl font-medium tracking-tight text-foreground leading-[1.15]"
+            className="text-xl font-medium tracking-tight text-foreground leading-snug"
             variants={{
               item: {
                 hidden: { opacity: 0, filter: "blur(6px)" },
@@ -86,7 +86,7 @@ export default function LandingPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
-            className="mt-5 text-base sm:text-lg lg:text-xl text-muted-foreground font-light leading-relaxed max-w-xl"
+            className="mt-5 text-xl text-muted-foreground/70 font-light leading-snug max-w-xl"
           >
             Você dita, o Reporter estrutura.
             <br />
@@ -96,20 +96,20 @@ export default function LandingPage() {
           </motion.p>
         </div>
 
-        {/* Brain MRI video with subtle zoom */}
+        {/* Brain MRI video with subtle zoom-in */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.9, duration: 0.7, ease: "easeOut" }}
-          className="mt-10 flex-1 min-h-[280px] sm:min-h-[360px] relative rounded-2xl overflow-hidden bg-black"
+          className="mt-10 flex-1 min-h-[400px] sm:min-h-[480px] lg:min-h-[520px] relative rounded-2xl overflow-hidden bg-black flex items-center justify-center"
         >
-          <div className="absolute inset-0 animate-subtle-zoom">
+          <div className="w-[70%] h-[70%] animate-zoom-in-smooth">
             <video
               autoPlay
               loop
               muted
               playsInline
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover rounded-lg"
             >
               <source
                 src={process.env.NEXT_PUBLIC_BRAINMRI_URL || "/brainmri.mp4"}
@@ -140,7 +140,7 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="px-8 sm:px-12 lg:px-16 py-12">
-        <p className="text-sm text-muted-foreground/30">
+        <p className="text-xl text-muted-foreground/30">
           Reporter by Radiologic™ — {new Date().getFullYear()}
         </p>
       </footer>
