@@ -75,9 +75,9 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
                 className="block text-lg font-medium tracking-tight text-foreground"
                 variants={{
                   item: {
-                    hidden: { opacity: 0, filter: 'blur(12px)' },
-                    visible: { opacity: 1, filter: 'blur(0px)', transition: { duration: 0.35 } },
-                    exit: { opacity: 0, filter: 'blur(12px)', transition: { duration: 0.35 } },
+                    hidden: { opacity: 0, filter: 'blur(4px)' },
+                    visible: { opacity: 1, filter: 'blur(0px)', transition: { duration: 0.25 } },
+                    exit: { opacity: 0, filter: 'blur(4px)', transition: { duration: 0.25 } },
                   },
                 }}
               >
@@ -86,10 +86,10 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
             ) : (
               <motion.span
                 key="radiologic"
-                initial={{ opacity: 0, filter: 'blur(12px)' }}
+                initial={{ opacity: 0, filter: 'blur(4px)' }}
                 animate={{ opacity: 1, filter: 'blur(0px)' }}
-                exit={{ opacity: 0, filter: 'blur(12px)' }}
-                transition={{ duration: 0.35 }}
+                exit={{ opacity: 0, filter: 'blur(4px)' }}
+                transition={{ duration: 0.25 }}
                 className="block text-lg tracking-tight text-foreground"
               >
                 <span className="font-light">by </span>
