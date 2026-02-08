@@ -236,16 +236,16 @@ export function DictationInput({
             className="overflow-hidden mb-6"
           >
             <div className="flex items-center gap-4 bg-muted/40 rounded-full px-5 py-3 h-12">
-              {/* Waveform: barras preenchem toda a largura */}
-              <div className="flex items-center justify-end gap-[1.5px] h-6 flex-1 overflow-hidden">
-                {Array.from({ length: 200 }).map((_, i) => {
+              {/* Waveform: barras preenchem a largura disponível (min-w-0 permite shrink) */}
+              <div className="flex items-center justify-end gap-[1.5px] h-6 flex-1 min-w-0 overflow-hidden">
+                {Array.from({ length: 80 }).map((_, i) => {
                   const seed = [3, 6, 4, 10, 14, 8, 18, 12, 5, 20, 16, 7, 22, 9, 4, 15, 11, 6, 19, 13, 3, 8, 17, 10, 5, 14, 21, 7, 12, 6, 16, 9, 4, 18, 11, 8, 3, 13, 20, 6]
                   const h = seed[i % seed.length]
                   return (
                     <motion.div
                       key={i}
-                      className="min-w-[1.5px] flex-1 rounded-full bg-foreground/60"
-                      style={{ maxWidth: 2.5 }}
+                      className="flex-1 min-w-0 rounded-full bg-foreground/60"
+                      style={{ maxWidth: 4 }}
                       initial={{ height: 2 }}
                       animate={{ height: h }}
                       transition={{ duration: 0.4, delay: i * 0.005 }}
