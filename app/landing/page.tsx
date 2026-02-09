@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { motion, AnimatePresence } from "motion/react"
+import { motion, AnimatePresence, useScroll, useTransform } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { TextEffect } from "@/components/ui/text-effect"
 import Link from "next/link"
@@ -14,6 +14,13 @@ export default function LandingPage() {
   const [isHoveringSlider, setIsHoveringSlider] = useState(false)
   const sentinelRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
+  const videoContainerRef = useRef<HTMLDivElement>(null)
+
+  const { scrollYProgress } = useScroll({
+    target: videoContainerRef,
+    offset: ["start end", "end start"],
+  })
+  const videoY = useTransform(scrollYProgress, [0, 0.5], [150, 0])
 
   // Detect when the sticky row reaches the top
   useEffect(() => {
@@ -171,8 +178,10 @@ export default function LandingPage() {
 
         {/* Brain MRI video with subtle zoom-in */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          ref={videoContainerRef}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          style={{ y: videoY }}
           transition={{ delay: 0.9, duration: 0.7, ease: "easeOut" }}
           className="mt-10 mx-8 sm:mx-12 lg:mx-16 flex-1 min-h-[85vh] sm:min-h-[90vh] lg:min-h-[95vh] relative rounded-2xl overflow-hidden bg-black flex items-center justify-center"
           onMouseEnter={() => {
