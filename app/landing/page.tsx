@@ -20,7 +20,7 @@ export default function LandingPage() {
       ([entry]) => {
         setShowHeader(!entry.isIntersecting)
       },
-      { threshold: 0 }
+      { threshold: 1 }
     )
 
     if (heroRowRef.current) {
