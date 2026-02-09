@@ -20,7 +20,7 @@ export default function LandingPage() {
     target: videoContainerRef,
     offset: ["start end", "end start"],
   })
-  const videoY = useTransform(scrollYProgress, [0, 0.5], [150, 0])
+  const videoY = useTransform(scrollYProgress, [0, 0.5], [450, 0])
 
   // Detect when the sticky row reaches the top
   useEffect(() => {
