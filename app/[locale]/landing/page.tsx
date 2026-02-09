@@ -91,83 +91,71 @@ export default function LandingPage() {
           <div className="px-8 sm:px-12 lg:px-16 h-[72px] flex items-center justify-between">
             {/* Logo / Title */}
             <div className="overflow-hidden">
-              <AnimatePresence mode="wait" initial={false}>
-                {isStuck ? (
-                  <motion.div
-                    key="stuck"
-                    initial={false}
-                    exit={{ opacity: 0, filter: "blur(4px)" }}
-                    transition={{ duration: 0.15 }}
-                    className="h-7 overflow-hidden cursor-pointer select-none min-w-[140px]"
-                    onMouseEnter={handleLogoEnter}
-                    onMouseLeave={() => setLogoHovered(false)}
-                  >
-                    <AnimatePresence mode="wait">
-                      {!logoHovered ? (
-                        hasHoveredSinceStuck.current ? (
-                          <TextEffect
-                            key="reporter"
-                            preset="blur"
-                            per="word"
-                            as="span"
-                            className="block text-xl font-medium tracking-tight text-foreground"
-                            variants={{
-                              item: {
-                                hidden: { opacity: 0, filter: "blur(4px)" },
-                                visible: { opacity: 1, filter: "blur(0px)", transition: { duration: 0.25 } },
-                                exit: { opacity: 0, filter: "blur(4px)", transition: { duration: 0.25 } },
-                              },
-                            }}
-                          >
-                            Reporter
-                          </TextEffect>
-                        ) : (
-                          <motion.span
-                            key="reporter-static"
-                            exit={{ opacity: 0, filter: "blur(4px)", transition: { duration: 0.25 } }}
-                            className="block text-xl font-medium tracking-tight text-foreground"
-                          >
-                            Reporter
-                          </motion.span>
-                        )
+              {isStuck ? (
+                <div
+                  className="h-7 overflow-hidden cursor-pointer select-none min-w-[140px]"
+                  onMouseEnter={handleLogoEnter}
+                  onMouseLeave={() => setLogoHovered(false)}
+                >
+                  <AnimatePresence mode="wait">
+                    {!logoHovered ? (
+                      hasHoveredSinceStuck.current ? (
+                        <TextEffect
+                          key="reporter"
+                          preset="blur"
+                          per="word"
+                          as="span"
+                          className="block text-xl font-medium tracking-tight text-foreground"
+                          variants={{
+                            item: {
+                              hidden: { opacity: 0, filter: "blur(4px)" },
+                              visible: { opacity: 1, filter: "blur(0px)", transition: { duration: 0.25 } },
+                              exit: { opacity: 0, filter: "blur(4px)", transition: { duration: 0.25 } },
+                            },
+                          }}
+                        >
+                          Reporter
+                        </TextEffect>
                       ) : (
                         <motion.span
-                          key="radiologic"
-                          initial={{ opacity: 0, filter: "blur(4px)" }}
-                          animate={{ opacity: 1, filter: "blur(0px)" }}
-                          exit={{ opacity: 0, filter: "blur(4px)" }}
-                          transition={{ duration: 0.25 }}
-                          className="block text-xl tracking-tight text-foreground"
+                          key="reporter-static"
+                          exit={{ opacity: 0, filter: "blur(4px)", transition: { duration: 0.25 } }}
+                          className="block text-xl font-medium tracking-tight text-foreground"
                         >
-                          <span className="font-medium">by </span>
-                          <span className="font-medium">Radiologic™</span>
+                          Reporter
                         </motion.span>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="hero"
-                    exit={{ opacity: 0, filter: "blur(4px)" }}
-                    transition={{ duration: 0.15 }}
-                  >
-                    <TextEffect
-                      preset="blur"
-                      per="word"
-                      as="span"
-                      className="text-xl font-medium tracking-tight text-foreground"
-                      variants={{
-                        item: {
-                          hidden: { opacity: 0, filter: "blur(6px)" },
-                          visible: { opacity: 1, filter: "blur(0px)", transition: { duration: 0.35 } },
-                        },
-                      }}
-                    >
-                      Reporter by Radiologic™
-                    </TextEffect>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                      )
+                    ) : (
+                      <motion.span
+                        key="radiologic"
+                        initial={{ opacity: 0, filter: "blur(4px)" }}
+                        animate={{ opacity: 1, filter: "blur(0px)" }}
+                        exit={{ opacity: 0, filter: "blur(4px)" }}
+                        transition={{ duration: 0.25 }}
+                        className="block text-xl tracking-tight text-foreground"
+                      >
+                        <span className="font-medium">by </span>
+                        <span className="font-medium">Radiologic™</span>
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <TextEffect
+                  preset="blur"
+                  per="word"
+                  as="span"
+                  className="text-xl font-medium tracking-tight text-foreground"
+                  variants={{
+                    item: {
+                      hidden: { opacity: 0, filter: "blur(6px)" },
+                      visible: { opacity: 1, filter: "blur(0px)", transition: { duration: 0.35 } },
+                    },
+                  }}
+                >
+                  Reporter by Radiologic™
+                </TextEffect>
+              )}
             </div>
 
             {/* CTA button + locale switcher */}

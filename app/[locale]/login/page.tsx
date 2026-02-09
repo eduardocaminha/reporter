@@ -94,12 +94,12 @@ export default function LoginPage() {
           <LocaleSwitcher />
         </div>
 
-        <div className="flex-1 flex items-center">
+        <div className="flex-1 flex items-center w-full min-w-0">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
-          className="w-full max-w-sm"
+          className="w-full"
         >
           <div className="space-y-6">
             <h1 className="text-xl font-medium tracking-tight text-foreground">
@@ -184,11 +184,11 @@ export default function LoginPage() {
           className="relative z-10 flex flex-col justify-end p-16 pb-20"
         >
           <h2 className="text-7xl font-medium tracking-tight text-white leading-[0.85]">
-            Abre,
+            {t("tagline1")}
             <br />
-            lauda,
+            {t("tagline2")}
             <br />
-            ponto.
+            {t("tagline3")}
           </h2>
         </motion.div>
       </div>

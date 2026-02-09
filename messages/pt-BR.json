@@ -41,7 +41,10 @@
     "termsPrefix": "Ao entrar, você concorda com os",
     "termsLink": "Termos de Uso",
     "termsAnd": "e a",
-    "privacyLink": "Política de Privacidade"
+    "privacyLink": "Política de Privacidade",
+    "tagline1": "Abre,",
+    "tagline2": "lauda,",
+    "tagline3": "ponto."
   },
   "Landing": {
     "cta": "Comece a laudar",

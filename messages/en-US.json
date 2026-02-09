@@ -41,7 +41,10 @@
     "termsPrefix": "By signing in, you agree to the",
     "termsLink": "Terms of Use",
     "termsAnd": "and the",
-    "privacyLink": "Privacy Policy"
+    "privacyLink": "Privacy Policy",
+    "tagline1": "Open,",
+    "tagline2": "report,",
+    "tagline3": "done."
   },
   "Landing": {
     "cta": "Start reporting",
