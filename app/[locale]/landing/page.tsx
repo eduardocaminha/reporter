@@ -2,11 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from "react"
 
-const VIDEO_URLS = [
-  "https://fl1j1x13akrzltef.public.blob.vercel-storage.com/abdomenmri.mp4",
-  "https://fl1j1x13akrzltef.public.blob.vercel-storage.com/brainmri.mp4",
-  "https://fl1j1x13akrzltef.public.blob.vercel-storage.com/lumbarmri.mp4",
-]
+const LANDING_VIDEO_URL =
+  "https://fl1j1x13akrzltef.public.blob.vercel-storage.com/brainmri.mp4"
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { TextEffect } from "@/components/ui/text-effect"
@@ -26,10 +23,6 @@ export default function LandingPage() {
     hasHoveredSinceStuck.current = true
   }, [])
   const [zoomDuration, setZoomDuration] = useState(20)
-  const [videoSrc, setVideoSrc] = useState(VIDEO_URLS[0])
-  useEffect(() => {
-    setVideoSrc(VIDEO_URLS[Math.floor(Math.random() * VIDEO_URLS.length)])
-  }, [])
   const [isHoveringSlider, setIsHoveringSlider] = useState(false)
   const sentinelRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -230,7 +223,7 @@ export default function LandingPage() {
               playsInline
               className="w-full h-full object-cover rounded-lg"
             >
-              <source src={videoSrc} type="video/mp4" />
+              <source src={LANDING_VIDEO_URL} type="video/mp4" />
             </video>
           </div>
         </motion.div>

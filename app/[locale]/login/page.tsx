@@ -2,11 +2,8 @@
 
 import { useState, useRef, useEffect } from "react"
 
-const VIDEO_URLS = [
-  "https://fl1j1x13akrzltef.public.blob.vercel-storage.com/abdomenmri.mp4",
-  "https://fl1j1x13akrzltef.public.blob.vercel-storage.com/brainmri.mp4",
-  "https://fl1j1x13akrzltef.public.blob.vercel-storage.com/lumbarmri.mp4",
-]
+const LOGIN_VIDEO_URL =
+  "https://fl1j1x13akrzltef.public.blob.vercel-storage.com/abdomenmri.mp4"
 import { useRouter } from "@/i18n/navigation"
 import { useTranslations } from "next-intl"
 import { motion } from "motion/react"
@@ -22,10 +19,6 @@ export default function LoginPage() {
   const [erro, setErro] = useState("")
   const [carregando, setCarregando] = useState(false)
   const [zoomDuration, setZoomDuration] = useState(20)
-  const [videoSrc, setVideoSrc] = useState(VIDEO_URLS[0])
-  useEffect(() => {
-    setVideoSrc(VIDEO_URLS[Math.floor(Math.random() * VIDEO_URLS.length)])
-  }, [])
   const videoRef = useRef<HTMLVideoElement>(null)
   const router = useRouter()
   const t = useTranslations("Login")
@@ -184,7 +177,7 @@ export default function LoginPage() {
             playsInline
             className="w-full h-full object-cover opacity-40"
           >
-            <source src={videoSrc} type="video/mp4" />
+            <source src={LOGIN_VIDEO_URL} type="video/mp4" />
           </video>
         </div>
 
@@ -195,7 +188,7 @@ export default function LoginPage() {
           transition={{ delay: 0.3, duration: 0.6 }}
           className="relative z-10 flex flex-col justify-end p-16 pb-20"
         >
-          <h2 className="text-7xl font-medium tracking-tight text-white leading-[0.85]">
+          <h2 className="text-5xl font-medium tracking-tight text-white leading-[0.85]">
             {t("tagline1")}
             <br />
             {t("tagline2")}
