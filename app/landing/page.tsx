@@ -65,13 +65,13 @@ export default function LandingPage() {
 
       {/* Hero - full viewport */}
       <section className="min-h-screen flex flex-col px-8 sm:px-12 lg:px-16 pt-16 sm:pt-20 pb-10">
-        {/* Headline + subtitle */}
-        <div>
+        {/* Headline + sublanding — mesmo parágrafo, cores diferenciam */}
+        <div className="text-xl font-medium tracking-tight leading-tight max-w-xl">
           <TextEffect
             preset="blur"
             per="word"
-            as="h1"
-            className="text-xl font-medium tracking-tight text-foreground leading-snug"
+            as="span"
+            className="text-foreground"
             variants={{
               item: {
                 hidden: { opacity: 0, filter: "blur(6px)" },
@@ -81,19 +81,19 @@ export default function LandingPage() {
           >
             Reporter by Radiologic™
           </TextEffect>
-
-          <motion.p
+          <motion.span
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
-            className="mt-2 text-xl text-muted-foreground/70 font-medium leading-snug max-w-xl"
+            className="text-muted-foreground/70 block"
           >
+            <br />
             Você dita, o Reporter estrutura.
             <br />
-            IA usada do jeito certo.
+            IA usada do jeito certo. Interface limpa.
             <br />
-            Interface limpa. Abre, lauda, ponto.
-          </motion.p>
+            Abre, lauda, ponto.
+          </motion.span>
         </div>
 
         {/* Brain MRI video with subtle zoom-in */}
