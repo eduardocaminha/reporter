@@ -85,7 +85,7 @@ export default function LandingPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
-            className="text-muted-foreground/70 block"
+            className="text-muted-foreground/70"
           >
             <br />
             Você dita, o Reporter estrutura.
