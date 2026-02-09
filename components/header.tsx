@@ -5,8 +5,10 @@ import { LogOut } from "lucide-react"
 import { TextEffect } from "@/components/ui/text-effect"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/i18n/navigation"
+import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
+import { LocaleSwitcher } from "@/components/locale-switcher"
 
 type ReportMode = "ps" | "eletivo" | "comparativo"
 
@@ -17,6 +19,7 @@ interface HeaderProps {
 
 export function Header({ reportMode, onReportModeChange }: HeaderProps) {
   const router = useRouter()
+  const t = useTranslations("Header")
   const [logoHovered, setLogoHovered] = useState(false)
 
   useEffect(() => {
@@ -101,6 +104,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
         </div>
 
         <div className="flex items-center gap-2">
+          <LocaleSwitcher />
           <Avatar size="default">
             <AvatarFallback className="bg-background text-muted-foreground">U</AvatarFallback>
           </Avatar>
@@ -111,7 +115,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
             className="gap-2 bg-background text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
           >
             <LogOut className="w-4 h-4" />
-            Sair
+            {t("logout")}
           </Button>
         </div>
       </div>

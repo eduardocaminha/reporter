@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from "next-intl"
+
 interface ResultadoProps {
   laudo: string | null;
   erro: string | null;
@@ -7,12 +9,14 @@ interface ResultadoProps {
 }
 
 export function Resultado({ laudo, erro, carregando }: ResultadoProps) {
+  const t = useTranslations("Resultado")
+
   if (carregando) {
     return (
       <div className="bg-muted/30 border border-border/40 rounded-2xl p-6 min-h-[200px] flex items-center justify-center">
         <div className="flex items-center gap-3 text-muted-foreground">
           <div className="w-5 h-5 border-2 border-primary/40 border-t-transparent rounded-full animate-spin" />
-          <span>Gerando laudo...</span>
+          <span>{t("generating")}</span>
         </div>
       </div>
     );
@@ -30,7 +34,7 @@ export function Resultado({ laudo, erro, carregando }: ResultadoProps) {
     return (
       <div className="bg-muted/20 border border-border/30 border-dashed rounded-2xl p-6 min-h-[200px] flex items-center justify-center">
         <p className="text-muted-foreground/60 text-center">
-          O laudo gerado aparecera aqui
+          {t("placeholder")}
         </p>
       </div>
     );

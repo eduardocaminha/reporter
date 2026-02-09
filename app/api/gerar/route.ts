@@ -1,20 +1,22 @@
 import { NextResponse } from 'next/server';
 import { gerarLaudoStream } from '@/lib/claude';
+import { getTranslations } from 'next-intl/server';
 
 export async function POST(request: Request) {
+  const t = await getTranslations('Api');
   try {
     const { texto, modoPS, modoComparativo, usarPesquisa } = await request.json();
 
     if (!texto || typeof texto !== 'string' || texto.trim() === '') {
       return NextResponse.json(
-        { erro: 'Digite ou cole um texto para gerar o laudo', laudo: null, sugestoes: [] },
+        { erro: t('emptyText'), laudo: null, sugestoes: [] },
         { status: 400 }
       );
     }
 
     if (!process.env.ANTHROPIC_API_KEY) {
       return NextResponse.json(
-        { erro: 'Chave da API não configurada', laudo: null, sugestoes: [] },
+        { erro: t('apiKeyNotConfigured'), laudo: null, sugestoes: [] },
         { status: 500 }
       );
     }
@@ -37,20 +39,20 @@ export async function POST(request: Request) {
 
     if (mensagem.includes('timeout') || mensagem.includes('ETIMEDOUT')) {
       return NextResponse.json(
-        { erro: 'Tempo esgotado. Tente novamente', laudo: null, sugestoes: [] },
+        { erro: t('timeout'), laudo: null, sugestoes: [] },
         { status: 504 }
       );
     }
 
     if (mensagem.includes('401') || mensagem.includes('authentication')) {
       return NextResponse.json(
-        { erro: 'Chave da API inválida', laudo: null, sugestoes: [] },
+        { erro: t('invalidApiKey'), laudo: null, sugestoes: [] },
         { status: 401 }
       );
     }
 
     return NextResponse.json(
-      { erro: 'Erro ao processar. Tente novamente', laudo: null, sugestoes: [] },
+      { erro: t('processingError'), laudo: null, sugestoes: [] },
       { status: 500 }
     );
   }

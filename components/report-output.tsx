@@ -7,6 +7,7 @@ import { useState, useMemo, useEffect, useRef, useCallback } from "react"
 import { calcularCusto, formatarCusto, type TokenUsage } from "@/lib/tokens"
 import { parseReportBlocks, blocksToHtml, type ReportBlock } from "@/lib/report-blocks"
 import { DraggableReport } from "@/components/draggable-report"
+import { useTranslations } from "next-intl"
 
 // Função para formatar linha do modo comparativo no cliente
 function formatarLinhaComparativoCliente(linha: string): string {
@@ -189,6 +190,7 @@ interface ReportOutputProps {
 }
 
 export function ReportOutput({ report, streamedText, isStreaming, isGenerating, tokenUsage, model }: ReportOutputProps) {
+  const t = useTranslations("ReportOutput")
   const [copiedHtml, setCopiedHtml] = useState(false)
   const [blocks, setBlocks] = useState<ReportBlock[]>([])
   const previousReportRef = useRef<string>("")
@@ -312,7 +314,7 @@ export function ReportOutput({ report, streamedText, isStreaming, isGenerating, 
       setCopiedHtml(true)
       setTimeout(() => setCopiedHtml(false), 2000)
     } catch {
-      console.error('Erro ao copiar HTML formatado')
+      console.error(t("errorCopyHtml"))
       await navigator.clipboard.writeText(plainTextFromHtml)
       setCopiedHtml(true)
       setTimeout(() => setCopiedHtml(false), 2000)
@@ -341,7 +343,7 @@ export function ReportOutput({ report, streamedText, isStreaming, isGenerating, 
             className="gap-2 text-muted-foreground hover:text-foreground disabled:opacity-30"
           >
             {copiedHtml ? <Check className="w-4 h-4 text-primary" /> : <Copy className="w-4 h-4" />}
-            {copiedHtml ? "Copiado" : "Copiar"}
+            {copiedHtml ? t("copied") : t("copy")}
           </Button>
         </div>
       </div>

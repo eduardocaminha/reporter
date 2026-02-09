@@ -1,0 +1,70 @@
+{
+  "Metadata": {
+    "title": "Reporter by Radiologic™",
+    "description": "Sistema pessoal para geração de laudos de TC"
+  },
+  "Header": {
+    "logout": "Sair"
+  },
+  "DictationInput": {
+    "radiopaedia": "Radiopaedia",
+    "history": "Histórico ({count})",
+    "lastReports": "Últimos laudos",
+    "clear": "Limpar",
+    "generateReport": "Gerar laudo",
+    "placeholder1": "tc abdome com contraste, microcalculo no rim esquerdo 0,2",
+    "placeholder2": "tomo torax sem, normal",
+    "placeholder3": "tc cranio sem contraste, avc isquemico no territorio da acm direita"
+  },
+  "ReportOutput": {
+    "copy": "Copiar",
+    "copied": "Copiado",
+    "errorCopyHtml": "Erro ao copiar HTML formatado"
+  },
+  "Sugestoes": {
+    "title": "Sugestões de completude:"
+  },
+  "Resultado": {
+    "generating": "Gerando laudo...",
+    "placeholder": "O laudo gerado aparecerá aqui"
+  },
+  "Editor": {
+    "placeholder": "Cole ou digite o texto ditado aqui...\n\nExemplos:\n• tc abdome com contraste, microcalculo no rim esquerdo 0,2\n• tomo torax sem, normal\n• tc cranio sem contraste, avc isquemico no territorio da acm direita"
+  },
+  "Login": {
+    "title": "Entrar",
+    "passwordPlaceholder": "Senha",
+    "submit": "Entrar",
+    "submitting": "Entrando...",
+    "errorDefault": "Erro ao fazer login",
+    "errorConnection": "Erro de conexão",
+    "termsPrefix": "Ao entrar, você concorda com os",
+    "termsLink": "Termos de Uso",
+    "termsAnd": "e a",
+    "privacyLink": "Política de Privacidade"
+  },
+  "Landing": {
+    "cta": "Comece a laudar",
+    "subtitle1": "Você dita, o Reporter estrutura.",
+    "subtitle2": "IA usada do jeito certo. Interface limpa.",
+    "subtitle3": "Abre, lauda, ponto.",
+    "footer": "Reporter by Radiologic™ — {year}"
+  },
+  "Dashboard": {
+    "errorDefault": "Erro ao gerar laudo",
+    "errorConnection": "Erro ao conectar com o servidor"
+  },
+  "Api": {
+    "passwordNotProvided": "Senha não fornecida",
+    "incorrectPassword": "Senha incorreta",
+    "loginError": "Erro ao processar login",
+    "logoutError": "Erro ao encerrar sessão",
+    "emptyText": "Digite ou cole um texto para gerar o laudo",
+    "apiKeyNotConfigured": "Chave da API não configurada",
+    "timeout": "Tempo esgotado. Tente novamente",
+    "invalidApiKey": "Chave da API inválida",
+    "processingError": "Erro ao processar. Tente novamente",
+    "noFile": "Nenhum arquivo enviado",
+    "uploadError": "Erro ao enviar arquivo. Verifique BLOB_READ_WRITE_TOKEN."
+  }
+}

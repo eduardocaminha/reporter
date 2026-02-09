@@ -1,6 +1,7 @@
 'use client';
 
 import { Textarea } from '@/components/ui/textarea';
+import { useTranslations } from "next-intl"
 
 interface EditorProps {
   valor: string;
@@ -9,14 +10,11 @@ interface EditorProps {
 }
 
 export function Editor({ valor, onChange, disabled }: EditorProps) {
+  const t = useTranslations("Editor")
+
   return (
     <Textarea
-      placeholder="Cole ou digite o texto ditado aqui...
-
-Exemplos:
-• tc abdome com contraste, microcalculo no rim esquerdo 0,2
-• tomo torax sem, normal
-• tc cranio sem contraste, avc isquemico no territorio da acm direita"
+      placeholder={t("placeholder")}
       value={valor}
       onChange={(e) => onChange(e.target.value)}
       disabled={disabled}

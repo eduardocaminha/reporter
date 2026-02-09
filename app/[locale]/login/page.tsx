@@ -1,20 +1,33 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { useRouter } from "next/navigation"
+
+const VIDEO_URLS = [
+  "https://fl1j1x13akrzltef.public.blob.vercel-storage.com/abdomenmri.mp4",
+  "https://fl1j1x13akrzltef.public.blob.vercel-storage.com/brainmri.mp4",
+  "https://fl1j1x13akrzltef.public.blob.vercel-storage.com/lumbarmri.mp4",
+]
+import { useRouter } from "@/i18n/navigation"
+import { useTranslations } from "next-intl"
 import { motion } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { TextEffect } from "@/components/ui/text-effect"
 import { ArrowRight, Loader2 } from "lucide-react"
+import { LocaleSwitcher } from "@/components/locale-switcher"
 
 export default function LoginPage() {
   const [senha, setSenha] = useState("")
   const [erro, setErro] = useState("")
   const [carregando, setCarregando] = useState(false)
   const [zoomDuration, setZoomDuration] = useState(20)
+  const [videoSrc, setVideoSrc] = useState(VIDEO_URLS[0])
+  useEffect(() => {
+    setVideoSrc(VIDEO_URLS[Math.floor(Math.random() * VIDEO_URLS.length)])
+  }, [])
   const videoRef = useRef<HTMLVideoElement>(null)
   const router = useRouter()
+  const t = useTranslations("Login")
 
   useEffect(() => {
     const video = videoRef.current
@@ -46,14 +59,14 @@ export default function LoginPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        setErro(data.erro || "Erro ao fazer login")
+        setErro(data.erro || t("errorDefault"))
         return
       }
 
       router.push("/")
       router.refresh()
     } catch {
-      setErro("Erro de conexão")
+      setErro(t("errorConnection"))
     } finally {
       setCarregando(false)
     }
@@ -63,7 +76,7 @@ export default function LoginPage() {
     <div className="min-h-screen bg-background flex">
       {/* Left — login form */}
       <div className="w-full lg:w-1/2 flex flex-col px-8 sm:px-16 lg:px-24 py-16">
-        <div className="pt-2">
+        <div className="pt-2 flex items-center justify-between">
           <TextEffect
             preset="blur"
             per="word"
@@ -78,6 +91,7 @@ export default function LoginPage() {
           >
             Reporter by Radiologic™
           </TextEffect>
+          <LocaleSwitcher />
         </div>
 
         <div className="flex-1 flex items-center">
@@ -89,13 +103,13 @@ export default function LoginPage() {
         >
           <div className="space-y-6">
             <h1 className="text-xl font-medium tracking-tight text-foreground">
-              Entrar
+              {t("title")}
             </h1>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <Input
                 type="password"
-                placeholder="Senha"
+                placeholder={t("passwordPlaceholder")}
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
                 className="h-11 rounded-full bg-muted border-border/50 text-foreground placeholder:text-muted-foreground/40 px-5 shadow-none focus-visible:ring-border/60 focus-visible:border-border selection:bg-border/60 selection:text-foreground"
@@ -122,18 +136,18 @@ export default function LoginPage() {
                 ) : (
                   <ArrowRight className="w-4 h-4" />
                 )}
-                {carregando ? "Entrando..." : "Entrar"}
+                {carregando ? t("submitting") : t("submit")}
               </Button>
             </form>
 
             <p className="text-xs text-muted-foreground/40 leading-relaxed">
-              Ao entrar, você concorda com os{" "}
+              {t("termsPrefix")}{" "}
               <a href="/termos" className="underline hover:text-muted-foreground/60">
-                Termos de Uso
+                {t("termsLink")}
               </a>{" "}
-              e a{" "}
+              {t("termsAnd")}{" "}
               <a href="/privacidade" className="underline hover:text-muted-foreground/60">
-                Política de Privacidade
+                {t("privacyLink")}
               </a>
               .
             </p>
@@ -158,10 +172,7 @@ export default function LoginPage() {
             playsInline
             className="w-full h-full object-cover opacity-40"
           >
-            <source
-              src={process.env.NEXT_PUBLIC_BRAINMRI_URL || "/brainmri.mp4"}
-              type="video/mp4"
-            />
+            <source src={videoSrc} type="video/mp4" />
           </video>
         </div>
 

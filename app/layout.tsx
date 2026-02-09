@@ -1,12 +1,6 @@
 import type React from "react"
-import type { Metadata } from "next"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
-
-export const metadata: Metadata = {
-  title: "Reporter by Radiologic™",
-  description: "Sistema pessoal para geração de laudos de TC",
-}
 
 export default function RootLayout({
   children,
@@ -14,7 +8,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR">
+    <html suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

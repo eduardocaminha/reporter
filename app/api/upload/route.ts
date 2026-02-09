@@ -1,13 +1,15 @@
 import { put } from "@vercel/blob"
 import { NextResponse } from "next/server"
+import { getTranslations } from "next-intl/server"
 
 export async function POST(request: Request) {
+  const t = await getTranslations("Api")
   try {
     const formData = await request.formData()
     const file = formData.get("file") as File
 
     if (!file) {
-      return NextResponse.json({ error: "Nenhum arquivo enviado" }, { status: 400 })
+      return NextResponse.json({ error: t("noFile") }, { status: 400 })
     }
 
     const blob = await put(`landing/${file.name}`, file, {
@@ -19,7 +21,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Upload error:", error)
     return NextResponse.json(
-      { error: "Erro ao enviar arquivo. Verifique BLOB_READ_WRITE_TOKEN." },
+      { error: t("uploadError") },
       { status: 500 }
     )
   }

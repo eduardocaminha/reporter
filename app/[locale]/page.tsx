@@ -9,6 +9,7 @@ import { ReportOutput } from "@/components/report-output"
 import { Sugestoes } from "@/components/sugestoes"
 import { formatarLaudoHTML } from "@/lib/formatador"
 import type { TokenUsage } from "@/lib/tokens"
+import { useTranslations } from "next-intl"
 
 type ReportMode = "ps" | "eletivo" | "comparativo"
 
@@ -22,6 +23,7 @@ interface ItemHistorico {
 const MAX_HISTORICO = 5
 
 export default function Home() {
+  const t = useTranslations("Dashboard")
   const [dictatedText, setDictatedText] = useState("")
   const [generatedReport, setGeneratedReport] = useState("")
   const [streamedText, setStreamedText] = useState("")
@@ -98,7 +100,7 @@ export default function Home() {
       // Erro HTTP (validação, API key, etc.)
       if (!response.ok) {
         const data = await response.json()
-        setErro(data.erro || "Erro ao gerar laudo")
+        setErro(data.erro || t("errorDefault"))
         setIsGenerating(false)
         return
       }
@@ -168,7 +170,7 @@ export default function Home() {
         // Cancelado pelo usuário — não mostrar erro
         return
       }
-      setErro("Erro ao conectar com o servidor")
+      setErro(t("errorConnection"))
       setGeneratedReport("")
       setSugestoes([])
     } finally {

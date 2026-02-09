@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { Kbd, KbdGroup } from "@/components/ui/kbd"
 import { Clock, Sparkles, Loader2, X, Search, AudioLines, Check } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 interface ItemHistorico {
   id: string
@@ -43,11 +44,12 @@ export function DictationInput({
   const [isMac, setIsMac] = useState(false)
   const [animatedPlaceholder, setAnimatedPlaceholder] = useState("")
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const t = useTranslations("DictationInput")
 
   const placeholderPhrases = [
-    "tc abdome com contraste, microcalculo no rim esquerdo 0,2",
-    "tomo torax sem, normal",
-    "tc cranio sem contraste, avc isquemico no territorio da acm direita",
+    t("placeholder1"),
+    t("placeholder2"),
+    t("placeholder3"),
   ]
 
   useEffect(() => {
@@ -157,7 +159,7 @@ export function DictationInput({
           className={`gap-1.5 ${usarPesquisa ? "bg-foreground/80 text-background hover:bg-foreground/70 hover:text-background" : "text-muted-foreground hover:text-foreground"}`}
         >
           <Search className="w-3.5 h-3.5" />
-          Radiopaedia
+          {t("radiopaedia")}
         </Button>
 
         {historico.length > 0 && (
@@ -169,7 +171,7 @@ export function DictationInput({
               className={`gap-1.5 ${historicoAberto ? "bg-foreground/5 text-muted-foreground" : "text-muted-foreground hover:text-foreground"}`}
             >
               <Clock className="w-3.5 h-3.5" />
-              Histórico ({historico.length})
+              {t("history", { count: historico.length })}
             </Button>
 
             <AnimatePresence>
@@ -182,7 +184,7 @@ export function DictationInput({
                   className="absolute top-full right-0 mt-2 w-80 bg-card border border-border/50 rounded-2xl z-50"
                 >
                   <div className="p-4 border-b border-border/50 flex items-center justify-between">
-                    <span className="text-xs font-medium text-muted-foreground">Ultimos laudos</span>
+                    <span className="text-xs font-medium text-muted-foreground">{t("lastReports")}</span>
                     <div className="flex items-center gap-1">
                       <Button
                         variant="ghost"
@@ -190,7 +192,7 @@ export function DictationInput({
                         onClick={onLimparHistorico}
                         className="text-xs text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-7 px-3"
                       >
-                        Limpar
+                        {t("clear")}
                       </Button>
                       <Button
                         variant="ghost"
@@ -313,7 +315,7 @@ export function DictationInput({
             className="gap-2 bg-muted text-foreground/70 hover:bg-accent hover:text-accent-foreground shadow-none"
           >
             {isGenerating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-            Gerar laudo
+            {t("generateReport")}
           </Button>
         </div>
       </div>

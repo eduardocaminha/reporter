@@ -1,16 +1,29 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+
+const VIDEO_URLS = [
+  "https://fl1j1x13akrzltef.public.blob.vercel-storage.com/abdomenmri.mp4",
+  "https://fl1j1x13akrzltef.public.blob.vercel-storage.com/brainmri.mp4",
+  "https://fl1j1x13akrzltef.public.blob.vercel-storage.com/lumbarmri.mp4",
+]
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { TextEffect } from "@/components/ui/text-effect"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
+import { useTranslations } from "next-intl"
 import { ArrowRight } from "lucide-react"
+import { LocaleSwitcher } from "@/components/locale-switcher"
 
 export default function LandingPage() {
+  const t = useTranslations("Landing")
   const [isStuck, setIsStuck] = useState(false)
   const [logoHovered, setLogoHovered] = useState(false)
   const [zoomDuration, setZoomDuration] = useState(20)
+  const [videoSrc, setVideoSrc] = useState(VIDEO_URLS[0])
+  useEffect(() => {
+    setVideoSrc(VIDEO_URLS[Math.floor(Math.random() * VIDEO_URLS.length)])
+  }, [])
   const [isHoveringSlider, setIsHoveringSlider] = useState(false)
   const sentinelRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -138,12 +151,14 @@ export default function LandingPage() {
               </AnimatePresence>
             </div>
 
-            {/* CTA button — color transitions smoothly */}
+            {/* CTA button + locale switcher */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8, duration: 0.4 }}
+              className="flex items-center gap-2"
             >
+              <LocaleSwitcher />
               <Link href="/login">
                 <Button
                   size="sm"
@@ -154,7 +169,7 @@ export default function LandingPage() {
                       : "rounded-full px-6 bg-foreground text-background hover:bg-foreground/90 hover:text-background shadow-none"
                   }`}
                 >
-                  Comece a laudar
+                  {t("cta")}
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
@@ -169,11 +184,11 @@ export default function LandingPage() {
           transition={{ delay: 0.6, duration: 0.5 }}
           className="px-8 sm:px-12 lg:px-16 mt-1 text-xl font-medium tracking-tight text-muted-foreground/70 leading-tight max-w-xl"
         >
-          Você dita, o Reporter estrutura.
+          {t("subtitle1")}
           <br />
-          IA usada do jeito certo. Interface limpa.
+          {t("subtitle2")}
           <br />
-          Abre, lauda, ponto.
+          {t("subtitle3")}
         </motion.p>
 
         {/* Brain MRI video with subtle zoom-in */}
@@ -208,10 +223,7 @@ export default function LandingPage() {
               playsInline
               className="w-full h-full object-cover rounded-lg"
             >
-              <source
-                src={process.env.NEXT_PUBLIC_BRAINMRI_URL || "/brainmri.mp4"}
-                type="video/mp4"
-              />
+              <source src={videoSrc} type="video/mp4" />
             </video>
           </div>
         </motion.div>
@@ -220,7 +232,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="px-8 sm:px-12 lg:px-16 py-12">
         <p className="text-xl text-muted-foreground/30">
-          Reporter by Radiologic™ — {new Date().getFullYear()}
+          {t("footer", { year: new Date().getFullYear() })}
         </p>
       </footer>
     </div>

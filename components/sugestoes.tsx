@@ -3,12 +3,15 @@
 import { motion, AnimatePresence } from "motion/react"
 import { AlertCircle } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { useTranslations } from "next-intl"
 
 interface SugestoesProps {
   sugestoes: string[]
 }
 
 export function Sugestoes({ sugestoes }: SugestoesProps) {
+  const t = useTranslations("Sugestoes")
+
   if (!sugestoes || sugestoes.length === 0) {
     return null
   }
@@ -23,7 +26,7 @@ export function Sugestoes({ sugestoes }: SugestoesProps) {
       >
         <Alert className="bg-accent/30 border-accent/40">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle className="text-accent-foreground/80">Sugestoes de completude:</AlertTitle>
+          <AlertTitle className="text-accent-foreground/80">{t("title")}</AlertTitle>
           <AlertDescription className="mt-2">
             <ul className="space-y-2">
               {sugestoes.map((sugestao, index) => (
