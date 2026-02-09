@@ -51,10 +51,10 @@ export default function LandingPage() {
       <AnimatePresence>
         {showHeader && (
           <motion.header
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
             className="bg-card border-b border-border/30 fixed top-0 left-0 right-0 z-50"
           >
             <div className="max-w-6xl lg:max-w-none mx-auto px-8 sm:px-12 lg:px-16 h-[72px] flex items-center justify-between">
@@ -103,7 +103,7 @@ export default function LandingPage() {
                 <Button
                   size="sm"
                   variant="ghost"
-                  className="gap-2 text-muted-foreground hover:text-foreground"
+                  className="gap-2 bg-background text-muted-foreground hover:text-foreground"
                 >
                   Comece a laudar
                   <ArrowRight className="w-4 h-4" />
