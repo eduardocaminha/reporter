@@ -115,37 +115,49 @@ export default function LandingPage() {
       </AnimatePresence>
 
       {/* Hero */}
-      <section className="min-h-screen flex flex-col pb-10">
-        {/* Hero top row — matches header layout exactly (this is the sentinel) */}
-        <div
-          ref={heroRowRef}
-          className="max-w-6xl lg:max-w-none mx-auto w-full px-8 sm:px-12 lg:px-16 h-[72px] flex items-center justify-between shrink-0"
-        >
-          <TextEffect
-            preset="blur"
-            per="word"
-            as="span"
-            className="text-lg font-medium tracking-tight text-foreground"
-            variants={{
-              item: {
-                hidden: { opacity: 0, filter: "blur(6px)" },
-                visible: { opacity: 1, filter: "blur(0px)", transition: { duration: 0.35 } },
-              },
-            }}
-          >
-            Reporter by Radiologic™
-          </TextEffect>
+      <section className="min-h-screen flex flex-col px-8 sm:px-12 lg:px-16 pt-16 sm:pt-20 pb-10">
+        {/* Texto (esq) + CTA (dir) — linha acima do vídeo */}
+        <div ref={heroRowRef} className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
+          <div className="text-xl font-medium tracking-tight leading-tight max-w-xl">
+            <TextEffect
+              preset="blur"
+              per="word"
+              as="span"
+              className="text-foreground"
+              variants={{
+                item: {
+                  hidden: { opacity: 0, filter: "blur(6px)" },
+                  visible: { opacity: 1, filter: "blur(0px)", transition: { duration: 0.35 } },
+                },
+              }}
+            >
+              Reporter by Radiologic™
+            </TextEffect>
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+              className="text-muted-foreground/70"
+            >
+              <br />
+              Você dita, o Reporter estrutura.
+              <br />
+              IA usada do jeito certo. Interface limpa.
+              <br />
+              Abre, lauda, ponto.
+            </motion.span>
+          </div>
 
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.8, duration: 0.4 }}
+            transition={{ delay: 1.3, duration: 0.4 }}
+            className="shrink-0"
           >
             <Link href="/login">
               <Button
-                size="sm"
-                variant="ghost"
-                className="gap-2 text-muted-foreground hover:text-foreground"
+                size="lg"
+                className="gap-2 rounded-full px-8 bg-foreground text-background hover:bg-foreground/90 shadow-none"
               >
                 Comece a laudar
                 <ArrowRight className="w-4 h-4" />
@@ -154,26 +166,12 @@ export default function LandingPage() {
           </motion.div>
         </div>
 
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.5 }}
-          className="px-8 sm:px-12 lg:px-16 text-lg font-medium tracking-tight text-muted-foreground/70 leading-relaxed max-w-xl"
-        >
-          Você dita, o Reporter estrutura.
-          <br />
-          IA usada do jeito certo. Interface limpa.
-          <br />
-          Abre, lauda, ponto.
-        </motion.p>
-
         {/* Brain MRI video with subtle zoom-in */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.9, duration: 0.7, ease: "easeOut" }}
-          className="mt-8 mx-8 sm:mx-12 lg:mx-16 flex-1 min-h-[85vh] sm:min-h-[90vh] lg:min-h-[95vh] relative rounded-2xl overflow-hidden bg-black flex items-center justify-center"
+          className="mt-10 flex-1 min-h-[85vh] sm:min-h-[90vh] lg:min-h-[95vh] relative rounded-2xl overflow-hidden bg-black flex items-center justify-center"
           onMouseEnter={() => {
             setIsHoveringSlider(true)
             videoRef.current?.pause()
