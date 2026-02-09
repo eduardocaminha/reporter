@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { motion } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { TextEffect } from "@/components/ui/text-effect"
 import { ArrowRight, Loader2 } from "lucide-react"
 
 export default function LoginPage() {
@@ -61,7 +62,25 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-background flex">
       {/* Left — login form */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center px-8 sm:px-16 lg:px-24 py-16">
+      <div className="w-full lg:w-1/2 flex flex-col px-8 sm:px-16 lg:px-24 py-16">
+        <div className="pt-2">
+          <TextEffect
+            preset="blur"
+            per="word"
+            as="span"
+            className="block text-xl font-medium tracking-tight text-foreground"
+            variants={{
+              item: {
+                hidden: { opacity: 0, filter: "blur(4px)" },
+                visible: { opacity: 1, filter: "blur(0px)", transition: { duration: 0.25 } },
+              },
+            }}
+          >
+            Reporter by Radiologic™
+          </TextEffect>
+        </div>
+
+        <div className="flex-1 flex items-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -79,7 +98,7 @@ export default function LoginPage() {
                 placeholder="Senha"
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
-                className="h-11 rounded-full bg-muted border-border/50 text-foreground placeholder:text-muted-foreground/40 px-5 shadow-none"
+                className="h-11 rounded-full bg-muted border-border/50 text-foreground placeholder:text-muted-foreground/40 px-5 shadow-none focus-visible:ring-border/60 focus-visible:border-border"
                 autoFocus
               />
 
@@ -120,6 +139,7 @@ export default function LoginPage() {
             </p>
           </div>
         </motion.div>
+        </div>
       </div>
 
       {/* Right — video panel with branding */}
@@ -152,14 +172,12 @@ export default function LoginPage() {
           transition={{ delay: 0.3, duration: 0.6 }}
           className="relative z-10 flex flex-col justify-end p-16 pb-20"
         >
-          <h2 className="text-7xl font-medium tracking-tight leading-[1.1]">
-            <span className="text-white">Reporter</span>
+          <h2 className="text-7xl font-medium tracking-tight text-white leading-[1.1]">
+            Abre,
             <br />
-            <span className="text-white">by Radiologic™</span>
+            lauda,
             <br />
-            <span className="text-neutral-500">Abre, lauda,</span>
-            <br />
-            <span className="text-neutral-500">ponto.</span>
+            ponto.
           </h2>
         </motion.div>
       </div>
