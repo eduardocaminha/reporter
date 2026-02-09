@@ -138,6 +138,8 @@ export default function LandingPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.9, duration: 0.7, ease: "easeOut" }}
           className="mt-10 flex-1 min-h-[85vh] sm:min-h-[90vh] lg:min-h-[95vh] relative rounded-2xl overflow-hidden bg-black flex items-center justify-center"
+          onMouseEnter={() => videoRef.current?.pause()}
+          onMouseLeave={() => videoRef.current?.play()}
         >
           <div
             className="w-[68%] h-[44%]"
