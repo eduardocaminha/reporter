@@ -33,6 +33,14 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# MCP config (contém chaves locais; use .mcp.json.example como base)
+.mcp.json
+
+# instruções e pastas de config local (mantém só .agents no repo)
+INSTRUCOES_CLAUDE_PROJECTS.md
+.cursor/
+.claude/
+
 # vercel
 .vercel
 

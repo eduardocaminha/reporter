@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "supabase": {
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp?project_ref=SEU_PROJECT_REF"
+    },
+    "stripe": {
+      "command": "npx",
+      "args": ["-y", "@stripe/mcp", "--tools=all"],
+      "env": {
+        "STRIPE_SECRET_KEY": "copie do .env.local ou use sua chave Stripe"
+      }
+    }
+  }
+}
