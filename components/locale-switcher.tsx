@@ -8,22 +8,19 @@ import { cn } from "@/lib/utils"
 
 const localeConfig: Record<
   string,
-  { label: string; hoverBg: string; textColor: string }
+  { label: string; hoverClass: string }
 > = {
   "pt-BR": {
     label: "PT",
-    hoverBg: "hover:bg-amber-500/20",
-    textColor: "text-amber-700 dark:text-amber-400",
+    hoverClass: "hover:bg-amber-500/20 hover:text-amber-700 dark:hover:text-amber-400",
   },
   "en-US": {
     label: "EN",
-    hoverBg: "hover:bg-blue-500/20",
-    textColor: "text-blue-700 dark:text-blue-400",
+    hoverClass: "hover:bg-blue-500/20 hover:text-blue-700 dark:hover:text-blue-400",
   },
   "es-MX": {
     label: "ES",
-    hoverBg: "hover:bg-emerald-500/20",
-    textColor: "text-emerald-700 dark:text-emerald-400",
+    hoverClass: "hover:bg-emerald-500/20 hover:text-emerald-700 dark:hover:text-emerald-400",
   },
 }
 
@@ -49,9 +46,8 @@ export function LocaleSwitcher() {
       size="sm"
       onClick={handleToggle}
       className={cn(
-        "min-w-[36px] px-2 font-medium transition-colors",
-        config?.textColor,
-        config?.hoverBg
+        "h-8 min-w-[36px] px-2 bg-muted text-muted-foreground/40 font-medium transition-colors",
+        config?.hoverClass
       )}
     >
       {config?.label ?? locale}
