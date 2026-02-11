@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { useSignIn, useSignUp } from "@clerk/nextjs"
 import { useRouter } from "@/i18n/navigation"
 import { useTranslations } from "next-intl"
@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { motion } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { PasswordInput } from "@/components/ui/password-input"
+import { cn } from "@/lib/utils"
 import {
   InputOTP,
   InputOTPGroup,
@@ -18,7 +18,7 @@ import {
 import { REGEXP_ONLY_DIGITS } from "input-otp"
 import { TextEffect } from "@/components/ui/text-effect"
 import { OAuthButtons } from "@/components/oauth-buttons"
-import { ArrowLeft, ArrowRight, Loader2, Check, X } from "lucide-react"
+import { ArrowLeft, ArrowRight, Loader2, Check, X, Eye, EyeOff } from "lucide-react"
 import { Link } from "@/i18n/navigation"
 import { LocaleSwitcher } from "@/components/locale-switcher"
 import {
@@ -30,8 +30,55 @@ import {
 
 type Mode = "signIn" | "signUp" | "verify" | "signInOtp"
 
-const inputStyle =
-  "h-11 rounded-full bg-muted border-border/50 text-foreground placeholder:text-muted-foreground/40 px-5 shadow-none transition-all duration-200 focus-visible:border-border focus-visible:ring-[3px] focus-visible:ring-border/30 selection:bg-border/60 selection:text-foreground"
+const floatingInputCls =
+  "peer h-12 rounded-full bg-muted border-border/50 text-foreground px-5 pt-5 pb-1 shadow-none transition-all duration-200 focus-visible:border-border focus-visible:ring-[3px] focus-visible:ring-border/30 selection:bg-border/60 selection:text-foreground placeholder:text-transparent"
+
+const floatingLabelCls =
+  "pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-sm text-muted-foreground/40 transition-all duration-200 origin-left peer-focus:top-2.5 peer-focus:translate-y-0 peer-focus:text-[11px] peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-[11px]"
+
+function FloatingField({
+  label,
+  className,
+  ...props
+}: React.ComponentProps<"input"> & { label: string }) {
+  return (
+    <div className="relative">
+      <Input
+        placeholder=" "
+        className={cn(floatingInputCls, className)}
+        {...props}
+      />
+      <span className={floatingLabelCls}>{label}</span>
+    </div>
+  )
+}
+
+function FloatingPasswordField({
+  label,
+  className,
+  ...props
+}: React.ComponentProps<"input"> & { label: string }) {
+  const [show, setShow] = useState(false)
+  return (
+    <div className="relative">
+      <Input
+        type={show ? "text" : "password"}
+        placeholder=" "
+        className={cn(floatingInputCls, "pr-10", className)}
+        {...props}
+      />
+      <span className={floatingLabelCls}>{label}</span>
+      <button
+        type="button"
+        tabIndex={-1}
+        onClick={() => setShow((prev) => !prev)}
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/40 hover:text-muted-foreground transition-colors"
+      >
+        {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+      </button>
+    </div>
+  )
+}
 
 function PasswordRequirements({ password }: { password: string }) {
   const t = useTranslations("Login")
@@ -471,16 +518,14 @@ export default function LoginPage() {
                   onSubmit={signInForm.handleSubmit(handleSignIn)}
                   className="space-y-4"
                 >
-                  <Input
+                  <FloatingField
                     type="email"
-                    placeholder={t("emailPlaceholder")}
-                    className={inputStyle}
+                    label={t("emailPlaceholder")}
                     autoFocus
                     {...signInForm.register("email")}
                   />
-                  <PasswordInput
-                    placeholder={t("passwordPlaceholder")}
-                    className={inputStyle}
+                  <FloatingPasswordField
+                    label={t("passwordPlaceholder")}
                     {...signInForm.register("password")}
                   />
 
@@ -517,21 +562,18 @@ export default function LoginPage() {
                   onSubmit={signUpForm.handleSubmit(handleSignUp)}
                   className="space-y-4"
                 >
-                  <Input
+                  <FloatingField
                     type="email"
-                    placeholder={t("emailPlaceholder")}
-                    className={inputStyle}
+                    label={t("emailPlaceholder")}
                     autoFocus
                     {...signUpForm.register("email")}
                   />
-                  <PasswordInput
-                    placeholder={t("passwordPlaceholder")}
-                    className={inputStyle}
+                  <FloatingPasswordField
+                    label={t("passwordPlaceholder")}
                     {...signUpForm.register("password")}
                   />
-                  <PasswordInput
-                    placeholder={t("confirmPasswordPlaceholder")}
-                    className={inputStyle}
+                  <FloatingPasswordField
+                    label={t("confirmPasswordPlaceholder")}
                     {...signUpForm.register("confirmPassword")}
                   />
 
@@ -611,17 +653,23 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Right — video panel with branding */}
+      {/* Right — video panel with glassmorphism */}
       <div className="hidden lg:flex lg:h-screen w-1/2 relative overflow-hidden rounded-l-3xl bg-black">
         <video
           autoPlay
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-25"
+          className="absolute inset-0 w-full h-full object-cover opacity-30"
         >
           <source src={LOGIN_VIDEO_URL} type="video/mp4" />
         </video>
+
+        {/* Glassmorphism frosted layer */}
+        <div className="absolute inset-0 backdrop-blur-sm bg-black/40 backdrop-saturate-150" />
+
+        {/* Subtle glass border highlight */}
+        <div className="pointer-events-none absolute inset-0 border-l border-white/6" />
 
         {/* Text overlay */}
         <motion.div
@@ -630,7 +678,7 @@ export default function LoginPage() {
           transition={{ delay: 0.3, duration: 0.6 }}
           className="relative z-10 flex flex-col justify-end p-16 pb-20"
         >
-          <h2 className="text-6xl font-medium tracking-tight text-white leading-[0.85]">
+          <h2 className="text-6xl font-medium tracking-tight text-white leading-[0.85] drop-shadow-sm">
             {t("tagline1")}
             <br />
             {t("tagline2")}

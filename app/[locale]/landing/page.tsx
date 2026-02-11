@@ -284,6 +284,10 @@ export default function LandingPage() {
               <source src={LANDING_VIDEO_URL} type="video/mp4" />
             </video>
           </div>
+
+          {/* Glassmorphism overlay — subtle frosted edges */}
+          <div className="pointer-events-none absolute inset-0 backdrop-blur-[1px] bg-white/2 dark:bg-black/4" />
+          <div className="pointer-events-none absolute inset-0 border border-white/8 dark:border-white/6 rounded-[inherit]" />
         </motion.div>
       </section>
 
