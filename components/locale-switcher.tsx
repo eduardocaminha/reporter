@@ -6,10 +6,10 @@ import { routing } from "@/i18n/routing"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-const localeConfig: Record<string, { label: string; hoverClass: string }> = {
-  "pt-BR": { label: "PT", hoverClass: "hover:text-emerald-500" },
-  "en-US": { label: "EN", hoverClass: "hover:text-blue-500" },
-  es: { label: "ES", hoverClass: "hover:text-amber-500" },
+const localeConfig: Record<string, { label: string; hoverBg: string }> = {
+  "pt-BR": { label: "PT", hoverBg: "hover:bg-emerald-500/20" },
+  "en-US": { label: "EN", hoverBg: "hover:bg-blue-500/20" },
+  "es-MX": { label: "ES", hoverBg: "hover:bg-amber-500/20" },
 }
 
 export function LocaleSwitcher() {
@@ -17,31 +17,27 @@ export function LocaleSwitcher() {
   const router = useRouter()
   const pathname = usePathname()
 
-  function handleSwitch(targetLocale: string) {
-    router.replace(pathname, { locale: targetLocale })
+  const locales = routing.locales
+  const currentIndex = locales.indexOf(locale as (typeof locales)[number])
+  const nextIndex = (currentIndex + 1) % locales.length
+  const nextLocale = locales[nextIndex]
+  const config = localeConfig[nextLocale]
+
+  function handleToggle() {
+    router.replace(pathname, { locale: nextLocale })
   }
 
   return (
-    <div className="flex items-center gap-0.5">
-      {routing.locales
-        .filter((l) => l !== locale)
-        .map((l) => {
-          const config = localeConfig[l]
-          return (
-            <Button
-              key={l}
-              variant="ghost"
-              size="sm"
-              onClick={() => handleSwitch(l)}
-              className={cn(
-                "text-muted-foreground/40 min-w-[36px] px-2 transition-colors",
-                config?.hoverClass
-              )}
-            >
-              {config?.label ?? l}
-            </Button>
-          )
-        })}
-    </div>
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={handleToggle}
+      className={cn(
+        "text-muted-foreground/60 min-w-[36px] px-2 transition-colors",
+        config?.hoverBg
+      )}
+    >
+      {config?.label ?? nextLocale}
+    </Button>
   )
 }

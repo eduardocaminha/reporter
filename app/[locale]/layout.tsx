@@ -1,11 +1,11 @@
 import { ClerkProvider } from "@clerk/nextjs"
-import { ptBR, enUS, esES } from "@clerk/localizations"
+import { ptBR, enUS, esMX } from "@clerk/localizations"
 import { NextIntlClientProvider, hasLocale } from "next-intl"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 import { notFound } from "next/navigation"
 import { routing } from "@/i18n/routing"
 
-const clerkLocales = { "pt-BR": ptBR, "en-US": enUS, es: esES } as const
+const clerkLocales = { "pt-BR": ptBR, "en-US": enUS, "es-MX": esMX } as const
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))

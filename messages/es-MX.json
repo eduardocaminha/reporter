@@ -14,7 +14,7 @@
     "generateReport": "Generar informe",
     "placeholder1": "tc abdomen con contraste, microcalculo en riñón izquierdo 0,2",
     "placeholder2": "tc tórax sin contraste, normal",
-    "placeholder3": "tc cráneo sin contraste, ictus isquémico en territorio de acm derecha"
+    "placeholder3": "tc cráneo sin contraste, ACV isquémico en territorio de acm derecha"
   },
   "ReportOutput": {
     "copy": "Copiar",
@@ -29,7 +29,7 @@
     "placeholder": "El informe generado aparecerá aquí"
   },
   "Editor": {
-    "placeholder": "Pegue o escriba el texto dictado aquí...\n\nEjemplos:\n• tc abdomen con contraste, microcalculo en riñón izquierdo 0,2\n• tc tórax sin contraste, normal\n• tc cráneo sin contraste, ictus isquémico en territorio de acm derecha"
+    "placeholder": "Pegue o escriba el texto dictado aquí...\n\nEjemplos:\n• tc abdomen con contraste, microcalculo en riñón izquierdo 0,2\n• tc tórax sin contraste, normal\n• tc cráneo sin contraste, ACV isquémico en territorio de acm derecha"
   },
   "Login": {
     "titleSignIn": "Iniciar sesión",
