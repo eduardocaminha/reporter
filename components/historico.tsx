@@ -59,7 +59,6 @@ export function Historico({ onSelecionar }: HistoricoProps) {
     <div className="relative">
       <Button
         variant="ghost"
-        size="sm"
         onClick={() => setAberto(!aberto)}
         className="text-muted-foreground hover:text-foreground text-xs"
       >
@@ -72,9 +71,8 @@ export function Historico({ onSelecionar }: HistoricoProps) {
             <span className="text-xs text-muted-foreground">Ultimos laudos</span>
             <Button
               variant="ghost"
-              size="sm"
               onClick={limparHistorico}
-              className="text-xs text-muted-foreground hover:text-destructive h-7 px-3"
+              className="text-xs text-muted-foreground hover:text-destructive"
             >
               Limpar
             </Button>

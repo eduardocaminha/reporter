@@ -216,7 +216,6 @@ export default function LandingPage() {
               <LocaleSwitcher />
               <Link href="/login">
                 <Button
-                  size="sm"
                   variant={isStuck ? "ghost" : undefined}
                   className={`gap-2 transition-all duration-200 ${
                     isStuck

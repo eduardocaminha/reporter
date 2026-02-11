@@ -339,7 +339,6 @@ export function ReportOutput({ report, streamedText, isStreaming, isGenerating, 
         <div className="flex items-center gap-1">
           <Button
             variant="ghost"
-            size="sm"
             onClick={handleCopyHtml}
             disabled={!hasContent || isError}
             className="gap-2 text-muted-foreground hover:text-foreground disabled:opacity-30"

@@ -35,7 +35,6 @@ export function CopyButtons({ laudo }: CopyButtonsProps) {
   return (
     <Button
       variant="ghost"
-      size="sm"
       onClick={copiar}
       className="gap-2 text-muted-foreground hover:text-foreground"
     >

@@ -131,7 +131,7 @@ export function DictationInput({
         <div className="group/audio relative">
           <button
             onClick={() => setAudioGravando(!audioGravando)}
-            className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors cursor-pointer ${audioGravando ? "bg-foreground/80 text-background" : "bg-muted text-foreground/70 hover:bg-foreground/80 hover:text-background"}`}
+            className={`size-11 rounded-full flex items-center justify-center transition-colors cursor-pointer ${audioGravando ? "bg-foreground/80 text-background" : "bg-muted text-foreground/70 hover:bg-foreground/80 hover:text-background"}`}
           >
             <AudioLines className="w-5 h-5" />
           </button>
@@ -154,7 +154,6 @@ export function DictationInput({
         <div className="flex items-center gap-4">
         <Button
           variant="ghost"
-          size="sm"
           onClick={() => onUsarPesquisaChange(!usarPesquisa)}
           disabled={isGenerating}
           className={`gap-1.5 ${usarPesquisa ? "bg-foreground/80 text-background hover:bg-foreground/70 hover:text-background" : "text-muted-foreground hover:text-foreground"}`}
@@ -167,7 +166,6 @@ export function DictationInput({
           <div className="relative">
             <Button
               variant="ghost"
-              size="sm"
               onClick={() => setHistoricoAberto(!historicoAberto)}
               className={`gap-1.5 ${historicoAberto ? "bg-foreground/5 text-muted-foreground" : "text-muted-foreground hover:text-foreground"}`}
             >
@@ -189,17 +187,16 @@ export function DictationInput({
                     <div className="flex items-center gap-1">
                       <Button
                         variant="ghost"
-                        size="sm"
                         onClick={onLimparHistorico}
-                        className="text-xs text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-7 px-3"
+                        className="text-xs text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                       >
                         {t("clear")}
                       </Button>
                       <Button
                         variant="ghost"
-                        size="sm"
+                        size="icon"
                         onClick={() => setHistoricoAberto(false)}
-                        className="text-muted-foreground hover:bg-accent hover:text-accent-foreground h-7 w-7 p-0"
+                        className="text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                       >
                         <X className="w-3.5 h-3.5" />
                       </Button>
@@ -238,7 +235,7 @@ export function DictationInput({
             transition={{ duration: 0.3, ease: "easeOut" }}
             className="overflow-hidden mb-6"
           >
-            <div className="flex items-center gap-4 bg-muted/40 rounded-full px-5 py-3 h-12">
+            <div className="flex items-center gap-4 bg-muted/40 rounded-full px-5 py-2 h-11">
               {/* Waveform: barras preenchem a largura disponível (min-w-0 permite shrink) */}
               <div className="flex items-center justify-end gap-[1.5px] h-6 flex-1 min-w-0 overflow-hidden">
                 {Array.from({ length: 80 }).map((_, i) => {
@@ -264,17 +261,17 @@ export function DictationInput({
                 </span>
                 <Button
                   variant="ghost"
-                  size="sm"
+                  size="icon"
                   onClick={() => setAudioGravando(false)}
-                  className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-7 w-7 p-0"
+                  className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                 >
                   <X className="w-3.5 h-3.5" />
                 </Button>
                 <Button
                   variant="ghost"
-                  size="sm"
+                  size="icon"
                   onClick={() => setAudioGravando(false)}
-                  className="text-muted-foreground hover:bg-accent hover:text-accent-foreground h-7 w-7 p-0"
+                  className="text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                 >
                   <Check className="w-3.5 h-3.5" />
                 </Button>

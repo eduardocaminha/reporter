@@ -43,10 +43,9 @@ export function LocaleSwitcher() {
   return (
     <Button
       variant="ghost"
-      size="sm"
       onClick={handleToggle}
       className={cn(
-        "h-8 min-w-[36px] px-2 bg-muted text-muted-foreground/40 font-medium transition-colors",
+        "min-w-[44px] px-3 bg-muted text-muted-foreground/40 font-medium transition-colors",
         config?.hoverClass
       )}
     >

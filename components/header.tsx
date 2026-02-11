@@ -113,7 +113,6 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
           <Button
             onClick={handleLogout}
             variant="ghost"
-            size="sm"
             className="gap-2 bg-background text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
           >
             <LogOut className="w-4 h-4" />
