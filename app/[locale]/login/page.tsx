@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback, useId } from "react"
 import { useSignIn, useSignUp } from "@clerk/nextjs"
 import { useRouter } from "@/i18n/navigation"
 import { useTranslations } from "next-intl"
@@ -31,24 +31,28 @@ import {
 type Mode = "signIn" | "signUp" | "verify" | "signInOtp"
 
 const floatingInputCls =
-  "peer h-12 rounded-full bg-muted border-border/50 text-foreground px-5 pt-5 pb-1 shadow-none transition-all duration-200 focus-visible:border-border focus-visible:ring-[3px] focus-visible:ring-border/30 selection:bg-border/60 selection:text-foreground placeholder:text-transparent"
+  "h-12 rounded-full bg-muted border-border/50 text-foreground px-5 shadow-none transition-all duration-200 focus-visible:border-border focus-visible:ring-[3px] focus-visible:ring-border/30 selection:bg-border/60 selection:text-foreground placeholder:text-transparent"
 
 const floatingLabelCls =
-  "pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-sm text-muted-foreground/40 transition-all duration-200 origin-left peer-focus:top-0 peer-focus:translate-y-0 peer-focus:text-[11px] peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-[11px]"
+  "origin-start absolute left-4 top-1/2 block -translate-y-1/2 cursor-text px-1 text-sm text-muted-foreground/40 transition-all duration-200 group-focus-within:pointer-events-none group-focus-within:top-0 group-focus-within:cursor-default group-focus-within:text-xs group-focus-within:font-medium group-focus-within:text-foreground has-[+input:not(:placeholder-shown)]:pointer-events-none has-[+input:not(:placeholder-shown)]:top-0 has-[+input:not(:placeholder-shown)]:cursor-default has-[+input:not(:placeholder-shown)]:text-xs has-[+input:not(:placeholder-shown)]:font-medium has-[+input:not(:placeholder-shown)]:text-foreground"
 
 function FloatingField({
   label,
   className,
   ...props
 }: React.ComponentProps<"input"> & { label: string }) {
+  const id = useId()
   return (
-    <div className="relative">
+    <div className="group relative">
+      <label htmlFor={id} className={floatingLabelCls}>
+        <span className="inline-flex bg-background px-2">{label}</span>
+      </label>
       <Input
+        id={id}
         placeholder=" "
         className={cn(floatingInputCls, className)}
         {...props}
       />
-      <span className={floatingLabelCls}>{label}</span>
     </div>
   )
 }
@@ -58,16 +62,20 @@ function FloatingPasswordField({
   className,
   ...props
 }: React.ComponentProps<"input"> & { label: string }) {
+  const id = useId()
   const [show, setShow] = useState(false)
   return (
-    <div className="relative">
+    <div className="group relative">
+      <label htmlFor={id} className={floatingLabelCls}>
+        <span className="inline-flex bg-background px-2">{label}</span>
+      </label>
       <Input
+        id={id}
         type={show ? "text" : "password"}
         placeholder=" "
         className={cn(floatingInputCls, "pr-10", className)}
         {...props}
       />
-      <span className={floatingLabelCls}>{label}</span>
       <button
         type="button"
         tabIndex={-1}
