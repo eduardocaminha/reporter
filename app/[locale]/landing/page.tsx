@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef, useCallback } from "react"
+import { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { TextEffect } from "@/components/ui/text-effect"
@@ -8,6 +8,7 @@ import { Link } from "@/i18n/navigation"
 import { useTranslations } from "next-intl"
 import { ArrowRight } from "lucide-react"
 import { LocaleSwitcher } from "@/components/locale-switcher"
+import { getSvgPath } from "figma-squircle"
 
 export default function LandingPage() {
   const LANDING_VIDEO_URL = "https://fl1j1x13akrzltef.public.blob.vercel-storage.com/brain-mri.mp4"
@@ -26,11 +27,28 @@ export default function LandingPage() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const videoContainerRef = useRef<HTMLDivElement>(null)
 
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 })
+
   const { scrollYProgress } = useScroll({
     target: videoContainerRef,
     offset: ["start end", "end start"],
   })
   const videoY = useTransform(scrollYProgress, [0, 0.5], [450, 0])
+
+  // Compute squircle clip-path (rounded top corners only)
+  const squirclePath = useMemo(() => {
+    if (containerSize.width === 0 || containerSize.height === 0) return undefined
+    return getSvgPath({
+      width: containerSize.width,
+      height: containerSize.height,
+      cornerRadius: 0,
+      cornerSmoothing: 0.6,
+      topLeftCornerRadius: 32,
+      topRightCornerRadius: 32,
+      bottomLeftCornerRadius: 0,
+      bottomRightCornerRadius: 0,
+    })
+  }, [containerSize])
 
   // Detect when the sticky row reaches the top
   useEffect(() => {
@@ -43,6 +61,18 @@ export default function LandingPage() {
       { threshold: 1 }
     )
     if (sentinelRef.current) observer.observe(sentinelRef.current)
+    return () => observer.disconnect()
+  }, [])
+
+  // Track container size for squircle clip-path
+  useEffect(() => {
+    const container = videoContainerRef.current
+    if (!container) return
+    const observer = new ResizeObserver(([entry]) => {
+      const { width, height } = entry.contentRect
+      setContainerSize({ width, height })
+    })
+    observer.observe(container)
     return () => observer.disconnect()
   }, [])
 
@@ -194,9 +224,12 @@ export default function LandingPage() {
           ref={videoContainerRef}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          style={{ y: videoY }}
+          style={{
+            y: videoY,
+            clipPath: squirclePath ? `path('${squirclePath}')` : undefined,
+          }}
           transition={{ delay: 0.9, duration: 0.7, ease: "easeOut" }}
-          className="mt-10 mx-8 sm:mx-12 lg:mx-16 flex-1 min-h-[85vh] sm:min-h-[90vh] lg:min-h-[95vh] relative rounded-2xl overflow-hidden bg-black flex items-center justify-center"
+          className="mt-10 mx-8 sm:mx-12 lg:mx-16 flex-1 min-h-[85vh] sm:min-h-[90vh] lg:min-h-[95vh] relative overflow-hidden bg-black flex items-center justify-center"
           onMouseEnter={() => {
             setIsHoveringSlider(true)
             videoRef.current?.pause()
@@ -224,6 +257,15 @@ export default function LandingPage() {
               <source src={LANDING_VIDEO_URL} type="video/mp4" />
             </video>
           </div>
+
+          {/* Bottom fade-out gradient */}
+          <div
+            className="absolute bottom-0 left-0 right-0 pointer-events-none"
+            style={{
+              height: "35%",
+              background: "linear-gradient(to bottom, transparent, hsl(var(--background)))",
+            }}
+          />
         </motion.div>
       </section>
 

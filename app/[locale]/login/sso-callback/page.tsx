@@ -10,6 +10,8 @@ export default function SSOCallbackPage() {
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
       <AuthenticateWithRedirectCallback />
+      {/* Required for sign-up flows — Clerk bot protection */}
+      <div id="clerk-captcha" />
     </div>
   )
 }
