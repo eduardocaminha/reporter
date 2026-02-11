@@ -368,7 +368,8 @@ export default function LoginPage() {
           <LocaleSwitcher />
         </div>
 
-        <div className="flex-1 flex items-center justify-center w-full min-w-0">
+        {/* No mobile: mesmo espaço entre header e conteúdo que na landing (Reporter ↔ texto) */}
+        <div className="flex-1 flex items-center justify-center w-full min-w-0 pt-6 sm:pt-0">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
