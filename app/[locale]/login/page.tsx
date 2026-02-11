@@ -14,8 +14,8 @@ import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
-  InputOTPSeparator,
 } from "@/components/ui/input-otp"
+import { REGEXP_ONLY_DIGITS } from "input-otp"
 import { TextEffect } from "@/components/ui/text-effect"
 import { OAuthButtons } from "@/components/oauth-buttons"
 import { ArrowLeft, ArrowRight, Loader2, Check, X } from "lucide-react"
@@ -31,7 +31,7 @@ import {
 type Mode = "signIn" | "signUp" | "verify" | "signInOtp"
 
 const inputStyle =
-  "h-11 rounded-full bg-muted border-border/50 text-foreground placeholder:text-muted-foreground/40 px-5 shadow-none focus-visible:ring-border/60 focus-visible:border-border selection:bg-border/60 selection:text-foreground"
+  "h-11 rounded-full bg-muted border-border/50 text-foreground placeholder:text-muted-foreground/40 px-5 shadow-none transition-all duration-200 focus-visible:border-border focus-visible:ring-[3px] focus-visible:ring-border/30 selection:bg-border/60 selection:text-foreground"
 
 function PasswordRequirements({ password }: { password: string }) {
   const t = useTranslations("Login")
@@ -286,12 +286,12 @@ export default function LoginPage() {
           <LocaleSwitcher />
         </div>
 
-        <div className="flex-1 flex items-center w-full min-w-0">
+        <div className="flex-1 flex items-center justify-center w-full min-w-0">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
-            className="w-full"
+            className="w-full max-w-md"
           >
             <div className="space-y-6">
               <h1 className="text-xl font-medium tracking-tight text-foreground">
@@ -334,6 +334,7 @@ export default function LoginPage() {
                   <div className="flex justify-center">
                     <InputOTP
                       maxLength={6}
+                      pattern={REGEXP_ONLY_DIGITS}
                       value={signInOtpValue}
                       onChange={(value) => {
                         setSignInOtpValue(value)
@@ -343,33 +344,12 @@ export default function LoginPage() {
                       }}
                     >
                       <InputOTPGroup>
-                        <InputOTPSlot
-                          index={0}
-                          className="h-11 w-11 rounded-lg bg-muted border-border/50"
-                        />
-                        <InputOTPSlot
-                          index={1}
-                          className="h-11 w-11 rounded-lg bg-muted border-border/50"
-                        />
-                        <InputOTPSlot
-                          index={2}
-                          className="h-11 w-11 rounded-lg bg-muted border-border/50"
-                        />
-                      </InputOTPGroup>
-                      <InputOTPSeparator />
-                      <InputOTPGroup>
-                        <InputOTPSlot
-                          index={3}
-                          className="h-11 w-11 rounded-lg bg-muted border-border/50"
-                        />
-                        <InputOTPSlot
-                          index={4}
-                          className="h-11 w-11 rounded-lg bg-muted border-border/50"
-                        />
-                        <InputOTPSlot
-                          index={5}
-                          className="h-11 w-11 rounded-lg bg-muted border-border/50"
-                        />
+                        <InputOTPSlot index={0} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
+                        <InputOTPSlot index={1} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
+                        <InputOTPSlot index={2} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
+                        <InputOTPSlot index={3} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
+                        <InputOTPSlot index={4} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
+                        <InputOTPSlot index={5} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
                       </InputOTPGroup>
                     </InputOTP>
                   </div>
@@ -407,7 +387,7 @@ export default function LoginPage() {
                       setSignInOtpValue("")
                       setErro("")
                     }}
-                    className="w-full text-sm text-muted-foreground/60 hover:text-foreground transition-colors"
+                    className="w-full text-sm text-center text-muted-foreground/60 hover:text-foreground transition-colors"
                   >
                     {t("signInLink")}
                   </button>
@@ -426,6 +406,7 @@ export default function LoginPage() {
                   <div className="flex justify-center">
                     <InputOTP
                       maxLength={6}
+                      pattern={REGEXP_ONLY_DIGITS}
                       value={otpValue}
                       onChange={(value) => {
                         setOtpValue(value)
@@ -435,33 +416,12 @@ export default function LoginPage() {
                       }}
                     >
                       <InputOTPGroup>
-                        <InputOTPSlot
-                          index={0}
-                          className="h-11 w-11 rounded-lg bg-muted border-border/50"
-                        />
-                        <InputOTPSlot
-                          index={1}
-                          className="h-11 w-11 rounded-lg bg-muted border-border/50"
-                        />
-                        <InputOTPSlot
-                          index={2}
-                          className="h-11 w-11 rounded-lg bg-muted border-border/50"
-                        />
-                      </InputOTPGroup>
-                      <InputOTPSeparator />
-                      <InputOTPGroup>
-                        <InputOTPSlot
-                          index={3}
-                          className="h-11 w-11 rounded-lg bg-muted border-border/50"
-                        />
-                        <InputOTPSlot
-                          index={4}
-                          className="h-11 w-11 rounded-lg bg-muted border-border/50"
-                        />
-                        <InputOTPSlot
-                          index={5}
-                          className="h-11 w-11 rounded-lg bg-muted border-border/50"
-                        />
+                        <InputOTPSlot index={0} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
+                        <InputOTPSlot index={1} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
+                        <InputOTPSlot index={2} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
+                        <InputOTPSlot index={3} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
+                        <InputOTPSlot index={4} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
+                        <InputOTPSlot index={5} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
                       </InputOTPGroup>
                     </InputOTP>
                   </div>
@@ -617,7 +577,7 @@ export default function LoginPage() {
 
               {/* Toggle sign-in / sign-up */}
               {mode !== "verify" && mode !== "signInOtp" && (
-                <p className="text-sm text-muted-foreground/60">
+                <p className="text-sm text-center text-muted-foreground/60">
                   {mode === "signIn" ? t("noAccount") : t("hasAccount")}{" "}
                   <button
                     type="button"
@@ -629,7 +589,7 @@ export default function LoginPage() {
                 </p>
               )}
 
-              <p className="text-xs text-muted-foreground/40 leading-relaxed">
+              <p className="text-xs text-center text-muted-foreground/40 leading-relaxed">
                 {t("termsPrefix")}{" "}
                 <a
                   href="/termos"
