@@ -391,7 +391,7 @@ export function ReportOutput({ report, streamedText, isStreaming, isGenerating, 
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="space-y-5 pl-6"
+              className="space-y-5"
             >
               {/* Título centrado */}
               <div className="flex flex-col items-center gap-2">
