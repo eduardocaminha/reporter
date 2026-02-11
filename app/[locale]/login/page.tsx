@@ -130,9 +130,8 @@ export default function LoginPage() {
       // Client Trust: Clerk may require email OTP on new device
       if (result.status === "needs_second_factor") {
         const emailFactor = result.supportedSecondFactors?.find(
-          (f): f is { strategy: "email_code"; emailAddressId: string } =>
-            f.strategy === "email_code"
-        )
+          (f) => f.strategy === "email_code"
+        ) as { strategy: "email_code"; emailAddressId: string } | undefined
         if (emailFactor) {
           await signIn.prepareSecondFactor({
             strategy: "email_code",
