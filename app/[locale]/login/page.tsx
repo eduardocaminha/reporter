@@ -692,8 +692,9 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Right — video panel with glassmorphism */}
-      <div className="hidden lg:flex lg:h-screen w-1/2 relative overflow-hidden rounded-l-3xl bg-black">
+      {/* Right — video panel with glassmorphism; wrapper evita halo cinza nos cantos */}
+      <div className="hidden lg:flex lg:h-screen w-1/2 rounded-l-3xl bg-black">
+        <div className="relative overflow-hidden rounded-l-3xl w-full h-full bg-black ring-1 ring-black ring-inset">
         <video
           autoPlay
           loop
@@ -725,6 +726,7 @@ export default function LoginPage() {
             {t("tagline3")}
           </h2>
         </motion.div>
+        </div>
       </div>
     </div>
   )
