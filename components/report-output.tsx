@@ -383,7 +383,7 @@ export function ReportOutput({ report, streamedText, isStreaming, isGenerating, 
                 <div dangerouslySetInnerHTML={{ __html: reportHtml }} />
               )}
             </motion.div>
-          ) : (
+          )           : (
             /* Static skeleton placeholder — animates only when generating */
             <motion.div
               key="skeleton"
@@ -391,21 +391,26 @@ export function ReportOutput({ report, streamedText, isStreaming, isGenerating, 
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="space-y-4"
+              className="space-y-5 pl-6"
             >
-              <div className={`h-5 w-3/5 mx-auto rounded bg-muted ${pulseClass}`} />
-              <div className={`h-4 w-2/5 mx-auto rounded bg-muted ${pulseClass}`} />
-              <div className={`h-4 w-1/4 rounded bg-muted/70 mt-6 ${pulseClass}`} />
-              <div className="space-y-2.5">
-                <div className={`h-3.5 w-full rounded bg-muted/50 ${pulseClass}`} />
-                <div className={`h-3.5 w-11/12 rounded bg-muted/50 ${pulseClass}`} />
+              {/* Título centrado */}
+              <div className="flex flex-col items-center gap-2">
+                <div className={`h-3 w-48 rounded-full bg-muted/40 ${pulseClass}`} />
+                <div className={`h-2.5 w-28 rounded-full bg-muted/30 ${pulseClass}`} />
               </div>
-              <div className={`h-4 w-1/4 rounded bg-muted/70 mt-4 ${pulseClass}`} />
-              <div className="space-y-2.5">
-                <div className={`h-3.5 w-full rounded bg-muted/50 ${pulseClass}`} />
-                <div className={`h-3.5 w-10/12 rounded bg-muted/50 ${pulseClass}`} />
-                <div className={`h-3.5 w-full rounded bg-muted/50 ${pulseClass}`} />
-                <div className={`h-3.5 w-9/12 rounded bg-muted/50 ${pulseClass}`} />
+              {/* Seção 1 */}
+              <div className="space-y-2 pt-2">
+                <div className={`h-2.5 w-20 rounded-full bg-muted/40 ${pulseClass}`} />
+                <div className={`h-2 w-full rounded-full bg-muted/20 ${pulseClass}`} />
+                <div className={`h-2 w-4/5 rounded-full bg-muted/20 ${pulseClass}`} />
+              </div>
+              {/* Seção 2 */}
+              <div className="space-y-2 pt-1">
+                <div className={`h-2.5 w-16 rounded-full bg-muted/40 ${pulseClass}`} />
+                <div className={`h-2 w-full rounded-full bg-muted/20 ${pulseClass}`} />
+                <div className={`h-2 w-11/12 rounded-full bg-muted/20 ${pulseClass}`} />
+                <div className={`h-2 w-full rounded-full bg-muted/20 ${pulseClass}`} />
+                <div className={`h-2 w-3/4 rounded-full bg-muted/20 ${pulseClass}`} />
               </div>
             </motion.div>
           )}
