@@ -28,7 +28,7 @@ import {
   type SignUpValues,
 } from "@/lib/validations/auth"
 
-type Mode = "signIn" | "signUp" | "verify"
+type Mode = "signIn" | "signUp" | "verify" | "signInOtp"
 
 const inputStyle =
   "h-11 rounded-full bg-muted border-border/50 text-foreground placeholder:text-muted-foreground/40 px-5 shadow-none focus-visible:ring-border/60 focus-visible:border-border selection:bg-border/60 selection:text-foreground"
@@ -71,6 +71,7 @@ export default function LoginPage() {
 
   const [mode, setMode] = useState<Mode>("signIn")
   const [otpValue, setOtpValue] = useState("")
+  const [signInOtpValue, setSignInOtpValue] = useState("")
   const [erro, setErro] = useState("")
   const [carregando, setCarregando] = useState(false)
   const [resendCooldown, setResendCooldown] = useState(0)
@@ -123,10 +124,54 @@ export default function LoginPage() {
       if (result.status === "complete") {
         await setSignInActive({ session: result.createdSessionId })
         router.push("/")
+        return
+      }
+
+      // Client Trust: Clerk may require email OTP on new device
+      if (result.status === "needs_second_factor") {
+        const emailFactor = result.supportedSecondFactors?.find(
+          (f): f is { strategy: "email_code"; emailAddressId: string } =>
+            f.strategy === "email_code"
+        )
+        if (emailFactor) {
+          await signIn.prepareSecondFactor({
+            strategy: "email_code",
+            emailAddressId: emailFactor.emailAddressId,
+          })
+          setSignInOtpValue("")
+          setMode("signInOtp")
+        } else {
+          setErro(t("errorDefault"))
+        }
+      } else {
+        setErro(t("errorDefault"))
       }
     } catch (err: unknown) {
       const clerkErr = err as { errors?: { longMessage?: string }[] }
       setErro(clerkErr.errors?.[0]?.longMessage || t("errorDefault"))
+    } finally {
+      setCarregando(false)
+    }
+  }
+
+  async function handleSignInOtp(code: string) {
+    if (!signInLoaded || code.length !== 6) return
+    setErro("")
+    setCarregando(true)
+    try {
+      const result = await signIn.attemptSecondFactor({
+        strategy: "email_code",
+        code,
+      })
+      if (result.status === "complete") {
+        await setSignInActive({ session: result.createdSessionId })
+        router.push("/")
+      } else {
+        setErro(t("errorVerifyIncomplete"))
+      }
+    } catch (err: unknown) {
+      const clerkErr = err as { errors?: { longMessage?: string }[] }
+      setErro(clerkErr.errors?.[0]?.longMessage || t("errorVerify"))
     } finally {
       setCarregando(false)
     }
@@ -253,13 +298,15 @@ export default function LoginPage() {
               <h1 className="text-xl font-medium tracking-tight text-foreground">
                 {mode === "verify"
                   ? t("titleVerify")
-                  : mode === "signIn"
-                    ? t("titleSignIn")
-                    : t("titleSignUp")}
+                  : mode === "signInOtp"
+                    ? t("titleVerify")
+                    : mode === "signIn"
+                      ? t("titleSignIn")
+                      : t("titleSignUp")}
               </h1>
 
-              {/* OAuth buttons (not in verify mode) */}
-              {mode !== "verify" && (
+              {/* OAuth buttons (not in verify or signInOtp mode) */}
+              {mode !== "verify" && mode !== "signInOtp" && (
                 <>
                   <OAuthButtons mode={mode} />
 
@@ -276,7 +323,99 @@ export default function LoginPage() {
                 </>
               )}
 
-              {/* Verification form */}
+              {/* Sign-in second factor (email OTP) — Client Trust */}
+              {mode === "signInOtp" && (
+                <div className="space-y-4">
+                  <p className="text-sm text-muted-foreground">
+                    {t("verificationSent", {
+                      email: signInForm.getValues("email"),
+                    })}
+                  </p>
+
+                  <div className="flex justify-center">
+                    <InputOTP
+                      maxLength={6}
+                      value={signInOtpValue}
+                      onChange={(value) => {
+                        setSignInOtpValue(value)
+                        if (value.length === 6) {
+                          handleSignInOtp(value)
+                        }
+                      }}
+                    >
+                      <InputOTPGroup>
+                        <InputOTPSlot
+                          index={0}
+                          className="h-11 w-11 rounded-lg bg-muted border-border/50"
+                        />
+                        <InputOTPSlot
+                          index={1}
+                          className="h-11 w-11 rounded-lg bg-muted border-border/50"
+                        />
+                        <InputOTPSlot
+                          index={2}
+                          className="h-11 w-11 rounded-lg bg-muted border-border/50"
+                        />
+                      </InputOTPGroup>
+                      <InputOTPSeparator />
+                      <InputOTPGroup>
+                        <InputOTPSlot
+                          index={3}
+                          className="h-11 w-11 rounded-lg bg-muted border-border/50"
+                        />
+                        <InputOTPSlot
+                          index={4}
+                          className="h-11 w-11 rounded-lg bg-muted border-border/50"
+                        />
+                        <InputOTPSlot
+                          index={5}
+                          className="h-11 w-11 rounded-lg bg-muted border-border/50"
+                        />
+                      </InputOTPGroup>
+                    </InputOTP>
+                  </div>
+
+                  {erro && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="bg-destructive/5 border border-destructive/30 rounded-2xl p-4"
+                    >
+                      <p className="text-sm font-medium text-destructive">
+                        {erro}
+                      </p>
+                    </motion.div>
+                  )}
+
+                  <Button
+                    type="button"
+                    onClick={() => handleSignInOtp(signInOtpValue)}
+                    className="w-full gap-2 rounded-full bg-foreground text-background hover:bg-foreground/90 shadow-none"
+                    disabled={carregando || signInOtpValue.length !== 6}
+                  >
+                    {carregando ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <ArrowRight className="w-4 h-4" />
+                    )}
+                    {carregando ? t("verifying") : t("verify")}
+                  </Button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMode("signIn")
+                      setSignInOtpValue("")
+                      setErro("")
+                    }}
+                    className="w-full text-sm text-muted-foreground/60 hover:text-foreground transition-colors"
+                  >
+                    {t("signInLink")}
+                  </button>
+                </div>
+              )}
+
+              {/* Verification form (sign-up) */}
               {mode === "verify" && (
                 <div className="space-y-4">
                   <p className="text-sm text-muted-foreground">
@@ -478,7 +617,7 @@ export default function LoginPage() {
               )}
 
               {/* Toggle sign-in / sign-up */}
-              {mode !== "verify" && (
+              {mode !== "verify" && mode !== "signInOtp" && (
                 <p className="text-sm text-muted-foreground/60">
                   {mode === "signIn" ? t("noAccount") : t("hasAccount")}{" "}
                   <button
