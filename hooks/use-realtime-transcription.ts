@@ -65,16 +65,25 @@ export function useRealtimeTranscription({
     return "en"
   }, [locale])
 
-  /** requestAnimationFrame loop that reads AnalyserNode data */
+  /**
+   * requestAnimationFrame loop that reads AnalyserNode data.
+   *
+   * Uses time-domain data (waveform amplitude) instead of frequency data
+   * so the bars respond evenly across the whole strip rather than being
+   * bass-heavy on the left.  The deviation from the centre line (128) is
+   * amplified for better visibility with normal speech volume.
+   */
   const updateFrequency = useCallback(() => {
     if (!analyserRef.current) return
-    const raw = new Uint8Array(analyserRef.current.frequencyBinCount)
-    analyserRef.current.getByteFrequencyData(raw)
+    const raw = new Uint8Array(analyserRef.current.fftSize)
+    analyserRef.current.getByteTimeDomainData(raw)
 
     const step = Math.max(1, Math.floor(raw.length / FREQ_BINS))
     const bins: number[] = []
     for (let i = 0; i < FREQ_BINS; i++) {
-      bins.push(raw[i * step] ?? 0)
+      // Time-domain values are centred at 128; deviation = amplitude
+      const amplitude = Math.abs((raw[i * step] ?? 128) - 128)
+      bins.push(Math.min(255, amplitude * 5))
     }
     setFrequencyData(bins)
     animFrameRef.current = requestAnimationFrame(updateFrequency)

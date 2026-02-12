@@ -77,9 +77,9 @@ export function OAuthButtons({ mode }: { mode: "signIn" | "signUp" }) {
         <Button
           key={strategy}
           type="button"
-          variant="outline"
+          variant="ghost"
           onClick={() => handleOAuth(strategy)}
-          className="w-full gap-3 rounded-full h-11 border-border/50 bg-muted hover:bg-muted/80 shadow-none"
+          className="w-full gap-3 rounded-full h-11 bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground shadow-none"
         >
           {icon}
           {t(label)}

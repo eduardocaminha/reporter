@@ -32,7 +32,7 @@ import {
 type Mode = "signIn" | "signUp" | "verify" | "signInOtp"
 
 const floatingInputCls =
-  "h-12 rounded-full bg-muted border-border/50 text-foreground px-3 shadow-none transition-all duration-200 focus-visible:border-border focus-visible:ring-[3px] focus-visible:ring-border/30 selection:bg-border/60 selection:text-foreground placeholder:text-transparent"
+  "h-12 rounded-full bg-muted border-0 text-foreground px-3 shadow-none transition-all duration-200 focus-visible:ring-[3px] focus-visible:ring-border/30 selection:bg-border/60 selection:text-foreground placeholder:text-transparent"
 
 const floatingLabelCls =
   "origin-start absolute left-2 top-1/2 block -translate-y-1/2 cursor-text px-0 text-sm text-muted-foreground/40 transition-all duration-200 group-focus-within:pointer-events-none group-focus-within:top-0 group-focus-within:cursor-default group-focus-within:text-xs group-focus-within:font-medium group-focus-within:text-foreground has-[+input:not(:placeholder-shown)]:pointer-events-none has-[+input:not(:placeholder-shown)]:top-0 has-[+input:not(:placeholder-shown)]:cursor-default has-[+input:not(:placeholder-shown)]:text-xs has-[+input:not(:placeholder-shown)]:font-medium has-[+input:not(:placeholder-shown)]:text-foreground [&>span]:bg-transparent group-focus-within:[&>span]:bg-background has-[+input:not(:placeholder-shown)]:[&>span]:bg-background"
@@ -437,12 +437,12 @@ export default function LoginPage() {
                       }}
                     >
                       <InputOTPGroup>
-                        <InputOTPSlot index={0} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
-                        <InputOTPSlot index={1} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
-                        <InputOTPSlot index={2} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
-                        <InputOTPSlot index={3} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
-                        <InputOTPSlot index={4} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
-                        <InputOTPSlot index={5} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
+                        <InputOTPSlot index={0} className="h-12 w-11 text-xl rounded-lg bg-muted border-0" />
+                        <InputOTPSlot index={1} className="h-12 w-11 text-xl rounded-lg bg-muted border-0" />
+                        <InputOTPSlot index={2} className="h-12 w-11 text-xl rounded-lg bg-muted border-0" />
+                        <InputOTPSlot index={3} className="h-12 w-11 text-xl rounded-lg bg-muted border-0" />
+                        <InputOTPSlot index={4} className="h-12 w-11 text-xl rounded-lg bg-muted border-0" />
+                        <InputOTPSlot index={5} className="h-12 w-11 text-xl rounded-lg bg-muted border-0" />
                       </InputOTPGroup>
                     </InputOTP>
                   </div>
@@ -509,12 +509,12 @@ export default function LoginPage() {
                       }}
                     >
                       <InputOTPGroup>
-                        <InputOTPSlot index={0} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
-                        <InputOTPSlot index={1} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
-                        <InputOTPSlot index={2} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
-                        <InputOTPSlot index={3} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
-                        <InputOTPSlot index={4} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
-                        <InputOTPSlot index={5} className="h-12 w-11 text-xl rounded-lg bg-muted border-border/50" />
+                        <InputOTPSlot index={0} className="h-12 w-11 text-xl rounded-lg bg-muted border-0" />
+                        <InputOTPSlot index={1} className="h-12 w-11 text-xl rounded-lg bg-muted border-0" />
+                        <InputOTPSlot index={2} className="h-12 w-11 text-xl rounded-lg bg-muted border-0" />
+                        <InputOTPSlot index={3} className="h-12 w-11 text-xl rounded-lg bg-muted border-0" />
+                        <InputOTPSlot index={4} className="h-12 w-11 text-xl rounded-lg bg-muted border-0" />
+                        <InputOTPSlot index={5} className="h-12 w-11 text-xl rounded-lg bg-muted border-0" />
                       </InputOTPGroup>
                     </InputOTP>
                   </div>

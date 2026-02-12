@@ -232,6 +232,13 @@ export function DictationInput({
         ? "animate-pulse-emerald"
         : "animate-pulse-blue"
 
+  const localeBadgeClass =
+    locale.startsWith("pt")
+      ? "bg-amber-500/15 text-amber-700 dark:text-amber-400"
+      : locale.startsWith("es")
+        ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400"
+        : "bg-blue-500/15 text-blue-700 dark:text-blue-400"
+
   return (
     <section>
       {/* Top bar: Audio à esquerda, Radiopaedia + Historico à direita */}
@@ -312,17 +319,16 @@ export function DictationInput({
                         <Button
                           variant="ghost"
                           onClick={onLimparHistorico}
-                          className="text-xs text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                          className="rounded-full h-6 px-2.5 text-[10px] font-medium text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                         >
                           {t("clear")}
                         </Button>
                         <Button
                           variant="ghost"
-                          size="icon"
                           onClick={() => setHistoricoAberto(false)}
-                          className="text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                          className="rounded-full size-6 p-0 text-muted-foreground hover:bg-accent hover:text-accent-foreground [&_svg]:size-3"
                         >
-                          <X className="w-3.5 h-3.5" />
+                          <X />
                         </Button>
                       </div>
                     </div>
@@ -390,7 +396,9 @@ export function DictationInput({
               {/* Timer + language badge + buttons */}
               <div className="flex items-center gap-2 shrink-0">
                 {/* Language badge */}
-                <span className="text-[10px] font-semibold text-muted-foreground/60 bg-muted rounded px-1.5 py-0.5">
+                <span
+                  className={`text-[10px] font-semibold rounded px-1.5 py-0.5 ${localeBadgeClass}`}
+                >
                   {langLabel}
                 </span>
 
@@ -402,24 +410,20 @@ export function DictationInput({
                 </span>
 
                 {/* Cancel */}
-                <Button
-                  variant="ghost"
-                  size="icon"
+                <button
                   onClick={handleCancelRecording}
-                  className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                  className="size-7 rounded-full flex items-center justify-center text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors cursor-pointer"
                 >
-                  <X className="w-3.5 h-3.5" />
-                </Button>
+                  <X className="w-3 h-3" />
+                </button>
 
                 {/* Confirm / stop */}
-                <Button
-                  variant="ghost"
-                  size="icon"
+                <button
                   onClick={handleStopRecording}
-                  className="text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                  className="size-7 rounded-full flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
                 >
-                  <Check className="w-3.5 h-3.5" />
-                </Button>
+                  <Check className="w-3 h-3" />
+                </button>
               </div>
             </div>
 
