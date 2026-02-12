@@ -92,15 +92,11 @@ export async function POST(req: NextRequest) {
     const prompt = MEDICAL_PROMPTS[language] ?? MEDICAL_PROMPTS.pt
 
     // ----------------------------------------------------------------
-    // Official format from the WebRTC docs:
-    //   body: { session: { model, type, audio, ... } }
+    // Transcription-only session via the Realtime API.
+    // Docs: https://developers.openai.com/api/docs/guides/realtime-transcription
     //
-    // We use a standard "realtime" session with:
-    //   - audio.input.transcription  → enables STT via gpt-4o-transcribe
-    //   - turn_detection.create_response: false → no model responses
-    //
-    // This is the cheapest setup: the mini realtime model is only used
-    // for session orchestration; actual transcription runs on gpt-4o-transcribe.
+    // session.type = "transcription" → no model responses, STT only.
+    // The transcription model is inside audio.input.transcription.model.
     // ----------------------------------------------------------------
     const response = await fetch(
       "https://api.openai.com/v1/realtime/client_secrets",
@@ -112,7 +108,7 @@ export async function POST(req: NextRequest) {
         },
         body: JSON.stringify({
           session: {
-            model: "gpt-4o-mini-realtime-preview",
+            type: "transcription",
             audio: {
               input: {
                 noise_reduction: { type: "near_field" },
@@ -130,8 +126,6 @@ export async function POST(req: NextRequest) {
                   // split turns prematurely. 1500ms lets them breathe
                   // without losing streaming feedback.
                   silence_duration_ms: 1500,
-                  // Don't auto-generate model responses; we only want STT.
-                  create_response: false,
                 },
               },
             },
