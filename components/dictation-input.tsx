@@ -462,7 +462,7 @@ export function DictationInput({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={onKeyDown}
-          className={`w-full bg-transparent border-none outline-none resize-none leading-relaxed text-foreground placeholder:text-muted-foreground/30 font-light overflow-hidden ${FONT_SIZES[fontSizeIdx].class}`}
+          className={`w-full bg-transparent border-none outline-none resize-none leading-relaxed text-foreground placeholder:text-muted-foreground/30 font-medium overflow-hidden ${FONT_SIZES[fontSizeIdx].class}`}
           rows={1}
         />
       </SquircleCard>
