@@ -86,7 +86,7 @@ export function useRealtimeTranscription({
       // Time-domain values are centred at 128; deviation = amplitude
       const amplitude = Math.abs((raw[i * step] ?? 128) - 128) / 128 // 0..1
       // Power curve: boosts low/mid amplitudes so speech is clearly visible
-      const boosted = Math.pow(amplitude, 0.3) * 255
+      const boosted = Math.pow(amplitude, 0.6 ) * 255
       bins.push(Math.min(255, Math.round(boosted)))
     }
     setFrequencyData(bins)
@@ -152,14 +152,19 @@ export function useRealtimeTranscription({
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
       streamRef.current = stream
 
-      // 3. AudioContext + AnalyserNode for waveform
+      // 3. AudioContext → GainNode (boost) → AnalyserNode for waveform
+      //    The gain only affects the analyser pipeline used for visualisation;
+      //    it does NOT touch the raw mic track sent to the RTCPeerConnection.
       const audioCtx = new AudioContext()
       audioCtxRef.current = audioCtx
       const source = audioCtx.createMediaStreamSource(stream)
+      const gain = audioCtx.createGain()
+      gain.gain.value = 8 // 8× digital boost for MacBook-level mics
       const analyser = audioCtx.createAnalyser()
       analyser.fftSize = 2048
       analyser.smoothingTimeConstant = 0.3
-      source.connect(analyser)
+      source.connect(gain)
+      gain.connect(analyser)
       analyserRef.current = analyser
 
       // 4. RTCPeerConnection
