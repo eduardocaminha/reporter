@@ -455,7 +455,30 @@ export function DictationInput({
       </AnimatePresence>
 
       {/* Textarea auto-grow inside squircle card */}
-      <SquircleCard className="p-8">
+      <SquircleCard className="relative p-8">
+        {/* Font size pill — top-right inside the card */}
+        <div className="absolute top-3 right-4 flex items-center bg-muted/60 rounded-full h-7 overflow-hidden z-10">
+          <button
+            onClick={() => setFontSizeIdx((i) => Math.max(0, i - 1))}
+            disabled={fontSizeIdx === 0}
+            className="h-full px-2 flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-accent-foreground disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-muted-foreground transition-colors cursor-pointer disabled:cursor-not-allowed"
+          >
+            <Minus className="w-3 h-3" />
+          </button>
+          <span className="text-[11px] text-muted-foreground/40 select-none px-1.5">
+            A
+          </span>
+          <button
+            onClick={() =>
+              setFontSizeIdx((i) => Math.min(FONT_SIZES.length - 1, i + 1))
+            }
+            disabled={fontSizeIdx === FONT_SIZES.length - 1}
+            className="h-full px-2 flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-accent-foreground disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-muted-foreground transition-colors cursor-pointer disabled:cursor-not-allowed"
+          >
+            <Plus className="w-3 h-3" />
+          </button>
+        </div>
+
         <textarea
           ref={textareaRef}
           placeholder={animatedPlaceholder}
@@ -467,31 +490,8 @@ export function DictationInput({
         />
       </SquircleCard>
 
-      {/* Bottom bar: Font size pill (left) + Gerar Laudo (right) */}
-      <div className="flex items-center justify-between mt-4">
-        {/* Font size pill */}
-        <div className="flex items-center bg-muted rounded-full h-9 overflow-hidden">
-          <button
-            onClick={() => setFontSizeIdx((i) => Math.max(0, i - 1))}
-            disabled={fontSizeIdx === 0}
-            className="h-full px-2.5 flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-accent-foreground disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-muted-foreground transition-colors cursor-pointer disabled:cursor-not-allowed"
-          >
-            <Minus className="w-3 h-3" />
-          </button>
-          <span className="text-[11px] font-medium text-muted-foreground/60 select-none tabular-nums min-w-[16px] text-center">
-            A
-          </span>
-          <button
-            onClick={() =>
-              setFontSizeIdx((i) => Math.min(FONT_SIZES.length - 1, i + 1))
-            }
-            disabled={fontSizeIdx === FONT_SIZES.length - 1}
-            className="h-full px-2.5 flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-accent-foreground disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-muted-foreground transition-colors cursor-pointer disabled:cursor-not-allowed"
-          >
-            <Plus className="w-3 h-3" />
-          </button>
-        </div>
-
+      {/* Bottom bar: Gerar Laudo (right) */}
+      <div className="flex items-center justify-end mt-4">
         {/* Gerar Laudo + Kbd */}
         <div className="group/gerar relative">
           <div className="absolute right-full top-1/2 -translate-y-1/2 pointer-events-none hidden sm:block">
