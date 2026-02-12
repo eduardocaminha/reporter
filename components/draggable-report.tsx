@@ -27,16 +27,45 @@ import type { ReportBlock } from "@/lib/report-blocks"
 /* ------------------------------------------------------------------ */
 
 function FormatPill({
-  onBold,
-  onItalic,
-  isBold,
-  isItalic,
+  contentRef,
 }: {
-  onBold: () => void
-  onItalic: () => void
-  isBold: boolean
-  isItalic: boolean
+  contentRef: React.RefObject<HTMLDivElement | null>
 }) {
+  const [isBold, setIsBold] = useState(false)
+  const [isItalic, setIsItalic] = useState(false)
+
+  // Re-check format state after every selection / key / click inside the editable
+  const sync = useCallback(() => {
+    setIsBold(document.queryCommandState("bold"))
+    setIsItalic(document.queryCommandState("italic"))
+  }, [])
+
+  // Listen for selectionchange on the document so we always stay in sync
+  useEffect(() => {
+    document.addEventListener("selectionchange", sync)
+    return () => document.removeEventListener("selectionchange", sync)
+  }, [sync])
+
+  const applyBold = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault()
+      contentRef.current?.focus()
+      document.execCommand("bold")
+      sync()
+    },
+    [contentRef, sync],
+  )
+
+  const applyItalic = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault()
+      contentRef.current?.focus()
+      document.execCommand("italic")
+      sync()
+    },
+    [contentRef, sync],
+  )
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 4 }}
@@ -46,10 +75,7 @@ function FormatPill({
       className="absolute -top-7 right-0 flex items-center bg-muted/60 rounded-full h-5 overflow-hidden z-20"
     >
       <button
-        onMouseDown={(e) => {
-          e.preventDefault() // keep selection
-          onBold()
-        }}
+        onMouseDown={applyBold}
         className={`h-full px-2 flex items-center justify-center text-[10px] font-bold transition-colors cursor-pointer ${
           isBold
             ? "bg-accent text-accent-foreground"
@@ -60,10 +86,7 @@ function FormatPill({
       </button>
       <div className="w-px h-3 bg-border/40" />
       <button
-        onMouseDown={(e) => {
-          e.preventDefault() // keep selection
-          onItalic()
-        }}
+        onMouseDown={applyItalic}
         className={`h-full px-2 flex items-center justify-center text-[10px] italic transition-colors cursor-pointer ${
           isItalic
             ? "bg-accent text-accent-foreground"
@@ -101,8 +124,6 @@ function SortableBlock({
   } = useSortable({ id: block.id, disabled: !block.draggable })
 
   const contentRef = useRef<HTMLDivElement>(null)
-  const [isBold, setIsBold] = useState(false)
-  const [isItalic, setIsItalic] = useState(false)
 
   const style = {
     transform: CSS.Translate.toString(transform),
@@ -110,17 +131,10 @@ function SortableBlock({
     opacity: isDragging ? 0.5 : 1,
   }
 
-  // Poll selection state to update pill active indicators
-  const checkFormatState = useCallback(() => {
-    setIsBold(document.queryCommandState("bold"))
-    setIsItalic(document.queryCommandState("italic"))
-  }, [])
-
   // Save and exit editing
   const finishEditing = useCallback(() => {
     if (!contentRef.current) return
-    const newHtml = contentRef.current.innerHTML
-    onFinishEdit(newHtml)
+    onFinishEdit(contentRef.current.innerHTML)
   }, [onFinishEdit])
 
   // Handle Escape to exit
@@ -130,21 +144,9 @@ function SortableBlock({
         e.preventDefault()
         finishEditing()
       }
-      // After any key that might change formatting, re-check state
-      setTimeout(checkFormatState, 0)
     },
-    [finishEditing, checkFormatState],
+    [finishEditing],
   )
-
-  const handleBold = useCallback(() => {
-    document.execCommand("bold")
-    checkFormatState()
-  }, [checkFormatState])
-
-  const handleItalic = useCallback(() => {
-    document.execCommand("italic")
-    checkFormatState()
-  }, [checkFormatState])
 
   // Click handler — only for draggable blocks, enter edit mode
   const handleClick = useCallback(() => {
@@ -153,9 +155,11 @@ function SortableBlock({
     }
   }, [block.draggable, isEditing, onStartEdit])
 
-  // Focus the contentEditable when entering edit mode
+  // Set innerHTML imperatively ONCE on entering edit mode (avoids React
+  // re-render resetting the content & killing the selection/cursor).
   useEffect(() => {
     if (isEditing && contentRef.current) {
+      contentRef.current.innerHTML = block.html
       contentRef.current.focus()
       // Place cursor at end
       const range = document.createRange()
@@ -165,6 +169,7 @@ function SortableBlock({
       sel?.removeAllRanges()
       sel?.addRange(range)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only on edit toggle
   }, [isEditing])
 
   return (
@@ -186,14 +191,7 @@ function SortableBlock({
 
       {/* Formatting pill */}
       <AnimatePresence>
-        {isEditing && (
-          <FormatPill
-            onBold={handleBold}
-            onItalic={handleItalic}
-            isBold={isBold}
-            isItalic={isItalic}
-          />
-        )}
+        {isEditing && <FormatPill contentRef={contentRef} />}
       </AnimatePresence>
 
       {/* Block content */}
@@ -202,11 +200,8 @@ function SortableBlock({
           ref={contentRef}
           contentEditable
           suppressContentEditableWarning
-          dangerouslySetInnerHTML={{ __html: block.html }}
           onKeyDown={handleKeyDown}
-          onSelect={checkFormatState}
-          onMouseUp={checkFormatState}
-          className="outline-none ring-1 ring-accent/40 rounded-sm px-1 -mx-1 cursor-text"
+          className="outline-none bg-muted/40 rounded-sm px-1 -mx-1 cursor-text"
         />
       ) : (
         <div
