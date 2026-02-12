@@ -7,11 +7,6 @@ import { Button } from "@/components/ui/button"
 import { Kbd, KbdGroup } from "@/components/ui/kbd"
 import { SquircleCard } from "@/components/ui/squircle-card"
 import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from "@/components/ui/tooltip"
-import {
   Clock,
   Sparkles,
   Loader2,
@@ -222,7 +217,7 @@ export function DictationInput({
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [toggleRecording])
 
-  // ---- Language label for locale alert ----
+  // ---- Language label + pulse color for mic button ----
   const langLabel =
     locale.startsWith("pt")
       ? "PT"
@@ -230,7 +225,12 @@ export function DictationInput({
         ? "ES"
         : "EN"
 
-  const langFullName = t(`lang${langLabel}`)
+  const localePulseClass =
+    locale.startsWith("pt")
+      ? "animate-pulse-amber"
+      : locale.startsWith("es")
+        ? "animate-pulse-emerald"
+        : "animate-pulse-blue"
 
   return (
     <section>
@@ -238,26 +238,17 @@ export function DictationInput({
       <div className="flex items-center justify-between mb-6">
         {/* Audio button */}
         <div className="group/audio relative">
-          <Tooltip open={transcription.isRecording ? true : undefined}>
-            <TooltipTrigger asChild>
-              <button
-                onClick={toggleRecording}
-                disabled={isGenerating}
-                className={`size-11 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
-                  transcription.isRecording
-                    ? "bg-foreground/80 text-background animate-locale-pulse"
-                    : "bg-muted text-foreground/70 hover:bg-foreground/80 hover:text-background"
-                }`}
-              >
-                <AudioLines className="w-5 h-5" />
-              </button>
-            </TooltipTrigger>
-            {transcription.isRecording && (
-              <TooltipContent side="bottom" className="max-w-[220px]">
-                {t("voiceLangHint", { lang: langFullName })}
-              </TooltipContent>
-            )}
-          </Tooltip>
+          <button
+            onClick={toggleRecording}
+            disabled={isGenerating}
+            className={`size-11 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
+              transcription.isRecording
+                ? `bg-foreground/80 text-background ${localePulseClass}`
+                : "bg-muted text-foreground/70 hover:bg-foreground/80 hover:text-background"
+            }`}
+          >
+            <AudioLines className="w-5 h-5" />
+          </button>
 
           {/* Kbd shortcut hint (hidden when recording) */}
           {!transcription.isRecording && (
