@@ -99,7 +99,17 @@ export function DictationInput({
     [reconstructText],
   )
 
-  const transcription = useRealtimeTranscription({
+  // Destructure so individual functions (start/stop/cancel) can be used
+  // as stable deps without re-creating callbacks on every render.
+  const {
+    start: rtStart,
+    stop: rtStop,
+    cancel: rtCancel,
+    isRecording: rtIsRecording,
+    elapsed: rtElapsed,
+    frequencyData: rtFrequencyData,
+    error: rtError,
+  } = useRealtimeTranscription({
     locale,
     onDelta: handleDelta,
     onComplete: handleComplete,
@@ -183,27 +193,25 @@ export function DictationInput({
     preRecordingTextRef.current = value
     turnTextsRef.current.clear()
     turnOrderRef.current = []
-    await transcription.start()
-  }, [value, transcription])
+    await rtStart()
+  }, [value, rtStart])
 
   const handleStopRecording = useCallback(() => {
-    transcription.stop()
-    // Text stays as-is (user accepted the dictation)
-  }, [transcription])
+    rtStop()
+  }, [rtStop])
 
   const handleCancelRecording = useCallback(() => {
-    transcription.cancel()
-    // Revert to pre-recording text
+    rtCancel()
     onChange(preRecordingTextRef.current)
-  }, [transcription, onChange])
+  }, [rtCancel, onChange])
 
   const toggleRecording = useCallback(async () => {
-    if (transcription.isRecording) {
+    if (rtIsRecording) {
       handleStopRecording()
     } else {
       await handleStartRecording()
     }
-  }, [transcription.isRecording, handleStopRecording, handleStartRecording])
+  }, [rtIsRecording, handleStopRecording, handleStartRecording])
 
   // Keyboard shortcut: Cmd/Ctrl + G
   useEffect(() => {
@@ -240,12 +248,12 @@ export function DictationInput({
             onClick={toggleRecording}
             disabled={isGenerating}
             className={`size-11 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
-              transcription.isRecording
+              rtIsRecording
                 ? "bg-foreground/80 text-background animate-recording-pulse"
                 : "bg-muted text-foreground/70 hover:bg-foreground/80 hover:text-background"
             }`}
             style={
-              transcription.isRecording
+              rtIsRecording
                 ? ({ "--pulse-color": pulseColor } as React.CSSProperties)
                 : undefined
             }
@@ -254,7 +262,7 @@ export function DictationInput({
           </button>
 
           {/* Kbd shortcut hint (hidden when recording) */}
-          {!transcription.isRecording && (
+          {!rtIsRecording && (
             <div className="absolute left-full top-1/2 -translate-y-1/2 pointer-events-none">
               <div className="flex items-center overflow-hidden">
                 <div className="-translate-x-[calc(100%+0.75rem)] opacity-0 group-hover/audio:translate-x-0 group-hover/audio:opacity-100 transition-all duration-300 ease-out ml-3">
@@ -356,9 +364,27 @@ export function DictationInput({
         </div>
       </div>
 
-      {/* Waveform bar — real frequency data or error */}
+      {/* Error message — always visible so user sees failures */}
       <AnimatePresence>
-        {transcription.isRecording && (
+        {rtError && !rtIsRecording && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="overflow-hidden mb-4"
+          >
+            <p className="text-xs text-destructive px-1">
+              {rtError === "micPermissionDenied"
+                ? t("micPermissionDenied")
+                : rtError}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Waveform bar — real frequency data */}
+      <AnimatePresence>
+        {rtIsRecording && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
@@ -369,8 +395,8 @@ export function DictationInput({
             <div className="flex items-center gap-4 bg-muted/40 rounded-full px-5 py-2 h-11">
               {/* Waveform bars driven by AnalyserNode frequency data */}
               <div className="flex items-center justify-end gap-[1.5px] h-6 flex-1 min-w-0 overflow-hidden">
-                {transcription.frequencyData.length > 0
-                  ? transcription.frequencyData.map((val, i) => (
+                {rtFrequencyData.length > 0
+                  ? rtFrequencyData.map((val, i) => (
                       <div
                         key={i}
                         className="flex-1 min-w-0 rounded-full bg-foreground/60 transition-[height] duration-75"
@@ -398,10 +424,10 @@ export function DictationInput({
                 </span>
 
                 <span className="text-xs text-muted-foreground font-medium tabular-nums min-w-[40px]">
-                  {Math.floor(transcription.elapsed / 60)
+                  {Math.floor(rtElapsed / 60)
                     .toString()
                     .padStart(1, "0")}
-                  :{(transcription.elapsed % 60).toString().padStart(2, "0")}
+                  :{(rtElapsed % 60).toString().padStart(2, "0")}
                 </span>
 
                 {/* Cancel */}
@@ -426,12 +452,12 @@ export function DictationInput({
               </div>
             </div>
 
-            {/* Error message */}
-            {transcription.error && (
+            {/* Error while recording */}
+            {rtError && (
               <p className="text-xs text-destructive mt-2 px-2">
-                {transcription.error === "micPermissionDenied"
+                {rtError === "micPermissionDenied"
                   ? t("micPermissionDenied")
-                  : transcription.error}
+                  : rtError}
               </p>
             )}
           </motion.div>
