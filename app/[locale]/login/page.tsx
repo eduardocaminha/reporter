@@ -18,6 +18,7 @@ import {
 import { REGEXP_ONLY_DIGITS } from "input-otp"
 import { TextEffect } from "@/components/ui/text-effect"
 import { OAuthButtons } from "@/components/oauth-buttons"
+import { RippleLoader } from "@/components/ui/ripple-loader"
 import { ArrowLeft, ArrowRight, Loader2, Check, X, Eye, EyeOff } from "lucide-react"
 import { Link } from "@/i18n/navigation"
 import { LocaleSwitcher } from "@/components/locale-switcher"
@@ -331,8 +332,17 @@ export default function LoginPage() {
   const signUpPassword = signUpForm.watch("password")
   const signUpConfirm = signUpForm.watch("confirmPassword")
 
+  // Gate: show loader until Clerk SDKs are ready
+  if (!signInLoaded || !signUpLoaded) {
+    return (
+      <div className="flex min-h-dvh items-center justify-center bg-background">
+        <RippleLoader size="lg" />
+      </div>
+    )
+  }
+
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-dvh bg-background flex">
       {/* Left — login form */}
       <div className="w-full lg:w-1/2 flex flex-col px-8 sm:px-12 lg:px-16 pt-16 sm:pt-20 pb-16">
         <div className="h-[72px] flex items-center justify-between">
@@ -373,7 +383,7 @@ export default function LoginPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
+            transition={{ delay: 0.15, duration: 0.4, ease: "easeOut" }}
             className="w-full max-w-md"
           >
             <div className="space-y-6">
@@ -700,15 +710,15 @@ export default function LoginPage() {
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-30"
+          className="absolute inset-0 w-full h-full object-cover opacity-50 blur-md scale-105"
         >
           <source src={LOGIN_VIDEO_URL} type="video/mp4" />
         </video>
 
-        {/* Glassmorphism frosted layer */}
-        <div className="absolute inset-0 backdrop-blur-sm bg-black/40 backdrop-saturate-150" />
+        {/* Overlay escuro (substitui glassmorphism para evitar falhas de backdrop-filter) */}
+        <div className="absolute inset-0 bg-black/50" />
 
-        {/* Subtle glass border highlight */}
+        {/* Borda sutil */}
         <div className="pointer-events-none absolute inset-0 border-l border-white/6" />
 
         {/* Text overlay */}

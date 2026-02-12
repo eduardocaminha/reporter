@@ -253,6 +253,8 @@ export default function LandingPage() {
           {t("subtitle2")}
           <br />
           {t("subtitle3")}
+          <br />
+          {t("subtitle4")}
         </motion.p>
 
         {/* CTA abaixo do texto só no mobile (à esquerda); mesmo espaço que entre título e subtítulo */}

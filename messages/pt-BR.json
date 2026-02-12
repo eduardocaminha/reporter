@@ -78,8 +78,9 @@
   "Landing": {
     "cta": "Comece a laudar",
     "subtitle1": "Você dita, o Reporter estrutura.",
-    "subtitle2": "IA usada do jeito certo. Interface limpa.",
-    "subtitle3": "Abre, lauda, ponto.",
+    "subtitle2": "IA usada do jeito certo.",
+    "subtitle3": "Visual limpo.",
+    "subtitle4": "Abre, lauda, ponto.",
     "footer": "Reporter by Radiologic™ — {year}"
   },
   "Dashboard": {

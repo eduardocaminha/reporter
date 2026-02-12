@@ -78,8 +78,9 @@
   "Landing": {
     "cta": "Start reporting",
     "subtitle1": "You dictate, Reporter structures.",
-    "subtitle2": "AI used the right way. Clean interface.",
-    "subtitle3": "Open, report, done.",
+    "subtitle2": "AI used the right way.",
+    "subtitle3": "Clean visual.",
+    "subtitle4": "Open, report, done.",
     "footer": "Reporter by Radiologic™ — {year}"
   },
   "Dashboard": {

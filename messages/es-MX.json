@@ -78,8 +78,9 @@
   "Landing": {
     "cta": "Empieza a informar",
     "subtitle1": "Tú dictas, Reporter estructura.",
-    "subtitle2": "IA usada de la forma correcta. Interfaz limpia.",
-    "subtitle3": "Abre, informa, listo.",
+    "subtitle2": "IA usada de la forma correcta.",
+    "subtitle3": "Visual limpio.",
+    "subtitle4": "Abre, informa, listo.",
     "footer": "Reporter by Radiologic™ — {year}"
   },
   "Dashboard": {

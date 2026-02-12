@@ -178,6 +178,22 @@
   font-style: italic;
 }
 
+/* Ripple loader — concentric pulsating rings */
+@keyframes ripple {
+  0% {
+    transform: scale(0.4);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+@utility animate-ripple {
+  animation: ripple 1.5s ease-out infinite;
+}
+
 /* Landing page: zoom in suave no vídeo */
 @keyframes zoom-in-smooth {
   0% { transform: scale(0.5); }
