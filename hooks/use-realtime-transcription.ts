@@ -36,14 +36,16 @@ export function useRealtimeTranscription({
   const [frequencyData, setFrequencyData] = useState<number[]>([])
   const [error, setError] = useState<string | null>(null)
 
-  // Keep mutable refs so callbacks inside event listeners are always fresh
+  // Keep callback refs fresh so the data-channel listener always
+  // calls the latest version without depending on them as closure deps.
   const onDeltaRef = useRef(onDelta)
   const onCompleteRef = useRef(onComplete)
-  const localeRef = useRef(locale)
-
-  useEffect(() => { onDeltaRef.current = onDelta }, [onDelta])
-  useEffect(() => { onCompleteRef.current = onComplete }, [onComplete])
-  useEffect(() => { localeRef.current = locale }, [locale])
+  useEffect(() => {
+    onDeltaRef.current = onDelta
+  }, [onDelta])
+  useEffect(() => {
+    onCompleteRef.current = onComplete
+  }, [onComplete])
 
   // Internal refs for resources
   const pcRef = useRef<RTCPeerConnection | null>(null)
@@ -53,17 +55,15 @@ export function useRealtimeTranscription({
   const analyserRef = useRef<AnalyserNode | null>(null)
   const animFrameRef = useRef<number>(0)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const startingRef = useRef(false)
 
-  // ---- helpers (all stable — no deps on props/state) ----
+  // ---- helpers ----
 
   /** Map next-intl locale to ISO-639-1 for OpenAI */
-  function getLanguage() {
-    const loc = localeRef.current
-    if (loc.startsWith("pt")) return "pt"
-    if (loc.startsWith("es")) return "es"
+  const getLanguage = useCallback(() => {
+    if (locale.startsWith("pt")) return "pt"
+    if (locale.startsWith("es")) return "es"
     return "en"
-  }
+  }, [locale])
 
   /** requestAnimationFrame loop that reads AnalyserNode data */
   const updateFrequency = useCallback(() => {
@@ -82,8 +82,6 @@ export function useRealtimeTranscription({
 
   /** Tear down all resources */
   const cleanup = useCallback(() => {
-    startingRef.current = false
-
     if (animFrameRef.current) {
       cancelAnimationFrame(animFrameRef.current)
       animFrameRef.current = 0
@@ -113,12 +111,9 @@ export function useRealtimeTranscription({
     )
   }, [])
 
-  // ---- public API (all stable — deps only on other stable callbacks) ----
+  // ---- public API ----
 
   const start = useCallback(async () => {
-    // Guard against double-start while async is in progress
-    if (startingRef.current || pcRef.current) return
-    startingRef.current = true
     setError(null)
 
     try {
@@ -130,14 +125,10 @@ export function useRealtimeTranscription({
       })
 
       if (!tokenRes.ok) {
-        const err = await tokenRes.json().catch(() => ({})) as {
-          error?: string
-          detail?: string
-        }
-        const msg = err.detail
-          ? `${err.error}: ${err.detail}`
-          : err.error ?? `Server error ${tokenRes.status}`
-        throw new Error(msg)
+        const err = await tokenRes.json().catch(() => ({}))
+        throw new Error(
+          (err as { error?: string }).error ?? `Server error ${tokenRes.status}`,
+        )
       }
 
       const { clientSecret } = (await tokenRes.json()) as {
@@ -166,40 +157,29 @@ export function useRealtimeTranscription({
       const dc = pc.createDataChannel("oai-events")
       dcRef.current = dc
 
-      dc.addEventListener("open", () => {
-        console.log("[Realtime] Data channel opened")
-      })
-
-      dc.addEventListener("close", () => {
-        console.log("[Realtime] Data channel closed")
-      })
-
       dc.addEventListener("message", (e) => {
         try {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const event = JSON.parse(e.data) as Record<string, any>
-
-          // Log every event type for debugging
-          console.log("[Realtime] Event:", event.type, event)
+          const event = JSON.parse(e.data) as {
+            type: string
+            delta?: string
+            transcript?: string
+            item_id?: string
+            error?: { message?: string }
+          }
 
           switch (event.type) {
             case "conversation.item.input_audio_transcription.delta":
-              onDeltaRef.current(
-                (event.delta as string) ?? "",
-                (event.item_id as string) ?? "",
-              )
+              onDeltaRef.current(event.delta ?? "", event.item_id ?? "")
               break
             case "conversation.item.input_audio_transcription.completed":
               onCompleteRef.current(
-                (event.transcript as string) ?? "",
-                (event.item_id as string) ?? "",
+                event.transcript ?? "",
+                event.item_id ?? "",
               )
               break
             case "error":
               console.error("[Realtime] Server error:", event.error)
-              setError(
-                (event.error?.message as string) ?? "Transcription error",
-              )
+              setError(event.error?.message ?? "Transcription error")
               break
           }
         } catch {
@@ -228,7 +208,6 @@ export function useRealtimeTranscription({
       await pc.setRemoteDescription({ type: "answer", sdp: answerSdp })
 
       // 7. Active! Start timers and animation
-      startingRef.current = false
       setIsRecording(true)
       setElapsed(0)
       timerRef.current = setInterval(() => setElapsed((p) => p + 1), 1000)
@@ -254,7 +233,7 @@ export function useRealtimeTranscription({
 
       cleanup()
     }
-  }, [updateFrequency, cleanup])
+  }, [getLanguage, updateFrequency, cleanup])
 
   const stop = useCallback(() => {
     cleanup()
@@ -266,9 +245,11 @@ export function useRealtimeTranscription({
 
   // Auto-cleanup on unmount
   useEffect(() => {
-    return () => cleanup()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      cleanup()
+    }
+  }, [cleanup])
 
   return {
     start,
