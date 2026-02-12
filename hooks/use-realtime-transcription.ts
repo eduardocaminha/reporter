@@ -166,29 +166,40 @@ export function useRealtimeTranscription({
       const dc = pc.createDataChannel("oai-events")
       dcRef.current = dc
 
+      dc.addEventListener("open", () => {
+        console.log("[Realtime] Data channel opened")
+      })
+
+      dc.addEventListener("close", () => {
+        console.log("[Realtime] Data channel closed")
+      })
+
       dc.addEventListener("message", (e) => {
         try {
-          const event = JSON.parse(e.data) as {
-            type: string
-            delta?: string
-            transcript?: string
-            item_id?: string
-            error?: { message?: string }
-          }
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const event = JSON.parse(e.data) as Record<string, any>
+
+          // Log every event type for debugging
+          console.log("[Realtime] Event:", event.type, event)
 
           switch (event.type) {
             case "conversation.item.input_audio_transcription.delta":
-              onDeltaRef.current(event.delta ?? "", event.item_id ?? "")
+              onDeltaRef.current(
+                (event.delta as string) ?? "",
+                (event.item_id as string) ?? "",
+              )
               break
             case "conversation.item.input_audio_transcription.completed":
               onCompleteRef.current(
-                event.transcript ?? "",
-                event.item_id ?? "",
+                (event.transcript as string) ?? "",
+                (event.item_id as string) ?? "",
               )
               break
             case "error":
               console.error("[Realtime] Server error:", event.error)
-              setError(event.error?.message ?? "Transcription error")
+              setError(
+                (event.error?.message as string) ?? "Transcription error",
+              )
               break
           }
         } catch {
