@@ -178,18 +178,18 @@
   font-style: italic;
 }
 
-/* Locale-switcher pulse — draws attention when dictation is active */
-@keyframes locale-pulse {
+/* Recording pulse — color set via --pulse-color CSS variable per locale */
+@keyframes recording-pulse {
   0%, 100% {
-    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.45);
+    box-shadow: 0 0 0 0 var(--pulse-color);
   }
   50% {
-    box-shadow: 0 0 0 8px rgba(245, 158, 11, 0);
+    box-shadow: 0 0 0 8px transparent;
   }
 }
 
-@utility animate-locale-pulse {
-  animation: locale-pulse 1.8s ease-in-out infinite;
+@utility animate-recording-pulse {
+  animation: recording-pulse 1.8s ease-in-out infinite;
 }
 
 /* Ripple loader — concentric pulsating rings */

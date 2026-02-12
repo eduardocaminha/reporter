@@ -10,6 +10,73 @@ import { NextRequest, NextResponse } from "next/server"
  * Body: { language: "pt" | "en" | "es" }
  * Returns: { clientSecret: string }
  */
+
+/* ------------------------------------------------------------------ */
+/*  Medical glossary prompt per language                               */
+/*                                                                    */
+/*  Sent as `prompt` inside the transcription config to bias the      */
+/*  model towards correct medical terminology, measurement formats,   */
+/*  and abbreviations common in radiology dictation.                  */
+/*                                                                    */
+/*  Keep each prompt ≤ ~500 tokens — enough to anchor vocabulary      */
+/*  without wasting context window.                                   */
+/* ------------------------------------------------------------------ */
+
+const MEDICAL_PROMPTS: Record<string, string> = {
+  pt: [
+    // Estruturas anatômicas e patologias frequentes em TC
+    "apendicite, diverticulite, pneumoperitônio, coleção, abscesso, colecistite,",
+    "colelitíase, coledocolitíase, hepatoesplenomegalia, esteatose hepática,",
+    "linfonodomegalia, linfadenopatia, derrame pleural, atelectasia, consolidação,",
+    "pneumotórax, hemotórax, hidropneumotórax, espessamento parietal,",
+    "tromboembolismo pulmonar, TEP, AVC isquêmico, AVC hemorrágico,",
+    "hematoma subdural, hematoma epidural, hemorragia subaracnóidea, HSA,",
+    "hidrocefalia, edema cerebral, desvio de linha média, herniação,",
+    "espondilolistese, espondiloartrose, protrusão discal, extrusão discal,",
+    "estenose de canal, artrose facetária, fratura, luxação, subluxação,",
+    "calcificação, microcalcificação, nódulo, cisto, massa, lesão focal,",
+    "realce heterogêneo, realce homogêneo, realce anelar, impregnação pelo contraste,",
+    // Medidas e formatação
+    "Medidas em cm e mm separadas por vírgula: 1,2 cm, 0,5 cm, 3,4 mm.",
+    "Usar ponto para abreviações: TC, RM, US, RX.",
+    // Termos de laudo
+    "achados, impressão diagnóstica, conclusão, correlação clínica, controle evolutivo,",
+    "exame prévio, comparação, sem alterações significativas, dentro dos limites da normalidade.",
+  ].join(" "),
+
+  en: [
+    "appendicitis, diverticulitis, pneumoperitoneum, abscess, cholecystitis,",
+    "cholelithiasis, choledocholithiasis, hepatosplenomegaly, hepatic steatosis,",
+    "lymphadenopathy, pleural effusion, atelectasis, consolidation,",
+    "pneumothorax, hemothorax, hydropneumothorax, pulmonary thromboembolism, PE,",
+    "ischemic stroke, hemorrhagic stroke, subdural hematoma, epidural hematoma,",
+    "subarachnoid hemorrhage, SAH, hydrocephalus, cerebral edema, midline shift,",
+    "herniation, spondylolisthesis, spondylosis, disc protrusion, disc extrusion,",
+    "spinal stenosis, facet arthropathy, fracture, dislocation, subluxation,",
+    "calcification, microcalcification, nodule, cyst, mass, focal lesion,",
+    "heterogeneous enhancement, homogeneous enhancement, rim enhancement,",
+    "Measurements in cm and mm with decimal point: 1.2 cm, 0.5 cm, 3.4 mm.",
+    "findings, impression, conclusion, clinical correlation, follow-up recommended,",
+    "prior exam, comparison, no significant abnormality, within normal limits.",
+  ].join(" "),
+
+  es: [
+    "apendicitis, diverticulitis, neumoperitoneo, colección, absceso, colecistitis,",
+    "colelitiasis, coledocolitiasis, hepatoesplenomegalia, esteatosis hepática,",
+    "linfadenopatía, derrame pleural, atelectasia, consolidación,",
+    "neumotórax, hemotórax, hidroneumotórax, tromboembolismo pulmonar, TEP,",
+    "ACV isquémico, ACV hemorrágico, hematoma subdural, hematoma epidural,",
+    "hemorragia subaracnoidea, HSA, hidrocefalia, edema cerebral,",
+    "desviación de línea media, herniación, espondilolistesis, espondiloartrosis,",
+    "protrusión discal, extrusión discal, estenosis de canal, artropatía facetaria,",
+    "fractura, luxación, subluxación, calcificación, microcalcificación,",
+    "nódulo, quiste, masa, lesión focal, realce heterogéneo, realce homogéneo,",
+    "Medidas en cm y mm con coma: 1,2 cm, 0,5 cm, 3,4 mm.",
+    "hallazgos, impresión diagnóstica, conclusión, correlación clínica,",
+    "control evolutivo, examen previo, sin alteraciones significativas.",
+  ].join(" "),
+}
+
 export async function POST(req: NextRequest) {
   const apiKey = process.env.OPENAI_API_KEY
   if (!apiKey) {
@@ -21,6 +88,8 @@ export async function POST(req: NextRequest) {
 
   try {
     const { language = "pt" } = await req.json()
+
+    const prompt = MEDICAL_PROMPTS[language] ?? MEDICAL_PROMPTS.pt
 
     const response = await fetch(
       "https://api.openai.com/v1/realtime/client_secrets",
@@ -39,12 +108,17 @@ export async function POST(req: NextRequest) {
                 transcription: {
                   model: "gpt-4o-transcribe",
                   language,
+                  prompt,
                 },
                 turn_detection: {
                   type: "server_vad",
                   threshold: 0.5,
                   prefix_padding_ms: 300,
-                  silence_duration_ms: 500,
+                  // Higher silence tolerance — radiologists often pause
+                  // mid-sentence to think. 500ms was too aggressive and
+                  // split turns prematurely. 1500ms lets them breathe
+                  // without losing streaming feedback.
+                  silence_duration_ms: 1500,
                 },
               },
             },
