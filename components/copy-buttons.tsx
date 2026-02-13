@@ -36,10 +36,10 @@ export function CopyButtons({ laudo }: CopyButtonsProps) {
     <Button
       variant="ghost"
       onClick={copiar}
-      className="gap-2 text-muted-foreground hover:text-foreground"
+      className="min-w-11 sm:min-w-0 gap-2 text-muted-foreground hover:text-foreground"
     >
       {copiado ? <Check className="w-4 h-4 text-primary" /> : <Copy className="w-4 h-4" />}
-      {copiado ? "Copiado" : "Copiar"}
+      <span className="hidden sm:inline">{copiado ? "Copiado" : "Copiar"}</span>
     </Button>
   )
 }
