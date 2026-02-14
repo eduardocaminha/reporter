@@ -81,7 +81,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
             variant="ghost"
             size="icon"
             onClick={() => setMenuOpen((prev) => !prev)}
-            className="h-4 w-4 p-0 bg-muted text-muted-foreground/40 hover:text-muted-foreground shrink-0"
+            className="h-6 w-6 p-0 bg-muted text-muted-foreground/40 hover:text-muted-foreground shrink-0"
           >
             <AnimatePresence mode="wait" initial={false}>
               {menuOpen ? (

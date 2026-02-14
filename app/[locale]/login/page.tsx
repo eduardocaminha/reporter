@@ -351,7 +351,7 @@ export default function LoginPage() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-4 w-4 p-0 bg-muted text-muted-foreground/40 hover:text-muted-foreground"
+                className="h-6 w-6 p-0 bg-muted text-muted-foreground/40 hover:text-muted-foreground"
               >
                 <ArrowLeft className="w-4 h-4" />
               </Button>
