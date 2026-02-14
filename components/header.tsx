@@ -1,7 +1,7 @@
 "use client"
 
 import { motion, AnimatePresence } from "motion/react"
-import { LogOut } from "lucide-react"
+import { LogOut, Menu } from "lucide-react"
 import { TextEffect } from "@/components/ui/text-effect"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
@@ -10,6 +10,7 @@ import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import { useClerk, useUser } from "@clerk/nextjs"
 import { LocaleSwitcher } from "@/components/locale-switcher"
+import { MenuOverlay } from "@/components/menu-overlay"
 
 type ReportMode = "ps" | "eletivo" | "comparativo"
 
@@ -22,6 +23,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
   const router = useRouter()
   const t = useTranslations("Header")
   const [logoHovered, setLogoHovered] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const { signOut } = useClerk()
   const { user } = useUser()
 
@@ -63,11 +65,20 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
       className="bg-card/80 backdrop-blur-sm border-b border-border/30 sticky top-0 z-50"
     >
       <div className="max-w-6xl lg:max-w-none mx-auto px-8 sm:px-12 lg:px-16 h-[72px] flex items-center justify-between">
-        <div
-          className="h-7 overflow-hidden cursor-pointer select-none min-w-[140px]"
-          onMouseEnter={() => setLogoHovered(true)}
-          onMouseLeave={() => setLogoHovered(false)}
-        >
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setMenuOpen(true)}
+            className="text-muted-foreground hover:text-foreground hover:bg-muted rounded-full h-10 w-10 shrink-0"
+          >
+            <Menu className="w-5 h-5" />
+          </Button>
+          <div
+            className="h-7 overflow-hidden cursor-pointer select-none min-w-[140px]"
+            onMouseEnter={() => setLogoHovered(true)}
+            onMouseLeave={() => setLogoHovered(false)}
+          >
           <AnimatePresence mode="wait">
             {!logoHovered ? (
               <TextEffect
@@ -101,6 +112,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
             )}
           </AnimatePresence>
         </div>
+        </div>
 
         <div className="flex items-center gap-2">
           <LocaleSwitcher />
@@ -120,6 +132,8 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
           </Button>
         </div>
       </div>
+
+      <MenuOverlay isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
     </motion.header>
   )
 }

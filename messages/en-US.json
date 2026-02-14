@@ -93,6 +93,29 @@
     "subtitle4": "Open, report, done.",
     "footer": "Reporter by Radiologic™ — {year}"
   },
+  "Menu": {
+    "configLLM": "LLM Settings",
+    "configLLMTitle": "LLM Settings",
+    "configLLMDesc": "Choose AI models and enter your API keys for report generation.",
+    "configCard1": "Models",
+    "configCard1Desc": "Select your preferred language model for report generation.",
+    "configCard2": "API Keys",
+    "configCard2Desc": "Manage your access keys for AI providers.",
+    "geradorMascaras": "Report Generator",
+    "geradorMascarasTitle": "Report Generator",
+    "geradorMascarasDesc": "Create structured reports from dictated or typed text.",
+    "geradorCard1": "New Report",
+    "geradorCard1Desc": "Generate a new report from clinical findings.",
+    "geradorCard2": "Templates",
+    "geradorCard2Desc": "Access ready-made templates for different exam types.",
+    "formatadorMascaras": "Report Formatter",
+    "formatadorMascarasTitle": "Report Formatter",
+    "formatadorMascarasDesc": "Format and style reports for printing or export.",
+    "formatadorCard1": "Formatting",
+    "formatadorCard1Desc": "Apply standard styles and formatting to your reports.",
+    "formatadorCard2": "Export",
+    "formatadorCard2Desc": "Export formatted reports to different formats."
+  },
   "Dashboard": {
     "errorDefault": "Error generating report",
     "errorConnection": "Error connecting to server"

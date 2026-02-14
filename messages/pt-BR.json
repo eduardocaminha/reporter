@@ -93,6 +93,29 @@
     "subtitle4": "Abre, lauda, ponto.",
     "footer": "Reporter by Radiologic™ — {year}"
   },
+  "Menu": {
+    "configLLM": "Configurações de LLM",
+    "configLLMTitle": "Configurações de LLM",
+    "configLLMDesc": "Escolha os modelos de IA e insira suas chaves de API para gerar laudos.",
+    "configCard1": "Modelos",
+    "configCard1Desc": "Selecione o modelo de linguagem preferido para geração de laudos.",
+    "configCard2": "Chaves de API",
+    "configCard2Desc": "Gerencie suas chaves de acesso para os provedores de IA.",
+    "geradorMascaras": "Gerador de Máscaras",
+    "geradorMascarasTitle": "Gerador de Máscaras",
+    "geradorMascarasDesc": "Crie laudos estruturados a partir de texto ditado ou digitado.",
+    "geradorCard1": "Novo Laudo",
+    "geradorCard1Desc": "Gere um novo laudo a partir de achados clínicos.",
+    "geradorCard2": "Templates",
+    "geradorCard2Desc": "Acesse templates prontos para diferentes tipos de exame.",
+    "formatadorMascaras": "Formatador de Máscaras",
+    "formatadorMascarasTitle": "Formatador de Máscaras",
+    "formatadorMascarasDesc": "Formate e estilize laudos para impressão ou exportação.",
+    "formatadorCard1": "Formatação",
+    "formatadorCard1Desc": "Aplique estilos e formatação padrão aos seus laudos.",
+    "formatadorCard2": "Exportar",
+    "formatadorCard2Desc": "Exporte laudos formatados para diferentes formatos."
+  },
   "Dashboard": {
     "errorDefault": "Erro ao gerar laudo",
     "errorConnection": "Erro ao conectar com o servidor"

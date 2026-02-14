@@ -93,6 +93,29 @@
     "subtitle4": "Abre, informa, listo.",
     "footer": "Reporter by Radiologic™ — {year}"
   },
+  "Menu": {
+    "configLLM": "Configuraciones de LLM",
+    "configLLMTitle": "Configuraciones de LLM",
+    "configLLMDesc": "Elige los modelos de IA e ingresa tus claves de API para generar informes.",
+    "configCard1": "Modelos",
+    "configCard1Desc": "Selecciona el modelo de lenguaje preferido para la generación de informes.",
+    "configCard2": "Claves de API",
+    "configCard2Desc": "Administra tus claves de acceso para los proveedores de IA.",
+    "geradorMascaras": "Generador de Plantillas",
+    "geradorMascarasTitle": "Generador de Plantillas",
+    "geradorMascarasDesc": "Crea informes estructurados a partir de texto dictado o escrito.",
+    "geradorCard1": "Nuevo Informe",
+    "geradorCard1Desc": "Genera un nuevo informe a partir de hallazgos clínicos.",
+    "geradorCard2": "Plantillas",
+    "geradorCard2Desc": "Accede a plantillas listas para diferentes tipos de examen.",
+    "formatadorMascaras": "Formateador de Plantillas",
+    "formatadorMascarasTitle": "Formateador de Plantillas",
+    "formatadorMascarasDesc": "Formatea y estiliza informes para impresión o exportación.",
+    "formatadorCard1": "Formateo",
+    "formatadorCard1Desc": "Aplica estilos y formato estándar a tus informes.",
+    "formatadorCard2": "Exportar",
+    "formatadorCard2Desc": "Exporta informes formateados a diferentes formatos."
+  },
   "Dashboard": {
     "errorDefault": "Error al generar informe",
     "errorConnection": "Error al conectar con el servidor"
