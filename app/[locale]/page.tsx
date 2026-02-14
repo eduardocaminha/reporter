@@ -416,7 +416,7 @@ export default function Home() {
         }}
         className="max-w-6xl lg:max-w-none mx-auto px-8 sm:px-12 lg:px-16 py-10 flex flex-col"
       >
-        <div className="flex flex-col lg:flex-row lg:gap-8">
+        <div className="flex flex-col lg:flex-row lg:gap-16">
           {/* Coluna esquerda - Input */}
           <motion.div
             className="lg:w-1/2"
@@ -443,7 +443,7 @@ export default function Home() {
           </motion.div>
 
           {/* Coluna direita - Output */}
-          <div className="mt-6 lg:mt-0 lg:w-1/2 flex flex-col gap-6">
+          <div className="mt-12 lg:mt-0 lg:w-1/2 flex flex-col gap-6">
             {/* Erro essencial */}
             {erro && (
               <motion.div
