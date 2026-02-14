@@ -85,7 +85,7 @@ export function SettingsInline() {
 
       {/* Model selection */}
       <div className="flex flex-col items-center md:items-center">
-        <div className="w-full md:max-w-[320px] space-y-3">
+        <div className="w-full md:max-w-[420px] space-y-3">
           <div className="flex items-center gap-1.5">
             <Label htmlFor="report-model" className="text-sm font-medium text-foreground">
               {t("reportModel")}
