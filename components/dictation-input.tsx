@@ -549,7 +549,7 @@ export function DictationInput({
 
       {/* Bottom bar: Radiopaedia (start) + Gerar Laudo (end) — space between so kbd hint doesn’t overlap */}
       <div className="flex items-center justify-between mt-4">
-        <Tooltip>
+        <Tooltip delayDuration={1000}>
           <TooltipTrigger asChild>
             <Button
               variant="ghost"
