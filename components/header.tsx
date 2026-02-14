@@ -79,9 +79,9 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
-            size="icon-sm"
+            size="icon"
             onClick={() => setMenuOpen((prev) => !prev)}
-            className="bg-muted text-muted-foreground/40 hover:text-muted-foreground shrink-0"
+            className="h-4 w-4 p-0 bg-muted text-muted-foreground/40 hover:text-muted-foreground shrink-0"
           >
             <AnimatePresence mode="wait" initial={false}>
               {menuOpen ? (
