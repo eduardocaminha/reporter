@@ -1,6 +1,6 @@
 "use client"
 
-import { Check } from "lucide-react"
+import { Check, Info } from "lucide-react"
 import { Label } from "@/components/ui/label"
 import { PasswordInput } from "@/components/ui/password-input"
 import {
@@ -10,6 +10,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { useTranslations } from "next-intl"
 import { useUserPreferences } from "@/hooks/use-user-preferences"
 import { useState, useEffect, useRef, useCallback } from "react"
@@ -67,10 +72,10 @@ export function SettingsInline() {
   }
 
   return (
-    <div className="space-y-10">
-      {/* Saved indicator */}
+    <div className="flex flex-col gap-10 md:grid md:grid-cols-3 md:gap-x-12 md:gap-y-10">
+      {/* Saved indicator — full width */}
       <div
-        className={`flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-opacity duration-200 ${
+        className={`flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-opacity duration-200 md:col-span-3 ${
           showSaved ? "opacity-100" : "opacity-0"
         }`}
       >
@@ -80,12 +85,25 @@ export function SettingsInline() {
 
       {/* Model selection */}
       <div className="space-y-3">
-        <Label htmlFor="report-model" className="text-sm font-medium text-foreground">
-          {t("reportModel")}
-        </Label>
-        <p className="text-xs font-medium text-muted-foreground/80 leading-relaxed">
-          {t("reportModelDesc")}
-        </p>
+        <div className="flex items-center gap-1.5">
+          <Label htmlFor="report-model" className="text-sm font-medium text-foreground">
+            {t("reportModel")}
+          </Label>
+          <Tooltip delayDuration={1000}>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                className="rounded-full p-0.5 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                aria-label={t("reportModelDesc")}
+              >
+                <Info className="w-3.5 h-3.5" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="top" sideOffset={8}>
+              {t("reportModelDesc")}
+            </TooltipContent>
+          </Tooltip>
+        </div>
         <Select
           value={preferences.preferredModel}
           onValueChange={handleModelChange}
@@ -105,12 +123,25 @@ export function SettingsInline() {
 
       {/* Anthropic API key */}
       <div className="space-y-3">
-        <Label htmlFor="anthropic-key" className="text-sm font-medium text-foreground">
-          {t("anthropicKey")}
-        </Label>
-        <p className="text-xs font-medium text-muted-foreground/80 leading-relaxed">
-          {t("anthropicKeyDesc")}
-        </p>
+        <div className="flex items-center gap-1.5">
+          <Label htmlFor="anthropic-key" className="text-sm font-medium text-foreground">
+            {t("anthropicKey")}
+          </Label>
+          <Tooltip delayDuration={1000}>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                className="rounded-full p-0.5 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                aria-label={t("anthropicKeyDesc")}
+              >
+                <Info className="w-3.5 h-3.5" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="top" sideOffset={8}>
+              {t("anthropicKeyDesc")}
+            </TooltipContent>
+          </Tooltip>
+        </div>
         <PasswordInput
           id="anthropic-key"
           placeholder={t("anthropicKeyPlaceholder")}
@@ -124,12 +155,25 @@ export function SettingsInline() {
 
       {/* OpenAI API key */}
       <div className="space-y-3">
-        <Label htmlFor="openai-key" className="text-sm font-medium text-foreground">
-          {t("openaiKey")}
-        </Label>
-        <p className="text-xs font-medium text-muted-foreground/80 leading-relaxed">
-          {t("openaiKeyDesc")}
-        </p>
+        <div className="flex items-center gap-1.5">
+          <Label htmlFor="openai-key" className="text-sm font-medium text-foreground">
+            {t("openaiKey")}
+          </Label>
+          <Tooltip delayDuration={1000}>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                className="rounded-full p-0.5 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                aria-label={t("openaiKeyDesc")}
+              >
+                <Info className="w-3.5 h-3.5" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="top" sideOffset={8}>
+              {t("openaiKeyDesc")}
+            </TooltipContent>
+          </Tooltip>
+        </div>
         <PasswordInput
           id="openai-key"
           placeholder={t("openaiKeyPlaceholder")}

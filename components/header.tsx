@@ -355,7 +355,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
     {activePanel !== null && (
       <div className="fixed inset-0 z-40 bg-card overflow-y-auto">
         <div className="pt-44 sm:pt-32 max-w-6xl lg:max-w-none mx-auto px-8 sm:px-12 lg:px-16 pb-16">
-          <div className="pl-4 sm:pl-11 max-w-md">
+          <div className="pl-4 sm:pl-11 w-full">
             {activePanel === "configLLM" && <SettingsInline />}
           </div>
         </div>
