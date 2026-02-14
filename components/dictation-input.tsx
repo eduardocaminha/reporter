@@ -518,11 +518,11 @@ export function DictationInput({
           <button
             onClick={() => onFontSizeIdxChange(Math.max(0, fontSizeIdx - 1))}
             disabled={fontSizeIdx === 0}
-            className="h-full flex-1 min-w-0 flex items-center justify-center px-2.5 text-muted-foreground/50 hover:bg-accent hover:text-accent-foreground disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-muted-foreground transition-colors cursor-pointer disabled:cursor-not-allowed"
+            className="h-full flex-1 min-w-0 flex items-center justify-center px-1.5 text-muted-foreground/50 hover:bg-accent hover:text-accent-foreground disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-muted-foreground transition-colors cursor-pointer disabled:cursor-not-allowed"
           >
             <Minus className="w-2.5 h-2.5" />
           </button>
-          <span className="flex-1 min-w-0 flex items-center justify-center px-2.5 text-[9px] font-medium text-muted-foreground/60 select-none">
+          <span className="flex-1 min-w-0 flex items-center justify-center px-1.5 text-[9px] font-medium text-muted-foreground/60 select-none">
             A
           </span>
           <button
@@ -530,7 +530,7 @@ export function DictationInput({
               onFontSizeIdxChange(Math.min(FONT_SIZES.length - 1, fontSizeIdx + 1))
             }
             disabled={fontSizeIdx === FONT_SIZES.length - 1}
-            className="h-full flex-1 min-w-0 flex items-center justify-center px-2.5 text-muted-foreground/50 hover:bg-accent hover:text-accent-foreground disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-muted-foreground transition-colors cursor-pointer disabled:cursor-not-allowed"
+            className="h-full flex-1 min-w-0 flex items-center justify-center px-1.5 text-muted-foreground/50 hover:bg-accent hover:text-accent-foreground disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-muted-foreground transition-colors cursor-pointer disabled:cursor-not-allowed"
           >
             <Plus className="w-2.5 h-2.5" />
           </button>
