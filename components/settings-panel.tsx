@@ -83,7 +83,7 @@ export function SettingsInline() {
         <Label htmlFor="report-model" className="text-xs">
           {t("reportModel")}
         </Label>
-        <p className="text-[10px] text-muted-foreground/60 leading-relaxed">
+        <p className="text-[10px] font-medium text-muted-foreground/60 leading-relaxed">
           {t("reportModelDesc")}
         </p>
         <Select
@@ -108,7 +108,7 @@ export function SettingsInline() {
         <Label htmlFor="anthropic-key" className="text-xs">
           {t("anthropicKey")}
         </Label>
-        <p className="text-[10px] text-muted-foreground/60 leading-relaxed">
+        <p className="text-[10px] font-medium text-muted-foreground/60 leading-relaxed">
           {t("anthropicKeyDesc")}
         </p>
         <PasswordInput
@@ -127,7 +127,7 @@ export function SettingsInline() {
         <Label htmlFor="openai-key" className="text-xs">
           {t("openaiKey")}
         </Label>
-        <p className="text-[10px] text-muted-foreground/60 leading-relaxed">
+        <p className="text-[10px] font-medium text-muted-foreground/60 leading-relaxed">
           {t("openaiKeyDesc")}
         </p>
         <PasswordInput

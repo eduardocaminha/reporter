@@ -132,7 +132,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
     })
   }
 
-  return (
+  return (<>
     <motion.header
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
@@ -283,9 +283,9 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
         </div>
       </div>
 
-      {/* Expanding section — slides down from header */}
+      {/* Expanding menu — slides down from header (menu items only) */}
       <AnimatePresence>
-        {isExpanded && (
+        {menuOpen && !activePanel && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
@@ -294,80 +294,76 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
             className="overflow-hidden"
           >
             <div className="max-w-6xl lg:max-w-none mx-auto px-8 sm:px-12 lg:px-16 pb-5">
-              <AnimatePresence mode="wait">
-                {activePanel === null ? (
-                  /* Menu items */
-                  <motion.div
-                    key="menu"
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -6 }}
-                    transition={{ duration: 0.15 }}
-                    className="flex flex-col sm:flex-row sm:items-center gap-2 pl-4 sm:pl-11"
-                  >
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        setMenuOpen(false)
-                        setActivePanel("configLLM")
-                      }}
-                      className="w-fit sm:w-auto justify-start sm:justify-center gap-1.5 bg-foreground text-background hover:bg-foreground/90 hover:text-background shadow-none"
-                    >
-                      <Settings className="w-3.5 h-3.5 shrink-0" />
-                      <span>{tMenu("configLLM")}</span>
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setMenuOpen(false)}
-                      className="w-fit sm:w-auto justify-start sm:justify-center gap-1.5 bg-foreground text-background hover:bg-foreground/90 hover:text-background shadow-none"
-                    >
-                      <FileText className="w-3.5 h-3.5 shrink-0" />
-                      <span>{tMenu("geradorMascaras")}</span>
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setMenuOpen(false)}
-                      className="w-fit sm:w-auto justify-start sm:justify-center gap-1.5 bg-foreground text-background hover:bg-foreground/90 hover:text-background shadow-none"
-                    >
-                      <Paintbrush className="w-3.5 h-3.5 shrink-0" />
-                      <span>{tMenu("formatadorMascaras")}</span>
-                    </Button>
-                  </motion.div>
-                ) : activePanel === "configLLM" ? (
-                  /* LLM Settings form */
-                  <motion.div
-                    key="configLLM"
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -6 }}
-                    transition={{ duration: 0.15 }}
-                    className="pl-4 sm:pl-11 max-w-md"
-                  >
-                    {/* Back to menu */}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        setActivePanel(null)
-                        setMenuOpen(true)
-                      }}
-                      className="mb-4 gap-1.5 bg-muted text-muted-foreground hover:text-foreground"
-                    >
-                      <ArrowLeft className="w-3.5 h-3.5" />
-                      <span>{tMenu("configLLM")}</span>
-                    </Button>
-
-                    <SettingsInline />
-                  </motion.div>
-                ) : null}
-              </AnimatePresence>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 pl-4 sm:pl-11">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setMenuOpen(false)
+                    setActivePanel("configLLM")
+                  }}
+                  className="w-fit sm:w-auto justify-start sm:justify-center gap-1.5 bg-foreground text-background hover:bg-foreground/90 hover:text-background shadow-none"
+                >
+                  <Settings className="w-3.5 h-3.5 shrink-0" />
+                  <span>{tMenu("configLLM")}</span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setMenuOpen(false)}
+                  className="w-fit sm:w-auto justify-start sm:justify-center gap-1.5 bg-foreground text-background hover:bg-foreground/90 hover:text-background shadow-none"
+                >
+                  <FileText className="w-3.5 h-3.5 shrink-0" />
+                  <span>{tMenu("geradorMascaras")}</span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setMenuOpen(false)}
+                  className="w-fit sm:w-auto justify-start sm:justify-center gap-1.5 bg-foreground text-background hover:bg-foreground/90 hover:text-background shadow-none"
+                >
+                  <Paintbrush className="w-3.5 h-3.5 shrink-0" />
+                  <span>{tMenu("formatadorMascaras")}</span>
+                </Button>
+              </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
     </motion.header>
-  )
+
+    {/* Full-page overlay below header — covers page content */}
+    <AnimatePresence>
+      {activePanel !== null && (
+        <motion.div
+          key={activePanel}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+          className="fixed top-[72px] inset-x-0 bottom-0 z-40 bg-background overflow-y-auto"
+        >
+          <div className="max-w-6xl lg:max-w-none mx-auto px-8 sm:px-12 lg:px-16 py-6">
+            <div className="pl-4 sm:pl-11 max-w-md">
+              {/* Back to menu */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setActivePanel(null)
+                  setMenuOpen(true)
+                }}
+                className="mb-6 gap-1.5 bg-muted text-muted-foreground hover:text-foreground"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>{tMenu("configLLM")}</span>
+              </Button>
+
+              {activePanel === "configLLM" && <SettingsInline />}
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </>)
 }

@@ -35,7 +35,7 @@ const floatingInputCls =
   "h-12 rounded-full bg-muted border-0 text-foreground px-3 shadow-none transition-all duration-200 focus-visible:ring-[3px] focus-visible:ring-border/30 selection:bg-border/60 selection:text-foreground placeholder:text-transparent"
 
 const floatingLabelCls =
-  "origin-start absolute left-2 top-1/2 block -translate-y-1/2 cursor-text px-0 text-sm text-muted-foreground/40 transition-all duration-200 group-focus-within:pointer-events-none group-focus-within:top-0 group-focus-within:cursor-default group-focus-within:text-xs group-focus-within:font-medium group-focus-within:text-foreground has-[+input:not(:placeholder-shown)]:pointer-events-none has-[+input:not(:placeholder-shown)]:top-0 has-[+input:not(:placeholder-shown)]:cursor-default has-[+input:not(:placeholder-shown)]:text-xs has-[+input:not(:placeholder-shown)]:font-medium has-[+input:not(:placeholder-shown)]:text-foreground [&>span]:bg-transparent group-focus-within:[&>span]:bg-background has-[+input:not(:placeholder-shown)]:[&>span]:bg-background"
+  "origin-start absolute left-2 top-1/2 block -translate-y-1/2 cursor-text px-0 text-sm font-medium text-muted-foreground/40 transition-all duration-200 group-focus-within:pointer-events-none group-focus-within:top-0 group-focus-within:cursor-default group-focus-within:text-xs group-focus-within:font-medium group-focus-within:text-foreground has-[+input:not(:placeholder-shown)]:pointer-events-none has-[+input:not(:placeholder-shown)]:top-0 has-[+input:not(:placeholder-shown)]:cursor-default has-[+input:not(:placeholder-shown)]:text-xs has-[+input:not(:placeholder-shown)]:font-medium has-[+input:not(:placeholder-shown)]:text-foreground [&>span]:bg-transparent group-focus-within:[&>span]:bg-background has-[+input:not(:placeholder-shown)]:[&>span]:bg-background"
 
 function FloatingField({
   label,
@@ -104,7 +104,7 @@ function PasswordRequirements({ password }: { password: string }) {
   return (
     <div className="space-y-1.5">
       {requirements.map(({ key, met }) => (
-        <div key={key} className="flex items-center gap-2 text-xs">
+        <div key={key} className="flex items-center gap-2 text-xs font-medium">
           {met ? (
             <Check className="h-3 w-3 text-emerald-500" />
           ) : (
@@ -407,7 +407,7 @@ export default function LoginPage() {
                       <span className="w-full border-t border-border/50" />
                     </div>
                     <div className="relative flex justify-center text-xs">
-                      <span className="bg-background px-3 text-muted-foreground/40">
+                      <span className="bg-background px-3 font-medium text-muted-foreground/40">
                         {t("orContinueWith")}
                       </span>
                     </div>
@@ -418,7 +418,7 @@ export default function LoginPage() {
               {/* Sign-in second factor (email OTP) — Client Trust */}
               {mode === "signInOtp" && (
                 <div className="space-y-4">
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm font-medium text-muted-foreground">
                     {t("verificationSent", {
                       email: signInForm.getValues("email"),
                     })}
@@ -480,7 +480,7 @@ export default function LoginPage() {
                       setSignInOtpValue("")
                       setErro("")
                     }}
-                    className="w-full text-sm text-center text-muted-foreground/60 hover:text-foreground transition-colors"
+                    className="w-full text-sm font-medium text-center text-muted-foreground/60 hover:text-foreground transition-colors"
                   >
                     {t("signInLink")}
                   </button>
@@ -490,7 +490,7 @@ export default function LoginPage() {
               {/* Verification form (sign-up) */}
               {mode === "verify" && (
                 <div className="space-y-4">
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm font-medium text-muted-foreground">
                     {t("verificationSent", {
                       email: signUpForm.getValues("email"),
                     })}
@@ -549,7 +549,7 @@ export default function LoginPage() {
                     type="button"
                     onClick={handleResend}
                     disabled={resendCooldown > 0}
-                    className="w-full text-sm text-muted-foreground/60 hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full text-sm font-medium text-muted-foreground/60 hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {resendCooldown > 0
                       ? t("resendCooldown", { seconds: resendCooldown })
@@ -629,7 +629,7 @@ export default function LoginPage() {
                   <div id="clerk-captcha" />
 
                   {signUpForm.formState.errors.confirmPassword && (
-                    <p className="text-sm text-destructive">
+                    <p className="text-sm font-medium text-destructive">
                       {t("errorPasswordMismatch")}
                     </p>
                   )}
@@ -668,7 +668,7 @@ export default function LoginPage() {
 
               {/* Toggle sign-in / sign-up */}
               {mode !== "verify" && mode !== "signInOtp" && (
-                <p className="text-sm text-center text-muted-foreground/60">
+                <p className="text-sm font-medium text-center text-muted-foreground/60">
                   {mode === "signIn" ? t("noAccount") : t("hasAccount")}{" "}
                   <button
                     type="button"
@@ -680,7 +680,7 @@ export default function LoginPage() {
                 </p>
               )}
 
-              <p className="text-xs text-center text-muted-foreground/40 leading-relaxed">
+              <p className="text-xs font-medium text-center text-muted-foreground/40 leading-relaxed">
                 {t("termsPrefix")}{" "}
                 <a
                   href="/termos"
