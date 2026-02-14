@@ -367,7 +367,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
             initial={{ height: 0 }}
             animate={{ height: "100%" }}
             exit={{ height: 0 }}
-            transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
             className="absolute top-0 left-0 w-px bg-border/30 origin-top"
           />
           <div className="pt-32 max-w-6xl lg:max-w-none mx-auto px-8 sm:px-12 lg:px-16 pb-16">
