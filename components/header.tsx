@@ -231,7 +231,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
                     })}
                   </div>
                 </div>
-                <div className="p-2 flex flex-col gap-0.5">
+                <div className="p-3 flex flex-col gap-3">
                   <Button
                     variant="ghost"
                     size="sm"
@@ -241,8 +241,8 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
                       router.push("/account")
                     }}
                   >
-                    <User className="w-3.5 h-3.5" />
-                    {t("myAccount")}
+                    <User className="w-3.5 h-3.5 shrink-0" />
+                    <span className="hidden sm:inline">{t("myAccount")}</span>
                   </Button>
                   <Button
                     onClick={() => {
@@ -253,8 +253,8 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
                     size="sm"
                     className="w-fit justify-start gap-2 h-8 text-xs bg-muted text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                   >
-                    <LogOut className="w-3.5 h-3.5" />
-                    {t("logout")}
+                    <LogOut className="w-3.5 h-3.5 shrink-0" />
+                    <span className="hidden sm:inline">{t("logout")}</span>
                   </Button>
                 </div>
               </motion.div>
