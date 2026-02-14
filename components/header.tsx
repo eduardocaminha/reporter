@@ -242,7 +242,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
                     }}
                     variant="ghost"
                     size="sm"
-                    className="w-full justify-start gap-2 h-8 text-xs bg-muted text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                    className="w-fit justify-start gap-2 h-8 text-xs bg-muted text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                   >
                     <LogOut className="w-3.5 h-3.5" />
                     {t("logout")}
