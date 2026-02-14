@@ -315,22 +315,22 @@ export function DictationInput({
 
   return (
     <section>
-      {/* Top bar: Audio à esquerda, Historico à direita */}
-      <div className="flex items-center justify-between mb-6">
-        {/* Audio / Ditar button */}
-        <div className="group/audio relative">
+      {/* Top bar: on mobile big centered Ditar; on desktop Audio left, Historico right */}
+      <div className="grid grid-cols-[1fr_auto_1fr] sm:flex sm:items-center sm:justify-between gap-4 mb-6 items-center">
+        {/* Audio / Ditar button — large and centered on mobile */}
+        <div className="group/audio relative flex justify-center col-start-2 sm:col-auto sm:justify-start">
           <Button
             variant="ghost"
             onClick={toggleRecording}
             disabled={isGenerating}
-            className={`gap-1.5 ${
+            className={`gap-2 sm:gap-1.5 h-14 min-w-14 px-6 rounded-full sm:h-9 sm:min-w-0 sm:px-3 ${
               transcription.isRecording
                 ? `bg-foreground/80 text-background hover:bg-foreground/70 hover:text-background ${localePulseClass}`
                 : "bg-muted text-foreground/70 hover:bg-foreground/80 hover:text-background"
             }`}
           >
-            <AudioLines className="w-4 h-4" />
-            <span className="hidden sm:inline">{t("dictate")}</span>
+            <AudioLines className="w-6 h-6 sm:w-4 sm:h-4 shrink-0" />
+            <span>{t("dictate")}</span>
           </Button>
 
           {/* Kbd shortcut hint (hidden when recording & on mobile) */}
@@ -355,8 +355,8 @@ export function DictationInput({
           )}
         </div>
 
-        {/* Historico */}
-        <div className="flex items-center gap-4">
+        {/* Historico — right column on mobile, same as desktop */}
+        <div className="flex items-center justify-end gap-4 col-start-3">
           {historico.length > 0 && (
             <div className="relative">
               <Button
