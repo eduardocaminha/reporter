@@ -298,7 +298,10 @@ export default function LandingPage() {
           <div
             className="w-[82%] h-[58%] sm:w-[68%] sm:h-[44%]"
             style={{
-              animation: `zoom-in-smooth ${zoomDuration}s ease-in-out infinite`,
+              animationName: "zoom-in-smooth",
+              animationDuration: `${zoomDuration}s`,
+              animationTimingFunction: "ease-in-out",
+              animationIterationCount: "infinite",
               animationPlayState: isHoveringSlider ? "paused" : "running",
             }}
           >

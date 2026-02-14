@@ -85,7 +85,7 @@ export function SettingsInline() {
 
       {/* Model selection */}
       <div className="flex flex-col items-center md:items-center">
-        <div className="w-full md:max-w-[220px] space-y-3">
+        <div className="w-full md:max-w-[320px] space-y-3">
           <div className="flex items-center gap-1.5">
             <Label htmlFor="report-model" className="text-sm font-medium text-foreground">
               {t("reportModel")}
@@ -125,7 +125,7 @@ export function SettingsInline() {
 
       {/* Anthropic API key */}
       <div className="flex flex-col items-center md:items-center">
-        <div className="w-full md:max-w-[220px] space-y-3">
+        <div className="w-full md:max-w-[320px] space-y-3">
           <div className="flex items-center gap-1.5">
             <Label htmlFor="anthropic-key" className="text-sm font-medium text-foreground">
               {t("anthropicKey")}
@@ -159,7 +159,7 @@ export function SettingsInline() {
 
       {/* OpenAI API key */}
       <div className="flex flex-col items-center md:items-center">
-        <div className="w-full md:max-w-[220px] space-y-3">
+        <div className="w-full md:max-w-[320px] space-y-3">
           <div className="flex items-center gap-1.5">
             <Label htmlFor="openai-key" className="text-sm font-medium text-foreground">
               {t("openaiKey")}
