@@ -1,7 +1,7 @@
 "use client"
 
 import { motion, AnimatePresence } from "motion/react"
-import { LogOut, ChevronDown, Settings, FileText, Paintbrush } from "lucide-react"
+import { LogOut, ChevronDown, Settings, FileText, Paintbrush, User } from "lucide-react"
 import { TextEffect } from "@/components/ui/text-effect"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
@@ -202,9 +202,6 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
                 className="absolute top-full right-0 mt-2 w-max min-w-0 bg-card border border-border/50 rounded-2xl z-50"
               >
                 <div className="p-3 border-b border-border/50">
-                  <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider block mb-2">
-                    {t("language")}
-                  </span>
                   <div className="flex items-center gap-1.5">
                     {[...routing.locales].map((loc) => {
                       const config = localeConfig[loc]
@@ -234,7 +231,19 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
                     })}
                   </div>
                 </div>
-                <div className="p-2">
+                <div className="p-2 flex flex-col gap-0.5">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-fit justify-start gap-2 h-8 text-xs bg-muted text-muted-foreground hover:bg-accent hover:text-foreground"
+                    onClick={() => {
+                      setAvatarMenuOpen(false)
+                      router.push("/account")
+                    }}
+                  >
+                    <User className="w-3.5 h-3.5" />
+                    {t("myAccount")}
+                  </Button>
                   <Button
                     onClick={() => {
                       setAvatarMenuOpen(false)

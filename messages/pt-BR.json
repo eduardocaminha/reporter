@@ -5,7 +5,7 @@
   },
   "Header": {
     "logout": "Sair",
-    "language": "Idioma"
+    "myAccount": "Minha conta"
   },
   "DictationInput": {
     "radiopaedia": "Radiopaedia",
@@ -18,14 +18,7 @@
     "placeholder1": "tc abdome com contraste, microcalculo no rim esquerdo 0,2",
     "placeholder2": "tomo torax sem, normal",
     "placeholder3": "tc cranio sem contraste, avc isquemico no territorio da acm direita",
-    "langPT": "Português",
-    "langEN": "Inglês",
-    "langES": "Espanhol",
-    "voiceLangHint": "Reconhecendo voz em {lang}. Para mudar, clique no botão de idioma acima.",
     "micPermissionDenied": "Permissão do microfone negada. Habilite nas configurações do navegador."
-  },
-  "LocaleSwitcher": {
-    "voiceActive": "Ditado ativo em Português. Clique para mudar o idioma do reconhecimento de voz."
   },
   "ReportOutput": {
     "copy": "Copiar",
@@ -122,10 +115,6 @@
     "errorConnection": "Erro ao conectar com o servidor"
   },
   "Api": {
-    "passwordNotProvided": "Senha não fornecida",
-    "incorrectPassword": "Senha incorreta",
-    "loginError": "Erro ao processar login",
-    "logoutError": "Erro ao encerrar sessão",
     "emptyText": "Digite ou cole um texto para gerar o laudo",
     "apiKeyNotConfigured": "Chave da API não configurada",
     "timeout": "Tempo esgotado. Tente novamente",
@@ -133,7 +122,6 @@
     "processingError": "Erro ao processar. Tente novamente",
     "noFile": "Nenhum arquivo enviado",
     "uploadError": "Erro ao enviar arquivo. Verifique BLOB_READ_WRITE_TOKEN.",
-    "tierLimitReached": "Limite de laudos atingido para este mês. Faça upgrade para gerar mais.",
-    "unauthorized": "Não autorizado"
+    "tierLimitReached": "Limite de laudos atingido para este mês. Faça upgrade para gerar mais."
   }
 }

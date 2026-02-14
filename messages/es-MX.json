@@ -5,7 +5,7 @@
   },
   "Header": {
     "logout": "Salir",
-    "language": "Idioma"
+    "myAccount": "Mi cuenta"
   },
   "DictationInput": {
     "radiopaedia": "Radiopaedia",
@@ -18,14 +18,7 @@
     "placeholder1": "tc abdomen con contraste, microcalculo en riñón izquierdo 0,2",
     "placeholder2": "tc tórax sin contraste, normal",
     "placeholder3": "tc cráneo sin contraste, ACV isquémico en territorio de acm derecha",
-    "langPT": "Portugués",
-    "langEN": "Inglés",
-    "langES": "Español",
-    "voiceLangHint": "Reconociendo voz en {lang}. Para cambiar, haz clic en el botón de idioma arriba.",
     "micPermissionDenied": "Permiso de micrófono denegado. Habilítalo en la configuración del navegador."
-  },
-  "LocaleSwitcher": {
-    "voiceActive": "Dictado activo en Español. Haz clic para cambiar el idioma del reconocimiento de voz."
   },
   "ReportOutput": {
     "copy": "Copiar",
@@ -122,10 +115,6 @@
     "errorConnection": "Error al conectar con el servidor"
   },
   "Api": {
-    "passwordNotProvided": "Contraseña no proporcionada",
-    "incorrectPassword": "Contraseña incorrecta",
-    "loginError": "Error al procesar inicio de sesión",
-    "logoutError": "Error al cerrar sesión",
     "emptyText": "Escriba o pegue un texto para generar el informe",
     "apiKeyNotConfigured": "Clave de API no configurada",
     "timeout": "Tiempo agotado. Inténtelo de nuevo",
@@ -133,7 +122,6 @@
     "processingError": "Error al procesar. Inténtelo de nuevo",
     "noFile": "Ningún archivo enviado",
     "uploadError": "Error al enviar archivo. Verifique BLOB_READ_WRITE_TOKEN.",
-    "tierLimitReached": "Límite de informes alcanzado este mes. Actualice para generar más.",
-    "unauthorized": "No autorizado"
+    "tierLimitReached": "Límite de informes alcanzado este mes. Actualice para generar más."
   }
 }

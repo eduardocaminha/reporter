@@ -5,7 +5,7 @@
   },
   "Header": {
     "logout": "Sign out",
-    "language": "Language"
+    "myAccount": "My account"
   },
   "DictationInput": {
     "radiopaedia": "Radiopaedia",
@@ -18,14 +18,7 @@
     "placeholder1": "ct abdomen with contrast, microcalculus left kidney 0.2",
     "placeholder2": "ct chest without contrast, normal",
     "placeholder3": "ct head without contrast, ischemic stroke mca territory right",
-    "langPT": "Portuguese",
-    "langEN": "English",
-    "langES": "Spanish",
-    "voiceLangHint": "Recognizing speech in {lang}. To change, click the language button above.",
     "micPermissionDenied": "Microphone permission denied. Enable it in your browser settings."
-  },
-  "LocaleSwitcher": {
-    "voiceActive": "Dictation active in English. Click to change the voice recognition language."
   },
   "ReportOutput": {
     "copy": "Copy",
@@ -122,10 +115,6 @@
     "errorConnection": "Error connecting to server"
   },
   "Api": {
-    "passwordNotProvided": "Password not provided",
-    "incorrectPassword": "Incorrect password",
-    "loginError": "Error processing login",
-    "logoutError": "Error ending session",
     "emptyText": "Type or paste text to generate the report",
     "apiKeyNotConfigured": "API key not configured",
     "timeout": "Timed out. Please try again",
@@ -133,7 +122,6 @@
     "processingError": "Error processing. Please try again",
     "noFile": "No file uploaded",
     "uploadError": "Error uploading file. Check BLOB_READ_WRITE_TOKEN.",
-    "tierLimitReached": "Monthly report limit reached. Upgrade to generate more.",
-    "unauthorized": "Unauthorized"
+    "tierLimitReached": "Monthly report limit reached. Upgrade to generate more."
   }
 }
