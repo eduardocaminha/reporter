@@ -407,24 +407,24 @@ export function ReportOutput({ report, streamedText, isStreaming, isGenerating, 
               transition={{ duration: 0.2 }}
               className="space-y-5"
             >
-              {/* Título centrado */}
+              {/* Título centrado — escuro: muted (botão Ditar), claro: background */}
               <div className="flex flex-col items-center gap-2">
-                <div className={`h-3 w-48 rounded-full bg-muted/40 ${pulseClass}`} />
-                <div className={`h-2.5 w-28 rounded-full bg-muted/30 ${pulseClass}`} />
+                <div className={`h-3 w-48 rounded-full bg-muted ${pulseClass}`} />
+                <div className={`h-2.5 w-28 rounded-full bg-muted ${pulseClass}`} />
               </div>
               {/* Seção 1 */}
               <div className="space-y-2 pt-2">
-                <div className={`h-2.5 w-20 rounded-full bg-muted/40 ${pulseClass}`} />
-                <div className={`h-2 w-full rounded-full bg-muted/20 ${pulseClass}`} />
-                <div className={`h-2 w-4/5 rounded-full bg-muted/20 ${pulseClass}`} />
+                <div className={`h-2.5 w-20 rounded-full bg-muted ${pulseClass}`} />
+                <div className={`h-2 w-full rounded-full bg-background ${pulseClass}`} />
+                <div className={`h-2 w-4/5 rounded-full bg-background ${pulseClass}`} />
               </div>
               {/* Seção 2 */}
               <div className="space-y-2 pt-1">
-                <div className={`h-2.5 w-16 rounded-full bg-muted/40 ${pulseClass}`} />
-                <div className={`h-2 w-full rounded-full bg-muted/20 ${pulseClass}`} />
-                <div className={`h-2 w-11/12 rounded-full bg-muted/20 ${pulseClass}`} />
-                <div className={`h-2 w-full rounded-full bg-muted/20 ${pulseClass}`} />
-                <div className={`h-2 w-3/4 rounded-full bg-muted/20 ${pulseClass}`} />
+                <div className={`h-2.5 w-16 rounded-full bg-muted ${pulseClass}`} />
+                <div className={`h-2 w-full rounded-full bg-background ${pulseClass}`} />
+                <div className={`h-2 w-11/12 rounded-full bg-background ${pulseClass}`} />
+                <div className={`h-2 w-full rounded-full bg-background ${pulseClass}`} />
+                <div className={`h-2 w-3/4 rounded-full bg-background ${pulseClass}`} />
               </div>
             </motion.div>
           )}
