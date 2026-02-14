@@ -4,7 +4,8 @@
     "description": "Sistema pessoal para geração de laudos de TC"
   },
   "Header": {
-    "logout": "Sair"
+    "logout": "Sair",
+    "language": "Idioma"
   },
   "DictationInput": {
     "radiopaedia": "Radiopaedia",

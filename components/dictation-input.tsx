@@ -562,7 +562,7 @@ export function DictationInput({
             </Button>
           </TooltipTrigger>
           <TooltipContent side="top" sideOffset={8}>
-            Clique para ativar sugestões com Radiopaedia
+            Ativar sugestões com Radiopaedia
           </TooltipContent>
         </Tooltip>
         {/* Gerar Laudo + Kbd */}

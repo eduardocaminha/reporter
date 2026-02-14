@@ -4,7 +4,8 @@
     "description": "Personal CT report generation system"
   },
   "Header": {
-    "logout": "Sign out"
+    "logout": "Sign out",
+    "language": "Language"
   },
   "DictationInput": {
     "radiopaedia": "Radiopaedia",

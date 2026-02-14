@@ -5,11 +5,33 @@ import { LogOut, ChevronDown, Settings, FileText, Paintbrush } from "lucide-reac
 import { TextEffect } from "@/components/ui/text-effect"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { useRouter } from "@/i18n/navigation"
-import { useTranslations } from "next-intl"
-import { useEffect, useState } from "react"
+import { useRouter, usePathname } from "@/i18n/navigation"
+import { useTranslations, useLocale } from "next-intl"
+import { useEffect, useState, useRef } from "react"
 import { useClerk, useUser } from "@clerk/nextjs"
-import { LocaleSwitcher } from "@/components/locale-switcher"
+import { routing } from "@/i18n/routing"
+import { cn } from "@/lib/utils"
+
+const localeConfig: Record<
+  string,
+  { label: string; hoverClass: string; activeClass: string }
+> = {
+  "pt-BR": {
+    label: "PT",
+    hoverClass: "hover:bg-amber-500/20 hover:text-amber-700 dark:hover:text-amber-400",
+    activeClass: "bg-amber-500/15 text-amber-700 dark:text-amber-400",
+  },
+  "en-US": {
+    label: "EN",
+    hoverClass: "hover:bg-blue-500/20 hover:text-blue-700 dark:hover:text-blue-400",
+    activeClass: "bg-blue-500/15 text-blue-700 dark:text-blue-400",
+  },
+  "es-MX": {
+    label: "ES",
+    hoverClass: "hover:bg-emerald-500/20 hover:text-emerald-700 dark:hover:text-emerald-400",
+    activeClass: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400",
+  },
+}
 
 type ReportMode = "ps" | "eletivo" | "comparativo"
 
@@ -20,10 +42,14 @@ interface HeaderProps {
 
 export function Header({ reportMode, onReportModeChange }: HeaderProps) {
   const router = useRouter()
+  const pathname = usePathname()
+  const locale = useLocale()
   const t = useTranslations("Header")
   const tMenu = useTranslations("Menu")
   const [logoHovered, setLogoHovered] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [avatarMenuOpen, setAvatarMenuOpen] = useState(false)
+  const avatarMenuRef = useRef<HTMLDivElement>(null)
   const { signOut } = useClerk()
   const { user } = useUser()
 
@@ -51,7 +77,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [onReportModeChange])
 
-  // Close menu on Escape
+  // Close chevron menu on Escape
   useEffect(() => {
     if (!menuOpen) return
     function handleKeyDown(e: KeyboardEvent) {
@@ -60,6 +86,25 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [menuOpen])
+
+  // Close avatar menu on Escape or click outside
+  useEffect(() => {
+    if (!avatarMenuOpen) return
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setAvatarMenuOpen(false)
+    }
+    function handleClickOutside(e: MouseEvent) {
+      if (avatarMenuRef.current && !avatarMenuRef.current.contains(e.target as Node)) {
+        setAvatarMenuOpen(false)
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    window.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown)
+      window.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [avatarMenuOpen])
 
   async function handleLogout() {
     await signOut(() => {
@@ -131,23 +176,76 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <LocaleSwitcher />
-          <Avatar size="sm">
-            {user?.imageUrl && (
-              <AvatarImage src={user.imageUrl} alt={user.fullName ?? "Avatar"} />
-            )}
-            <AvatarFallback className="bg-background text-muted-foreground">{initials}</AvatarFallback>
-          </Avatar>
-          <Button
-            onClick={handleLogout}
-            variant="ghost"
-            size="sm"
-            className="min-w-9 sm:min-w-0 gap-2 bg-muted text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+        <div className="relative flex items-center" ref={avatarMenuRef}>
+          <button
+            type="button"
+            onClick={() => setAvatarMenuOpen((prev) => !prev)}
+            className="rounded-full ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            aria-expanded={avatarMenuOpen}
+            aria-haspopup="true"
           >
-            <LogOut className="w-4 h-4" />
-            <span className="hidden sm:inline">{t("logout")}</span>
-          </Button>
+            <Avatar size="sm">
+              {user?.imageUrl && (
+                <AvatarImage src={user.imageUrl} alt={user.fullName ?? "Avatar"} />
+              )}
+              <AvatarFallback className="bg-background text-muted-foreground">{initials}</AvatarFallback>
+            </Avatar>
+          </button>
+
+          <AnimatePresence>
+            {avatarMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="absolute top-full right-0 mt-2 w-56 bg-card border border-border/50 rounded-2xl z-50 shadow-lg"
+              >
+                <div className="p-3 border-b border-border/50">
+                  <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider block mb-2">
+                    {t("language")}
+                  </span>
+                  <div className="flex items-center gap-1.5">
+                    {(routing.locales as string[]).map((loc) => {
+                      const config = localeConfig[loc]
+                      const isActive = locale === loc
+                      return (
+                        <Button
+                          key={loc}
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            router.replace(pathname, { locale: loc })
+                          }}
+                          className={cn(
+                            "h-6 min-w-0 px-2 text-[10px] font-medium rounded-md transition-colors",
+                            isActive && config ? config.activeClass : "bg-muted text-muted-foreground",
+                            config?.hoverClass
+                          )}
+                        >
+                          {config?.label ?? loc}
+                        </Button>
+                      )
+                    })}
+                  </div>
+                </div>
+                <div className="p-2">
+                  <Button
+                    onClick={() => {
+                      setAvatarMenuOpen(false)
+                      handleLogout()
+                    }}
+                    variant="ghost"
+                    size="sm"
+                    className="w-full justify-start gap-2 h-8 text-xs bg-muted text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                    {t("logout")}
+                  </Button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 
@@ -168,7 +266,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
                   variant="ghost"
                   size="sm"
                   onClick={() => setMenuOpen(false)}
-                  className="w-fit sm:w-auto justify-start sm:justify-center gap-1.5 bg-muted text-muted-foreground hover:text-foreground"
+                  className="w-fit sm:w-auto justify-start sm:justify-center gap-1.5 bg-foreground text-background hover:bg-foreground/90 hover:text-background shadow-none"
                 >
                   <Settings className="w-3.5 h-3.5 shrink-0" />
                   <span>{tMenu("configLLM")}</span>
@@ -177,7 +275,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
                   variant="ghost"
                   size="sm"
                   onClick={() => setMenuOpen(false)}
-                  className="w-fit sm:w-auto justify-start sm:justify-center gap-1.5 bg-muted text-muted-foreground hover:text-foreground"
+                  className="w-fit sm:w-auto justify-start sm:justify-center gap-1.5 bg-foreground text-background hover:bg-foreground/90 hover:text-background shadow-none"
                 >
                   <FileText className="w-3.5 h-3.5 shrink-0" />
                   <span>{tMenu("geradorMascaras")}</span>
@@ -186,7 +284,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
                   variant="ghost"
                   size="sm"
                   onClick={() => setMenuOpen(false)}
-                  className="w-fit sm:w-auto justify-start sm:justify-center gap-1.5 bg-muted text-muted-foreground hover:text-foreground"
+                  className="w-fit sm:w-auto justify-start sm:justify-center gap-1.5 bg-foreground text-background hover:bg-foreground/90 hover:text-background shadow-none"
                 >
                   <Paintbrush className="w-3.5 h-3.5 shrink-0" />
                   <span>{tMenu("formatadorMascaras")}</span>

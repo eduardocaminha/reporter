@@ -4,7 +4,8 @@
     "description": "Sistema personal para generación de informes de TC"
   },
   "Header": {
-    "logout": "Salir"
+    "logout": "Salir",
+    "language": "Idioma"
   },
   "DictationInput": {
     "radiopaedia": "Radiopaedia",
