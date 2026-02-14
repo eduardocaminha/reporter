@@ -3,7 +3,6 @@
 import { motion, AnimatePresence } from "motion/react"
 import { X, ChevronRight, Settings, FileText, Paintbrush } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { SquircleCard } from "@/components/ui/squircle-card"
 import { useTranslations } from "next-intl"
 import { useEffect, useState, useCallback } from "react"
 
@@ -50,122 +49,118 @@ export function MenuOverlay({ isOpen, onClose }: MenuOverlayProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
-          className="fixed inset-0 z-100 bg-white"
+          className="fixed inset-0 z-100 flex bg-white"
         >
-          {/* Header — matches the app header height */}
+          {/* ── Left column: gray bg, menu items ── */}
           <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.25, delay: 0.05 }}
-            className="h-[72px] flex items-center px-8 sm:px-12 lg:px-16 border-b border-border/30"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.35, delay: 0.05, ease: "easeOut" }}
+            className="w-full lg:w-1/2 flex flex-col bg-background"
           >
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onClose}
-              className="text-muted-foreground hover:text-foreground hover:bg-muted rounded-full h-10 w-10"
-            >
-              <X className="w-5 h-5" />
-            </Button>
-          </motion.div>
-
-          {/* Body */}
-          <div className="max-w-6xl lg:max-w-none mx-auto px-8 sm:px-12 lg:px-16 py-10 h-[calc(100vh-72px)] overflow-y-auto">
-            <div className="flex flex-col lg:flex-row lg:gap-8">
-              {/* Left — nav items */}
-              <motion.nav
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.08, ease: "easeOut" }}
-                className="lg:w-1/2 flex flex-col gap-2 mb-8 lg:mb-0"
+            {/* Header with close button — same position/height as main header */}
+            <div className="h-[72px] flex items-center px-8 sm:px-12 lg:px-16">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onClose}
+                className="h-8 w-8 bg-muted text-muted-foreground/40 hover:text-muted-foreground"
               >
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+
+            {/* Menu items */}
+            <nav className="flex-1 flex flex-col justify-center px-8 sm:px-12 lg:px-16 pb-20">
+              <div className="flex flex-col gap-1">
                 {menuItems.map((item, index) => {
                   const Icon = item.icon
                   const isActive = activeSection === item.id
                   return (
                     <motion.button
                       key={item.id}
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
+                      initial={{ opacity: 0, x: -16 }}
+                      animate={{ opacity: 1, x: 0 }}
                       transition={{
-                        duration: 0.35,
-                        delay: 0.12 + index * 0.05,
+                        duration: 0.3,
+                        delay: 0.1 + index * 0.05,
                         ease: "easeOut",
                       }}
                       onClick={() => setActiveSection(item.id)}
                       className={`group flex items-center gap-4 w-full py-4 px-5 rounded-2xl text-left transition-colors duration-200 cursor-pointer ${
                         isActive
-                          ? "bg-muted text-foreground"
-                          : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                          ? "bg-card text-foreground"
+                          : "text-muted-foreground hover:bg-card/60 hover:text-foreground"
                       }`}
                     >
                       <div
                         className={`shrink-0 w-9 h-9 rounded-xl flex items-center justify-center transition-colors duration-200 ${
                           isActive
-                            ? "bg-foreground/80 text-white"
-                            : "bg-muted text-muted-foreground group-hover:bg-muted"
+                            ? "bg-foreground text-background"
+                            : "bg-muted text-muted-foreground/60 group-hover:text-muted-foreground"
                         }`}
                       >
                         <Icon className="w-4 h-4" />
                       </div>
-                      <span className="flex-1 text-base font-medium tracking-tight">
+                      <span className="flex-1 text-[17px] font-medium tracking-tight">
                         {t(item.id)}
                       </span>
                       <ChevronRight
                         className={`w-4 h-4 transition-all duration-200 ${
                           isActive
-                            ? "text-foreground/60 translate-x-0"
-                            : "text-muted-foreground/30 group-hover:text-muted-foreground/60 group-hover:translate-x-0.5"
+                            ? "text-foreground/40"
+                            : "text-muted-foreground/20 group-hover:text-muted-foreground/40 group-hover:translate-x-0.5"
                         }`}
                       />
                     </motion.button>
                   )
                 })}
-              </motion.nav>
+              </div>
+            </nav>
+          </motion.div>
 
-              {/* Right — content */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.15, ease: "easeOut" }}
-                className="lg:w-1/2"
-              >
-                <SquircleCard className="p-8 min-h-[300px]">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={activeSection}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      transition={{ duration: 0.2, ease: "easeOut" }}
-                    >
-                      <p className="text-xs font-medium text-muted-foreground/60 uppercase tracking-wider mb-4">
-                        {t(activeSection)}
-                      </p>
-                      <h2 className="text-xl sm:text-2xl font-medium tracking-tight text-foreground mb-2">
-                        {t(`${activeSection}Title`)}
-                      </h2>
-                      <p className="text-sm text-muted-foreground leading-relaxed mb-8">
-                        {t(`${activeSection}Desc`)}
-                      </p>
+          {/* ── Right column: white, page content ── */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.35, delay: 0.1 }}
+            className="hidden lg:flex lg:w-1/2 flex-col bg-white"
+          >
+            {/* Spacer to align with header height */}
+            <div className="h-[72px]" />
 
-                      {/* Placeholder cards */}
-                      <div className="flex flex-col gap-3">
-                        <SectionCards section={activeSection} t={t} />
-                      </div>
-                    </motion.div>
-                  </AnimatePresence>
-                </SquircleCard>
-              </motion.div>
+            {/* Page content */}
+            <div className="flex-1 flex flex-col justify-center px-16 pb-20">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeSection}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -16 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                  className="max-w-lg"
+                >
+                  <h1 className="text-3xl font-medium tracking-tight text-foreground mb-3">
+                    {t(`${activeSection}Title`)}
+                  </h1>
+                  <p className="text-base text-muted-foreground leading-relaxed mb-10">
+                    {t(`${activeSection}Desc`)}
+                  </p>
+
+                  <div className="flex flex-col gap-3">
+                    <PageCards section={activeSection} t={t} />
+                  </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
-          </div>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
   )
 }
 
-function SectionCards({
+function PageCards({
   section,
   t,
 }: {
@@ -179,13 +174,13 @@ function SectionCards({
       {cards.map((card, i) => (
         <motion.div
           key={card.label}
-          initial={{ opacity: 0, y: 6 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.25, delay: 0.05 + i * 0.04 }}
-          className="flex items-start gap-3.5 bg-muted/40 rounded-2xl p-4 cursor-default"
+          transition={{ duration: 0.25, delay: 0.06 + i * 0.04 }}
+          className="flex items-start gap-4 rounded-2xl bg-background p-5 cursor-default"
         >
-          <div className="shrink-0 w-8 h-8 rounded-lg bg-muted flex items-center justify-center">
-            <card.icon className="w-4 h-4 text-muted-foreground" />
+          <div className="shrink-0 w-9 h-9 rounded-xl bg-muted flex items-center justify-center">
+            <card.icon className="w-4 h-4 text-muted-foreground/60" />
           </div>
           <div className="flex flex-col gap-0.5 min-w-0">
             <span className="text-sm font-medium text-foreground">

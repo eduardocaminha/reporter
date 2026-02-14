@@ -70,9 +70,9 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
             variant="ghost"
             size="icon"
             onClick={() => setMenuOpen(true)}
-            className="text-muted-foreground hover:text-foreground hover:bg-muted rounded-full h-10 w-10 shrink-0"
+            className="h-8 w-8 bg-muted text-muted-foreground/40 hover:text-muted-foreground shrink-0"
           >
-            <Menu className="w-5 h-5" />
+            <Menu className="w-4 h-4" />
           </Button>
           <div
             className="h-7 overflow-hidden cursor-pointer select-none min-w-[140px]"
