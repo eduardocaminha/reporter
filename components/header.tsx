@@ -199,7 +199,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.2 }}
-                className="absolute top-full right-0 mt-2 w-56 bg-card border border-border/50 rounded-2xl z-50 shadow-lg"
+                className="absolute top-full right-0 mt-2 w-56 bg-card border border-border/50 rounded-2xl z-50"
               >
                 <div className="p-3 border-b border-border/50">
                   <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider block mb-2">
@@ -216,9 +216,14 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
                           size="sm"
                           onClick={() => {
                             router.replace(pathname, { locale: loc })
+                            fetch("/api/preferences", {
+                              method: "PUT",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({ locale: loc }),
+                            }).catch(() => {})
                           }}
                           className={cn(
-                            "h-6 min-w-0 px-2 text-[10px] font-medium rounded-md transition-colors",
+                            "h-6 min-w-0 px-2 text-[10px] font-medium rounded-full transition-colors",
                             isActive && config ? config.activeClass : "bg-muted text-muted-foreground",
                             config?.hoverClass
                           )}

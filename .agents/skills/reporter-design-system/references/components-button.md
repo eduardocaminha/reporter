@@ -46,13 +46,27 @@ Used for: Radiopaedia, Ditar, History, Copy, menu items.
 
 ### 2. Icon Button
 
-Used for: hamburger menu, back arrow, close (X), font size controls.
+Used for: back arrow, close (X), font size controls.
 
 ```tsx
 <Button
   variant="ghost"
   size="icon"
   className="h-8 w-8 bg-muted text-muted-foreground/40 hover:text-muted-foreground"
+>
+  <Icon className="w-4 h-4" />
+</Button>
+```
+
+### 2b. Compact Icon Button
+
+Used for: header chevron toggle (smaller contexts where `h-8` is too large).
+
+```tsx
+<Button
+  variant="ghost"
+  size="icon"
+  className="h-6 w-6 p-0 bg-muted text-muted-foreground/40 hover:text-muted-foreground"
 >
   <Icon className="w-4 h-4" />
 </Button>
@@ -68,6 +82,21 @@ Used for: login submit, verify, landing page CTA.
 >
   <Icon className="w-4 h-4" />
   {label}
+</Button>
+```
+
+### 3b. CTA Menu Button
+
+Used for: expanding header menu items (Settings, Generator, Formatter).
+
+```tsx
+<Button
+  variant="ghost"
+  size="sm"
+  className="w-fit gap-1.5 bg-foreground text-background hover:bg-foreground/90 hover:text-background shadow-none"
+>
+  <Icon className="w-3.5 h-3.5 shrink-0" />
+  <span>{label}</span>
 </Button>
 ```
 
