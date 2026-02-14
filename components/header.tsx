@@ -243,7 +243,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
                             }).catch(() => {})
                           }}
                           className={cn(
-                            "h-6 min-w-0 px-2 text-[10px] font-medium rounded-full transition-colors",
+                            "min-w-0 font-medium rounded-full transition-colors h-6 px-2 text-[10px] sm:h-8 sm:px-3 sm:text-xs",
                             isActive && config ? config.activeClass : "bg-muted text-muted-foreground",
                             config?.hoverClass
                           )}
@@ -258,14 +258,14 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="w-fit justify-start gap-2 h-8 text-xs bg-muted text-muted-foreground hover:bg-accent hover:text-foreground"
+                    className="w-fit justify-start gap-2 h-6 px-2 text-[10px] sm:h-8 sm:px-3 sm:text-xs bg-muted text-muted-foreground hover:bg-accent hover:text-foreground"
                     onClick={() => {
                       setAvatarMenuOpen(false)
                       router.push("/account")
                     }}
                   >
                     <User className="w-3.5 h-3.5 shrink-0" />
-                    <span className="hidden sm:inline">{t("myAccount")}</span>
+                    <span>{t("myAccount")}</span>
                   </Button>
                   <Button
                     onClick={() => {
@@ -274,10 +274,10 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
                     }}
                     variant="ghost"
                     size="sm"
-                    className="w-fit justify-start gap-2 h-8 text-xs bg-muted text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                    className="w-fit justify-start gap-2 h-6 px-2 text-[10px] sm:h-8 sm:px-3 sm:text-xs bg-muted text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                   >
                     <LogOut className="w-3.5 h-3.5 shrink-0" />
-                    <span className="hidden sm:inline">{t("logout")}</span>
+                    <span>{t("logout")}</span>
                   </Button>
                 </div>
               </motion.div>
