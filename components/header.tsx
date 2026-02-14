@@ -138,7 +138,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
       className={cn(
-        "border-b border-border/30 sticky top-0 z-50",
+        "sticky top-0 z-50",
         activePanel ? "bg-card" : "bg-card/80 backdrop-blur-sm"
       )}
     >
@@ -367,7 +367,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
             initial={{ height: 0 }}
             animate={{ height: "100%" }}
             exit={{ height: 0 }}
-            transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+            transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
             className="absolute top-0 left-0 w-px bg-border/30 origin-top"
           />
           <div className="pt-32 max-w-6xl lg:max-w-none mx-auto px-8 sm:px-12 lg:px-16 pb-16">

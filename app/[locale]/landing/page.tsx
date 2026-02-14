@@ -140,10 +140,10 @@ export default function LandingPage() {
 
         {/* Sticky title + CTA row — becomes the header when stuck */}
         <div
-          className={`sticky top-0 z-50 shrink-0 transition-[background-color,border-color] duration-150 ${
+          className={`sticky top-0 z-50 shrink-0 transition-[background-color] duration-150 ${
             isStuck
-              ? "bg-card border-b border-border/30"
-              : "border-b border-transparent"
+              ? "bg-card"
+              : ""
           }`}
         >
           <div className="px-8 sm:px-12 lg:px-16 h-[72px] flex items-center justify-between">
