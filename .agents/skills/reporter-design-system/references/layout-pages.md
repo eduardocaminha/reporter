@@ -128,54 +128,45 @@ The menu expands below the header bar when hamburger is clicked:
 
 `pl-11` aligns items under the logo (past the hamburger button + gap).
 
-## Full-Page Settings Panel (`components/settings-panel.tsx`)
+## Header Expanding Panel (Settings, etc.)
 
-A full-viewport overlay triggered from the header menu, without route change.
+Menu items and sub-panels share the same expanding section. The `activePanel` state controls which content is shown inside. Transitions between content use `AnimatePresence mode="wait"`.
 
 ```tsx
-<AnimatePresence mode="wait">
-  {activePanel === "configLLM" && (
-    <SettingsPanel key="configLLM" onClose={() => setActivePanel(null)} />
+<AnimatePresence>
+  {isExpanded && (
+    <motion.div
+      initial={{ height: 0, opacity: 0 }}
+      animate={{ height: "auto", opacity: 1 }}
+      exit={{ height: 0, opacity: 0 }}
+      transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+      className="overflow-hidden"
+    >
+      <div className="max-w-6xl lg:max-w-none mx-auto px-8 sm:px-12 lg:px-16 pb-5">
+        <AnimatePresence mode="wait">
+          {activePanel === null ? (
+            <motion.div key="menu" ...>{/* Menu buttons */}</motion.div>
+          ) : activePanel === "configLLM" ? (
+            <motion.div key="configLLM" className="pl-4 sm:pl-11 max-w-md" ...>
+              {/* Back button + inline settings form */}
+              <SettingsInline />
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
+      </div>
+    </motion.div>
   )}
 </AnimatePresence>
 ```
 
-Panel structure:
-
-```tsx
-<motion.div
-  initial={{ opacity: 0, y: -20 }}
-  animate={{ opacity: 1, y: 0 }}
-  exit={{ opacity: 0, y: -20 }}
-  transition={{ duration: 0.3, ease: "easeOut" }}
-  className="fixed inset-0 z-50 bg-background overflow-y-auto"
->
-  {/* Top bar — h-[72px], back button + title */}
-  <div className="max-w-6xl lg:max-w-none mx-auto px-8 sm:px-12 lg:px-16 h-[72px] flex items-center justify-between border-b border-border/30">
-    <div className="flex items-center gap-3">
-      <Button variant="ghost" size="icon" className="h-8 w-8 bg-muted text-muted-foreground/40 hover:text-muted-foreground">
-        <ArrowLeft className="w-4 h-4" />
-      </Button>
-      <span className="text-xl font-medium tracking-tight text-foreground">{title}</span>
-    </div>
-  </div>
-
-  {/* Content — centered, max-w-3xl */}
-  <div className="max-w-3xl mx-auto px-8 sm:px-12 lg:px-16 py-10">
-    <SquircleCard className="p-8">
-      {/* Form fields with space-y-8 */}
-    </SquircleCard>
-  </div>
-</motion.div>
-```
-
 Key patterns:
-- `fixed inset-0 z-50 bg-background` covers everything
-- Top bar matches header height (`h-[72px]`) with icon button back arrow
-- Content in `SquircleCard` centered at `max-w-3xl`
-- Fields use `space-y-8` with `border-t border-border/30` dividers
+- `isExpanded = menuOpen || activePanel !== null`
+- Outer `AnimatePresence` handles height expand/collapse
+- Inner `AnimatePresence mode="wait"` handles content switching with `y: 6 -> 0 -> -6` fade
+- Panel content aligned with `pl-4 sm:pl-11 max-w-md`
+- Back button uses toolbar recipe to return to menu items
 - Auto-save on blur (API keys) or on change (select) with flash "Saved" indicator
-- Close on Escape key
+- Chevron closes everything; Escape closes everything
 
 ## New Page Template
 

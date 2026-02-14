@@ -1,11 +1,11 @@
 "use client"
 
 import { motion, AnimatePresence } from "motion/react"
-import { LogOut, ChevronDown, Settings, FileText, Paintbrush, User } from "lucide-react"
+import { LogOut, ChevronDown, Settings, FileText, Paintbrush, User, ArrowLeft } from "lucide-react"
 import { TextEffect } from "@/components/ui/text-effect"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { SettingsPanel } from "@/components/settings-panel"
+import { SettingsInline } from "@/components/settings-panel"
 import { useRouter, usePathname } from "@/i18n/navigation"
 import { useTranslations, useLocale } from "next-intl"
 import { useEffect, useState, useRef } from "react"
@@ -50,6 +50,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
   const [logoHovered, setLogoHovered] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [avatarMenuOpen, setAvatarMenuOpen] = useState(false)
+  // null = menu items, "configLLM" = settings form, etc.
   const [activePanel, setActivePanel] = useState<string | null>(null)
   const avatarMenuRef = useRef<HTMLDivElement>(null)
   const { signOut } = useClerk()
@@ -58,6 +59,9 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
   const initials = user
     ? `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase() || user.emailAddresses[0]?.emailAddress?.[0]?.toUpperCase() || "U"
     : "U"
+
+  // The expanding section is open when menuOpen OR activePanel is set
+  const isExpanded = menuOpen || activePanel !== null
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -79,15 +83,18 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [onReportModeChange])
 
-  // Close chevron menu on Escape
+  // Close everything on Escape
   useEffect(() => {
-    if (!menuOpen) return
+    if (!isExpanded) return
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") setMenuOpen(false)
+      if (e.key === "Escape") {
+        setMenuOpen(false)
+        setActivePanel(null)
+      }
     }
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [menuOpen])
+  }, [isExpanded])
 
   // Close avatar menu on Escape or click outside
   useEffect(() => {
@@ -108,15 +115,16 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
     }
   }, [avatarMenuOpen])
 
-  // Close active panel on Escape
-  useEffect(() => {
-    if (!activePanel) return
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") setActivePanel(null)
+  function handleChevronClick() {
+    if (activePanel) {
+      // If inside a panel, close everything
+      setActivePanel(null)
+      setMenuOpen(false)
+    } else {
+      // Toggle menu items
+      setMenuOpen((prev) => !prev)
     }
-    window.addEventListener("keydown", handleKeyDown)
-    return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [activePanel])
+  }
 
   async function handleLogout() {
     await signOut(() => {
@@ -124,7 +132,7 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
     })
   }
 
-  return (<>
+  return (
     <motion.header
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
@@ -137,11 +145,11 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setMenuOpen((prev) => !prev)}
+            onClick={handleChevronClick}
             className="h-6 w-6 p-0 bg-muted text-muted-foreground/40 hover:text-muted-foreground shrink-0"
           >
             <motion.span
-              animate={{ rotate: menuOpen ? 180 : 0 }}
+              animate={{ rotate: isExpanded ? 180 : 0 }}
               transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
               className="inline-flex"
             >
@@ -275,9 +283,9 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
         </div>
       </div>
 
-      {/* Expanding menu — slides down from header */}
+      {/* Expanding section — slides down from header */}
       <AnimatePresence>
-        {menuOpen && (
+        {isExpanded && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
@@ -286,54 +294,80 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
             className="overflow-hidden"
           >
             <div className="max-w-6xl lg:max-w-none mx-auto px-8 sm:px-12 lg:px-16 pb-5">
-              {/* pl-11 on sm+ aligns under logo; on mobile stack vertically */}
-              <div className="flex flex-col sm:flex-row sm:items-center gap-2 pl-4 sm:pl-11">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setMenuOpen(false)
-                    setActivePanel("configLLM")
-                  }}
-                  className="w-fit sm:w-auto justify-start sm:justify-center gap-1.5 bg-foreground text-background hover:bg-foreground/90 hover:text-background shadow-none"
-                >
-                  <Settings className="w-3.5 h-3.5 shrink-0" />
-                  <span>{tMenu("configLLM")}</span>
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setMenuOpen(false)}
-                  className="w-fit sm:w-auto justify-start sm:justify-center gap-1.5 bg-foreground text-background hover:bg-foreground/90 hover:text-background shadow-none"
-                >
-                  <FileText className="w-3.5 h-3.5 shrink-0" />
-                  <span>{tMenu("geradorMascaras")}</span>
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setMenuOpen(false)}
-                  className="w-fit sm:w-auto justify-start sm:justify-center gap-1.5 bg-foreground text-background hover:bg-foreground/90 hover:text-background shadow-none"
-                >
-                  <Paintbrush className="w-3.5 h-3.5 shrink-0" />
-                  <span>{tMenu("formatadorMascaras")}</span>
-                </Button>
-              </div>
+              <AnimatePresence mode="wait">
+                {activePanel === null ? (
+                  /* Menu items */
+                  <motion.div
+                    key="menu"
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.15 }}
+                    className="flex flex-col sm:flex-row sm:items-center gap-2 pl-4 sm:pl-11"
+                  >
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setMenuOpen(false)
+                        setActivePanel("configLLM")
+                      }}
+                      className="w-fit sm:w-auto justify-start sm:justify-center gap-1.5 bg-foreground text-background hover:bg-foreground/90 hover:text-background shadow-none"
+                    >
+                      <Settings className="w-3.5 h-3.5 shrink-0" />
+                      <span>{tMenu("configLLM")}</span>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setMenuOpen(false)}
+                      className="w-fit sm:w-auto justify-start sm:justify-center gap-1.5 bg-foreground text-background hover:bg-foreground/90 hover:text-background shadow-none"
+                    >
+                      <FileText className="w-3.5 h-3.5 shrink-0" />
+                      <span>{tMenu("geradorMascaras")}</span>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setMenuOpen(false)}
+                      className="w-fit sm:w-auto justify-start sm:justify-center gap-1.5 bg-foreground text-background hover:bg-foreground/90 hover:text-background shadow-none"
+                    >
+                      <Paintbrush className="w-3.5 h-3.5 shrink-0" />
+                      <span>{tMenu("formatadorMascaras")}</span>
+                    </Button>
+                  </motion.div>
+                ) : activePanel === "configLLM" ? (
+                  /* LLM Settings form */
+                  <motion.div
+                    key="configLLM"
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.15 }}
+                    className="pl-4 sm:pl-11 max-w-md"
+                  >
+                    {/* Back to menu */}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setActivePanel(null)
+                        setMenuOpen(true)
+                      }}
+                      className="mb-4 gap-1.5 bg-muted text-muted-foreground hover:text-foreground"
+                    >
+                      <ArrowLeft className="w-3.5 h-3.5" />
+                      <span>{tMenu("configLLM")}</span>
+                    </Button>
+
+                    <SettingsInline />
+                  </motion.div>
+                ) : null}
+              </AnimatePresence>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
     </motion.header>
-
-    {/* Full-page panels */}
-    <AnimatePresence mode="wait">
-      {activePanel === "configLLM" && (
-        <SettingsPanel
-          key="configLLM"
-          onClose={() => setActivePanel(null)}
-        />
-      )}
-    </AnimatePresence>
-  </>
   )
 }
