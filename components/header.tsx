@@ -178,33 +178,33 @@ export function Header({ reportMode, onReportModeChange }: HeaderProps) {
             className="overflow-hidden"
           >
             <div className="max-w-6xl lg:max-w-none mx-auto px-8 sm:px-12 lg:px-16 pb-5">
-              {/* pl-11 = 2.75rem = button 2rem + gap-3 0.75rem → aligns under logo */}
-              <div className="flex items-center gap-2 pl-11">
+              {/* pl-11 on sm+ aligns under logo; on mobile stack vertically */}
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 pl-4 sm:pl-11">
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setMenuOpen(false)}
-                  className="gap-1.5 bg-muted text-muted-foreground hover:text-foreground"
+                  className="w-full sm:w-auto justify-start sm:justify-center gap-1.5 bg-muted text-muted-foreground hover:text-foreground"
                 >
-                  <Settings className="w-3.5 h-3.5" />
+                  <Settings className="w-3.5 h-3.5 shrink-0" />
                   <span>{tMenu("configLLM")}</span>
                 </Button>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setMenuOpen(false)}
-                  className="gap-1.5 bg-muted text-muted-foreground hover:text-foreground"
+                  className="w-full sm:w-auto justify-start sm:justify-center gap-1.5 bg-muted text-muted-foreground hover:text-foreground"
                 >
-                  <FileText className="w-3.5 h-3.5" />
+                  <FileText className="w-3.5 h-3.5 shrink-0" />
                   <span>{tMenu("geradorMascaras")}</span>
                 </Button>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setMenuOpen(false)}
-                  className="gap-1.5 bg-muted text-muted-foreground hover:text-foreground"
+                  className="w-full sm:w-auto justify-start sm:justify-center gap-1.5 bg-muted text-muted-foreground hover:text-foreground"
                 >
-                  <Paintbrush className="w-3.5 h-3.5" />
+                  <Paintbrush className="w-3.5 h-3.5 shrink-0" />
                   <span>{tMenu("formatadorMascaras")}</span>
                 </Button>
               </div>
